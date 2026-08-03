@@ -1,0 +1,39 @@
+name: Validate paper tutorials
+
+on:
+  pull_request:
+    paths:
+      - "html_output/**"
+      - "catalog/**"
+      - "portal/**"
+      - "scripts/**"
+      - "paper-skill/**"
+      - "package.json"
+      - ".github/workflows/**"
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: "html_output/*/package-lock.json"
+      - name: Validate repository structure
+        run: npm run validate
+      - name: Validate pull request scope
+        if: github.event_name == 'pull_request'
+        run: npm run validate:pr
+      - name: Check generated catalog
+        run: npm run catalog:check
+      - name: Build all tutorials and portal
+        run: npm run build:site

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="由 paper-skill 与协作者共同制作的中文交互式论文教程集合。" />
+    <title>论文交互教程集合</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero-inner">
+        <p class="eyebrow">PAPER · EXPLAINED · INTERACTIVELY</p>
+        <h1>把论文读成一条<br /><span>可以探索的学习路径</span></h1>
+        <p class="intro">这里收录由 paper-skill 生成、协作者校对和完善的中文交互式 AI 论文教程。</p>
+        <div class="stats" aria-label="集合统计">
+          <div><strong id="paper-count">—</strong><span>篇教程</span></div>
+          <div><strong id="topic-count">—</strong><span>个主题</span></div>
+          <div><strong id="participant-count">—</strong><span>位参与者</span></div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="toolbar" aria-label="筛选论文">
+        <label class="search">
+          <span>搜索</span>
+          <input id="search" type="search" placeholder="论文、作者、主题或参与者" autocomplete="off" />
+        </label>
+        <label class="filter">
+          <span>主题</span>
+          <select id="topic-filter"><option value="">全部主题</option></select>
+        </label>
+      </section>
+      <p id="result-summary" class="result-summary" aria-live="polite"></p>
+      <section id="paper-grid" class="paper-grid" aria-label="论文教程"></section>
+      <div id="empty" class="empty" hidden>没有找到匹配的教程。</div>
+    </main>
+
+    <footer>
+      <p>由 paper-skill 生成 · 由社区共同审核与维护</p>
+    </footer>
+    <script src="./app.js" defer></script>
+  </body>
+</html>
