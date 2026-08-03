@@ -19,18 +19,23 @@ document.querySelector('#start-title').addEventListener('blur', (event) => {
   if (!field.value) field.value = slugify(event.target.value);
 });
 
+document.querySelector('#start-source').addEventListener('blur', (event) => {
+  event.target.value = event.target.value.trim();
+});
+
 starterForm.addEventListener('submit', (event) => {
   event.preventDefault();
   const title = document.querySelector('#start-title').value.trim();
   const url = document.querySelector('#start-url').value.trim();
   const paperSlug = document.querySelector('#start-paper-slug').value.trim();
-  const source = document.querySelector('#start-source').value.trim();
+  const githubUser = document.querySelector('#start-source').value.trim();
+  const source = slugify(githubUser);
   const name = document.querySelector('#start-name').value.trim();
   const branch = `paper/${paperSlug}-${source}`;
 
   document.querySelector('#branch-command').textContent = `git switch main\ngit pull origin main\ngit switch -c ${branch}`;
   document.querySelector('#skill-command').textContent = `$paper-skill 请阅读并分析《${title}》（${url}），制作成完整的中文交互式论文教程。`;
-  document.querySelector('#import-command').textContent = `npm run import -- <生成目录> ${paperSlug} --source ${source} --source-branch ${branch} --title "${title}" --paper-url "${url}" --participant "${name}" --github "${source}"`;
+  document.querySelector('#import-command').textContent = `npm run import -- <生成目录> ${paperSlug} --source ${source} --source-branch ${branch} --title "${title}" --paper-url "${url}" --participant "${name}" --github "${githubUser}"`;
   starterResult.hidden = false;
   starterResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 });
