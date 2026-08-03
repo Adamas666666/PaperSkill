@@ -1,58 +1,29 @@
 # 参与指南
 
-## 1. 允许重复论文
+本文只规定作品进入 GitHub 仓库的技术流程。环境安装见 [SETUP.md](SETUP.md)，考核材料去向见 [SUBMISSION.md](SUBMISSION.md)。
 
-当前阶段不要求预先认领论文。同一篇论文可以由不同参与者制作多份实现，合并到 `main` 时用来源后缀区分：
+## 1. 论文与目录标识
+
+当前阶段不要求预先认领论文。同一篇论文可以由不同参与者制作多份实现，使用来源后缀区分：
 
 ```text
 html_output/resnet_zhangsan/
 html_output/resnet_team-a/
 ```
 
-其中 `paperSlug` 表示论文，`source` 表示来源分支、团队或参与者。两者只能使用小写字母、数字和中间连字符；最终目录 ID 固定为 `paperSlug_source`。
+`paperSlug` 表示论文，`source` 表示参与者、团队或来源分支。两者只能使用小写字母、数字和中间连字符；最终目录固定为 `<paperSlug>_<source>`。
 
-## 2. 使用 paper-skill 生成
+## 2. 生成项目
 
-`paper-skill/` 是共享生成规范。普通论文参与者不得修改它。推荐在独立工作目录完成生成与迭代，然后通过根目录导入脚本收集成果。
-
-Skill 默认生成：
+`paper-skill/` 是共享生成规范，普通参与者不得修改。请在仓库外的独立工作目录中调用 Skill，生成：
 
 ```text
 <paper-short-name>_output/
 ```
 
-仓库接收格式：
+完成论文核查和人工修改后，再导入本仓库。
 
-```text
-html_output/<paper-slug>_<source>/
-```
-
-## 3. 每篇论文必须包含
-
-```text
-html_output/<paper-slug>_<source>/
-├── paper.json
-├── README.md
-├── package.json
-├── package-lock.json
-├── index.html
-├── vite.config.ts
-├── tsconfig.json
-├── public/
-└── src/
-```
-
-`paper.json` 必须符合 `schemas/paper.schema.json` 的字段约定。`slug` 必须等于 `paperSlug + "_" + source` 并与目录名一致；`sourceBranch` 记录原始参与分支。同一 `paperUrl` 可以重复。
-
-禁止提交：
-
-- `node_modules/`
-- `dist/`
-- 本地缓存、日志或编辑器配置
-- 论文 PDF（除非维护者明确批准）
-- 未获授权的图片或数据
-
-## 4. 分支与 Pull Request
+## 3. 创建分支并导入
 
 分支命名：
 
@@ -60,14 +31,43 @@ html_output/<paper-slug>_<source>/
 paper/<paper-slug>-<github-user>
 ```
 
-一份 PR 原则上只能触碰一个来源实现：
+在仓库根目录运行：
+
+```powershell
+npm run import -- <生成目录> <paper-slug> --source <来源标识> --source-branch <来源分支> --title "英文论文名" --paper-url "论文链接" --participant "姓名" --github "GitHub用户名"
+```
+
+导入后生成：
 
 ```text
 html_output/<paper-slug>_<source>/
-catalog/papers.json
 ```
 
-`catalog/papers.json` 由 `npm run catalog` 生成。普通参与任务不得同时修改 `paper-skill/`、管理脚本或其他论文目录。
+## 4. 项目结构
+
+每篇教程必须包含：
+
+```text
+html_output/<paper-slug>_<source>/
+|-- paper.json
+|-- README.md
+|-- package.json
+|-- package-lock.json
+|-- index.html
+|-- vite.config.ts
+|-- tsconfig.json
+|-- public/
+`-- src/
+```
+
+`paper.json` 必须符合 `schemas/paper.schema.json`。其中：
+
+- `slug` 必须等于 `paperSlug + "_" + source` 并与目录名一致；
+- `sourceBranch` 记录参与分支；
+- `skillVersion` 记录 `paper-skill/VERSION`；
+- 同一 `paperUrl` 可以有多个来源实现。
+
+不得提交 `node_modules/`、`dist/`、本地缓存、论文 PDF、密钥或未获授权的素材。详细边界见 [ASSET_AND_PRIVACY.md](ASSET_AND_PRIVACY.md)。
 
 ## 5. 本地验收
 
@@ -79,17 +79,22 @@ npm run catalog
 npm run build:site
 ```
 
-提交前还应人工确认：
+还应人工确认：
 
-- 页面中文表达自然；
-- 论文事实、公式、实验数字和局限准确；
-- 所有主要交互均可操作；
-- 移动端没有明显溢出；
+- 页面中文表达自然，论文事实、公式、实验数字和局限准确；
+- 所有主要交互均可操作，移动端没有明显溢出；
 - 图片来源和论文链接可追溯；
 - 页面中没有个人隐私、密钥或本地绝对路径。
 
-## 6. 审核分工
+## 6. 创建 Pull Request
 
-- 工程审核：目录、构建、交互、资源路径和部署。
-- 内容审核：论文结论、公式、数字、中文教学质量和引用。
-- 维护者：确认 CI 和审核通过后合并。
+一份参与者 PR 原则上只修改：
+
+```text
+html_output/<paper-slug>_<source>/
+catalog/papers.json
+```
+
+普通参与任务不得同时修改 `paper-skill/`、管理脚本、工作流或其他论文目录。检查通过后推送个人分支并创建 Pull Request，不要直接推送 `main`。
+
+审核、反馈和 `review -> published` 状态流转见 [REVIEWING.md](REVIEWING.md)。

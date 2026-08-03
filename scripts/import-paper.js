@@ -40,6 +40,11 @@ for (const key of ['source', 'source-branch', 'title', 'paper-url', 'participant
 if (!SOURCE_RE.test(opts.source)) throw new Error('--source 只能包含小写字母、数字和中间连字符');
 if (!/^https:\/\//.test(opts['paper-url'])) throw new Error('--paper-url 必须是 https:// 链接');
 
+const versionFile = path.join(ROOT, 'paper-skill', 'VERSION');
+if (!fs.existsSync(versionFile)) throw new Error('缺少 paper-skill/VERSION');
+const skillVersion = fs.readFileSync(versionFile, 'utf8').trim();
+if (!/^\d+\.\d+\.\d+$/.test(skillVersion)) throw new Error('paper-skill/VERSION 必须是 x.y.z');
+
 const source = path.resolve(ROOT, sourceArg);
 const slug = `${paperSlug}_${opts.source}`;
 const target = path.join(OUTPUT_ROOT, slug);
@@ -64,7 +69,7 @@ const meta = {
   paperUrl: opts['paper-url'],
   participants: [participant],
   topics: opts.topics ? opts.topics.split(',').map((item) => item.trim()).filter(Boolean) : [],
-  skillVersion: '1.0.0',
+  skillVersion,
   status: 'review',
   entry: 'index.html',
 };
