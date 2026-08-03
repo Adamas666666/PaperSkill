@@ -19,13 +19,13 @@
 4. 将生成结果导入本仓库：
 
 ```powershell
-npm run import -- <生成目录> <paper-slug> --source <来源标识> --source-branch <来源分支> --title "英文论文名" --title-zh "中文论文名" --paper-url "论文链接" --participant "姓名" --github "GitHub用户名"
+npm run import -- <生成目录> <paper-slug> --source <来源标识> --source-branch <来源分支> --title "英文论文名" --paper-url "论文链接" --participant "姓名" --github "GitHub用户名"
 ```
 
 示例：
 
 ```powershell
-npm run import -- .\resnet_output resnet --source zhangsan --source-branch paper/resnet-zhangsan --title "Deep Residual Learning for Image Recognition" --title-zh "用于图像识别的深度残差学习" --paper-url "https://arxiv.org/abs/1512.03385" --participant "张三" --github "zhangsan"
+npm run import -- .\resnet_output resnet --source zhangsan --source-branch paper/resnet-zhangsan --title "Deep Residual Learning for Image Recognition" --paper-url "https://arxiv.org/abs/1512.03385" --participant "张三" --github "zhangsan"
 ```
 
 5. 检查并构建：

@@ -7,6 +7,44 @@ const topicFilter = document.querySelector('#topic-filter');
 const summary = document.querySelector('#result-summary');
 let papers = [];
 
+const starterForm = document.querySelector('#starter-form');
+const starterResult = document.querySelector('#starter-result');
+
+function slugify(value) {
+  return value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+document.querySelector('#start-title').addEventListener('blur', (event) => {
+  const field = document.querySelector('#start-paper-slug');
+  if (!field.value) field.value = slugify(event.target.value);
+});
+
+starterForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const title = document.querySelector('#start-title').value.trim();
+  const url = document.querySelector('#start-url').value.trim();
+  const paperSlug = document.querySelector('#start-paper-slug').value.trim();
+  const source = document.querySelector('#start-source').value.trim();
+  const name = document.querySelector('#start-name').value.trim();
+  const branch = `paper/${paperSlug}-${source}`;
+
+  document.querySelector('#branch-command').textContent = `git switch main\ngit pull origin main\ngit switch -c ${branch}`;
+  document.querySelector('#skill-command').textContent = `$paper-skill 请阅读并分析《${title}》（${url}），制作成完整的中文交互式论文教程。`;
+  document.querySelector('#import-command').textContent = `npm run import -- <生成目录> ${paperSlug} --source ${source} --source-branch ${branch} --title "${title}" --paper-url "${url}" --participant "${name}" --github "${source}"`;
+  starterResult.hidden = false;
+  starterResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+});
+
+document.querySelectorAll('.copy-btn').forEach((button) => {
+  button.addEventListener('click', async () => {
+    const text = document.querySelector(`#${button.dataset.copy}`).textContent;
+    await navigator.clipboard.writeText(text);
+    const previous = button.textContent;
+    button.textContent = '已复制';
+    setTimeout(() => { button.textContent = previous; }, 1200);
+  });
+});
+
 function escapeHtml(value) {
   return String(value).replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[char]);
 }
@@ -15,7 +53,7 @@ function render() {
   const query = search.value.trim().toLowerCase();
   const topic = topicFilter.value;
   const visible = papers.filter((paper) => {
-    const haystack = [paper.title, paper.titleZh, paper.venue, paper.source, paper.sourceBranch, ...(paper.authors || []), ...(paper.topics || []), ...(paper.participants || []).map((item) => `${item.name} ${item.github || ''}`)].join(' ').toLowerCase();
+    const haystack = [paper.title, paper.venue, paper.source, paper.sourceBranch, ...(paper.authors || []), ...(paper.topics || []), ...(paper.participants || []).map((item) => `${item.name} ${item.github || ''}`)].join(' ').toLowerCase();
     return (!query || haystack.includes(query)) && (!topic || (paper.topics || []).includes(topic));
   });
 
@@ -24,8 +62,7 @@ function render() {
   grid.innerHTML = visible.map((paper) => `
     <article class="paper-card">
       <div class="card-meta"><span>${escapeHtml([paper.venue, paper.year].filter(Boolean).join(' · ') || '论文教程')}</span><span class="status">${paper.status === 'published' ? '已发布' : '审核中'}</span></div>
-      <h2>${escapeHtml(paper.titleZh)}</h2>
-      <p class="title-en">${escapeHtml(paper.title)}</p>
+      <h2>${escapeHtml(paper.title)}</h2>
       <div class="topics">${(paper.topics || []).map((item) => `<span class="topic">${escapeHtml(item)}</span>`).join('')}</div>
       <p class="participants">版本来源：${escapeHtml(paper.source)} · ${escapeHtml(paper.sourceBranch)}<br />参与者：${escapeHtml((paper.participants || []).map((item) => item.name).join('、'))}</p>
       <div class="actions"><a class="open-link" href="./${escapeHtml(paper.tutorialUrl)}">打开教程 →</a><a class="paper-link" href="${escapeHtml(paper.paperUrl)}" target="_blank" rel="noopener">查看原论文</a></div>

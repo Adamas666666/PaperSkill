@@ -5,7 +5,6 @@
     "source": "example",
     "sourceBranch": "local/resnet-output",
     "title": "Deep Residual Learning for Image Recognition",
-    "titleZh": "用于图像识别的深度残差学习",
     "authors": [
       "Kaiming He",
       "Xiangyu Zhang",

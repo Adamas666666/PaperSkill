@@ -27,7 +27,7 @@ function listSubmissions() {
 
 function validateMetadata(meta, expectedSlug) {
   const errors = [];
-  const requiredStrings = ['slug', 'paperSlug', 'source', 'sourceBranch', 'title', 'titleZh', 'paperUrl', 'skillVersion', 'status', 'entry'];
+  const requiredStrings = ['slug', 'paperSlug', 'source', 'sourceBranch', 'title', 'paperUrl', 'skillVersion', 'status', 'entry'];
   if (!meta || typeof meta !== 'object' || Array.isArray(meta)) return ['paper.json 必须是对象'];
   if (meta.schemaVersion !== 1) errors.push('schemaVersion 必须为 1');
   for (const key of requiredStrings) {
@@ -69,7 +69,6 @@ function catalogRecord(meta) {
     source: meta.source,
     sourceBranch: meta.sourceBranch,
     title: meta.title,
-    titleZh: meta.titleZh,
     authors: meta.authors || [],
     year: meta.year ?? null,
     venue: meta.venue || '',

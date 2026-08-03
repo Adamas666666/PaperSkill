@@ -13,11 +13,39 @@ body { margin: 0; min-width: 320px; }
 h1 { max-width: 850px; margin: 0; font-family: Georgia, "Noto Serif SC", serif; font-size: clamp(42px, 7vw, 78px); line-height: 1.05; letter-spacing: -.035em; }
 h1 span { color: #b8d29e; }
 .intro { max-width: 700px; margin: 28px 0 0; color: #cbd4df; font-size: 18px; line-height: 1.8; }
+.start-link { display: inline-flex; margin-top: 28px; padding: 12px 16px; border: 1px solid #71819a; color: #fff; text-decoration: none; font-weight: 700; }
+.start-link:hover { border-color: #e7b46a; color: #e7b46a; }
 .stats { display: flex; gap: 42px; margin-top: 46px; }
 .stats div { display: grid; gap: 3px; }
 .stats strong { font: 700 30px/1 Georgia, serif; color: #fff; }
 .stats span { color: #9fadc0; font-size: 13px; }
 main { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 48px 0 80px; }
+.starter { scroll-margin-top: 20px; margin-bottom: 70px; padding: 32px; background: #fff; border: 1px solid #d8dfd1; border-top: 5px solid #d97706; box-shadow: 0 12px 36px rgba(28, 48, 43, .08); }
+.starter-heading { display: grid; grid-template-columns: 1fr minmax(280px, 440px); gap: 36px; align-items: end; }
+.starter-heading h2, .collection-heading h2 { margin: 5px 0 0; font-family: Georgia, "Noto Serif SC", serif; font-size: clamp(28px, 4vw, 42px); }
+.starter-heading > p { margin: 0; color: #68778f; line-height: 1.75; }
+.section-kicker { margin: 0; color: #d97706; font: 700 11px/1.4 ui-monospace, monospace; letter-spacing: .18em; }
+.journey { display: grid; grid-template-columns: repeat(4, 1fr); margin: 30px 0; border: 1px solid #d8dfd1; }
+.journey div { display: grid; gap: 7px; padding: 18px; border-right: 1px solid #d8dfd1; }
+.journey div:last-child { border-right: 0; }
+.journey b { color: #d97706; font: 700 13px/1 ui-monospace, monospace; }
+.journey span { font-weight: 700; }
+.starter-form { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding: 24px; background: #f5f7f1; }
+.starter-form label { display: grid; gap: 7px; color: #46566d; font-size: 13px; font-weight: 700; }
+.starter-form .wide { grid-column: 1 / -1; }
+.starter-form small { color: #7b8798; font-weight: 400; }
+.starter-form button { min-height: 46px; align-self: end; border: 0; background: #27446e; color: #fff; font: 700 15px/1 inherit; cursor: pointer; }
+.starter-form button:hover { background: #1b355b; }
+.starter-result { display: grid; gap: 14px; margin-top: 24px; }
+.starter-result article { position: relative; padding: 20px; background: #17253b; color: #fff; }
+.starter-result article > div { display: flex; gap: 12px; align-items: baseline; padding-right: 70px; }
+.starter-result article b { color: #e7b46a; font-size: 12px; }
+.starter-result h3 { margin: 0; font-size: 16px; }
+.starter-result pre { margin: 16px 0 0; padding: 14px; overflow-x: auto; background: #0f1a2b; color: #dce5ef; white-space: pre-wrap; word-break: break-word; line-height: 1.6; }
+.copy-btn { position: absolute; top: 16px; right: 16px; padding: 7px 11px; border: 1px solid #71819a; background: transparent; color: #fff; cursor: pointer; }
+.result-note { margin: 0; padding: 16px; background: #edf3e8; color: #47613c; line-height: 1.7; }
+.result-note code { font-weight: 700; }
+.collection-heading { margin-bottom: 22px; }
 .toolbar { display: grid; grid-template-columns: minmax(0, 1fr) 240px; gap: 16px; padding: 18px; background: #fff; border: 1px solid #d8dfd1; box-shadow: 0 8px 28px rgba(28, 48, 43, .06); }
 .toolbar label { display: grid; gap: 8px; color: #68778f; font-size: 12px; font-weight: 700; letter-spacing: .08em; }
 input, select { width: 100%; min-height: 46px; border: 1px solid #cbd4df; background: #fbfcf9; padding: 0 14px; color: #21324a; font: inherit; outline: none; }
@@ -43,6 +71,12 @@ footer { padding: 28px 20px; background: #17253b; color: #9fadc0; text-align: ce
   .hero-inner { padding: 54px 0 48px; }
   .stats { gap: 24px; }
   .toolbar { grid-template-columns: 1fr; }
+  .starter { padding: 22px 16px; }
+  .starter-heading, .starter-form { grid-template-columns: 1fr; }
+  .starter-form .wide { grid-column: auto; }
+  .journey { grid-template-columns: 1fr 1fr; }
+  .journey div:nth-child(2) { border-right: 0; }
+  .journey div:nth-child(-n+2) { border-bottom: 1px solid #d8dfd1; }
   .paper-grid { grid-template-columns: 1fr; }
   .paper-card { min-height: 0; }
 }

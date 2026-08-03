@@ -6,7 +6,7 @@ const path = require('path');
 const { ROOT, OUTPUT_ROOT, PAPER_SLUG_RE, SOURCE_RE } = require('./lib/repository');
 
 function usage() {
-  console.error('用法: npm run import -- <生成目录> <paper-slug> --source <来源标识> --source-branch <来源分支> --title "..." --title-zh "..." --paper-url "https://..." --participant "..." [--github "..."] [--year 2024] [--venue "..."] [--topics "CV,CNN"]');
+  console.error('用法: npm run import -- <生成目录> <paper-slug> --source <来源标识> --source-branch <来源分支> --title "..." --paper-url "https://..." --participant "..." [--github "..."] [--year 2024] [--venue "..."] [--topics "CV,CNN"]');
   process.exit(2);
 }
 
@@ -34,7 +34,7 @@ const [sourceArg, paperSlug, ...rest] = process.argv.slice(2);
 if (!sourceArg || !paperSlug) usage();
 if (!PAPER_SLUG_RE.test(paperSlug)) throw new Error('paper-slug 只能包含小写字母、数字和中间连字符');
 const opts = options(rest);
-for (const key of ['source', 'source-branch', 'title', 'title-zh', 'paper-url', 'participant']) {
+for (const key of ['source', 'source-branch', 'title', 'paper-url', 'participant']) {
   if (!opts[key]) throw new Error(`缺少 --${key}`);
 }
 if (!SOURCE_RE.test(opts.source)) throw new Error('--source 只能包含小写字母、数字和中间连字符');
@@ -58,7 +58,6 @@ const meta = {
   source: opts.source,
   sourceBranch: opts['source-branch'],
   title: opts.title,
-  titleZh: opts['title-zh'],
   authors: [],
   year: opts.year ? Number(opts.year) : null,
   venue: opts.venue || '',
