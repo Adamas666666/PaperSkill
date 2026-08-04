@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "slug": "elf_example",
+  "paperSlug": "elf",
+  "source": "example",
+  "sourceBranch": "paper/elf-happycodingday",
+  "title": "ELF: Embedded Language Flows",
+  "authors": [],
+  "year": null,
+  "venue": "",
+  "paperUrl": "https://arxiv.org/abs/2605.10938",
+  "participants": [
+    {
+      "name": "liuyuxuan",
+      "github": "happycodingday"
+    }
+  ],
+  "topics": [],
+  "skillVersion": "1.0.0",
+  "status": "review",
+  "entry": "index.html"
+}
