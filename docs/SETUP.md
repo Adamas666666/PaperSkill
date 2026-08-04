@@ -70,16 +70,36 @@ git config --global user.name
 git config --global user.email
 ```
 
-## 4. 安装 Paper Skill
+## 4. 安装并核对 Paper Skill 版本
 
-选手可自行选择支持 Skill 的 Agent。按照所选 Agent 的安装说明，将仓库中的完整 `paper-skill/` 文件夹安装到该 Agent 的 Skill 目录。
+选手可自行选择支持 Skill 的 Agent。开始安装前，应先确保本地仓库已同步到最新版本：
+
+```powershell
+git checkout main
+git pull --ff-only
+Get-Content .\paper-skill\VERSION
+```
+
+记录仓库中 `paper-skill/VERSION` 显示的版本号，然后按照所选 Agent 的安装说明，将仓库中的完整 `paper-skill/` 文件夹安装到该 Agent 的 Skill 目录。
 
 安装时注意：
 
 - 必须安装完整的 `paper-skill/`，不能只复制 `SKILL.md`；
-- 保留 `assets/`、`references/`、`scripts/`、`templates/` 和 `contract.md`；
+- 必须保留 `assets/`、`references/`、`scripts/`、`templates/`、`contract.md` 和 `VERSION`；
 - 安装后重新加载 Agent，并确认它能够识别 `paper-skill`；
-- 普通参赛者不要修改共享的 `paper-skill/` 内容。
+- 普通参与者不要修改仓库中共享的 `paper-skill/` 内容。
+
+安装完成后，按照所选 Agent 的安装说明找到其 Skill 目录，并读取安装版本：
+
+```powershell
+Get-Content "<Agent 的 Skill 目录>\paper-skill\VERSION"
+```
+
+安装目录与仓库中的 `VERSION` 必须完全一致。同时确认 Agent 对该 Skill 的说明为生成 React + TypeScript（Vite）项目文件夹。
+
+完成版本核对后，重新加载或重新启动 Agent，再开始生成论文教程。
+
+如果安装目录缺少 `VERSION`、版本号与仓库不一致，或者 Agent 无法识别 `paper-skill`，应停止生成任务，重新安装仓库中的完整 `paper-skill/` 文件夹并再次检查。
 
 ## 5. 准备论文工作目录
 
@@ -125,6 +145,8 @@ npm run validate
 - Node.js 版本不低于 20；
 - Git 和 GitHub 远端连接正常；
 - 已完整安装 `paper-skill/`；
+- 仓库与安装目录中的 `paper-skill/VERSION` 完全一致；
+- Agent 能够识别 `paper-skill`，并说明其输出为 React + TypeScript（Vite）项目文件夹；
 - Agent 可以读取论文并写入独立工作目录；
 - 当前仓库已同步到最新 `main`；
 - 后续工作将在个人分支中完成，不直接修改 `main`。
