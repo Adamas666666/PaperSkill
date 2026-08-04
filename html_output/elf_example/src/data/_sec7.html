@@ -37,7 +37,7 @@
     </div>
     <div class="analogy-body">
       <div class="analogy-title">老师指导学生临摹字帖</div>
-      <div class="analogy-text">学生自己临摹容易歪，老师（CFG）指导学生往正确方向写。其中参数<b>ω越大</b>越像字帖——字越工整，但太大就死板。ω=2.5是一个合适点。</div>
+      <div class="analogy-text">学生自己临摹容易歪，老师（CFG）指导学生往正确方向写。其中参数<b>ω越大</b>越像字帖——字越工整，但太大就死板。论文实际用 CFG scale 1+2（self-guidance=1、input-guidance=2，条件生成）或 self-guidance=3（无条件生成）；下图 ω=2.5 仅作<b>示意</b>。</div>
     </div>
   </div>
 
@@ -87,7 +87,7 @@
           <div class="mini">"love I Chinese landscape" — 语序乱</div>
         </div>
         <div class="compare-cell good">
-          <div class="label">ω = 2.5 ⭐</div>
+          <div class="label">ω = 2.5（演示）</div>
           <div class="val" style="color:var(--olive);">平衡</div>
           <div class="mini">"I love Chinese landscape" — 准确自然</div>
         </div>

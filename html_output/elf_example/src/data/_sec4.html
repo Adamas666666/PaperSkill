@@ -61,12 +61,12 @@
   </div>
 
   <div class="formula-explain">
-    <div class="fe-formula"><span class="sym" data-sym="zt">z_t</span> = (1 - <span class="sym" data-sym="t">t</span>) &middot; <span class="sym" data-sym="x0">x_0</span> + <span class="sym" data-sym="t">t</span> &middot; <span class="sym" data-sym="eps">&epsilon;</span></div>
+    <div class="fe-formula"><span class="sym" data-sym="zt">z_t</span> = (1 - <span class="sym" data-sym="t">t</span>) &middot; <span class="sym" data-sym="eps">&epsilon;</span> + <span class="sym" data-sym="t">t</span> &middot; <span class="sym" data-sym="x0">x_0</span></div>
     <div class="fe-symbols">
-      <span class="sym-desc" data-desc="zt"><b>z_t</b> = t 时刻的中间状态</span>
-      <span class="sym-desc" data-desc="x0"><b>x_0</b> = 清晰的词（起点）</span>
-      <span class="sym-desc" data-desc="eps"><b>&epsilon;</b> = 纯噪声（终点）</span>
-      <span class="sym-desc" data-desc="t"><b>t</b> = 加噪程度，0 到 1 之间</span>
+      <span class="sym-desc" data-desc="zt"><b>z_t</b> = t 时刻的中间状态（线性插值）</span>
+      <span class="sym-desc" data-desc="eps"><b>&epsilon;</b> = 纯噪声（t = 0 时）</span>
+      <span class="sym-desc" data-desc="x0"><b>x_0</b> = 清晰的文本（t = 1 时）</span>
+      <span class="sym-desc" data-desc="t"><b>t</b> = 时间步：0 = 纯噪声 → 1 = 清晰文本（ELF 约定）</span>
     </div>
     <div class="fe-hint">点击公式里的符号查看解释</div>
   </div>

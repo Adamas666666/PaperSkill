@@ -52,15 +52,16 @@
   <div class="module">
     <div class="module-head">
       <span class="num">9.2</span>
-      <h4>采样t：训练时随机选一个噪声量练</h4>
+      <h4>采样 t：ELF 训练时对 t 做均匀采样</h4>
     </div>
     <div class="module-body">
+      <p class="module-desc"><b>训练时随机选一个噪声量 t 来练。</b>ELF 从 [0,1] 对 t 做<b>均匀采样</b>（t = sample_t()），每个噪声量等概率。下图对比两种分布：<b>ELF 用均匀（蓝，处处等概率）</b>；logit-normal（橙）是许多其他扩散语言模型常用的"倾斜采样"。</p>
       <canvas id="cv-logit-normal" width="800" height="290"></canvas>
       <div class="ctrl">
-        <label>采样中心</label>
+        <label>logit-normal 中心</label>
         <input type="range" id="rng-logit-mu" min="-30" max="30" value="-8" step="1" style="flex:0 1 200px;">
         <span class="val" id="lbl-logit-mu">-0.8</span>
-        <span class="val" id="lbl-logit-sigma" style="margin-left:auto; color:var(--blue);">t* ≈ 0.30</span>
+        <span class="val" id="lbl-logit-sigma" style="margin-left:auto; color:var(--blue);">logit-normal 峰值 ≈ 0.30</span>
       </div>
     </div>
   </div>

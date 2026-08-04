@@ -2188,13 +2188,8 @@ function safeCtx(canvas, w, h) {
   const lblBleu = $('lbl-loss-bleu');
   const cvMix = $('cv-loss-mix');
   if (mixRange && cvMix) {
-    function bleuPredict(cePct) {
-      // 论文实测三点：0% → 27.1, 20% → 28.6（峰值）, 100% → 25.3
-      // 分段线性：20% 前上升，20% 后下降，保证 20% 是真正的最高点
-      const t = cePct / 100;
-      if (t <= 0.2) return (27.1 + (28.6 - 27.1) * t / 0.2).toFixed(1);
-      return (28.6 + (25.3 - 28.6) * (t - 0.2) / 0.8).toFixed(1);
-    }
+    // 论文未对 CE 比例做 BLEU 扫描：训练固定 80% MSE + 20% CE（§4）。
+    // 最佳结果 BLEU 26.4（WMT14 De-En，见 §10.1 Table 1）。
     function roundRect(ctx, x, y, w, h, r) {
       ctx.beginPath();
       ctx.moveTo(x + r, y);
@@ -2301,51 +2296,19 @@ function safeCtx(canvas, w, h) {
       ctx.textAlign = 'right';
       ctx.fillText(v + '%', ceX + cardW - 16, cardY + 70);
 
-      // 底部：BLEU 预测条（更精致）
-      const bleu = bleuPredict(v);
-      const bleuMin = 25, bleuMax = 29;
-      const bleuPct = Math.max(0, Math.min(1, (bleu - bleuMin) / (bleuMax - bleuMin)));
-      const barY = 228, barH = 16, barX = 80, barW = W - 160;
-      // BLEU 标签（左侧）
-      ctx.fillStyle = '#5b7a8c';
-      ctx.font = 'bold 12px "Microsoft YaHei", sans-serif';
-      ctx.textAlign = 'right';
-      ctx.fillText('BLEU', barX - 10, barY + 12);
-      // 背景轨道（圆角）
-      ctx.fillStyle = '#f0ecdf';
-      roundRect(ctx, barX, barY, barW, barH, 8); ctx.fill();
-      // 填充（圆角，渐变感）
-      ctx.fillStyle = '#5b7a8c';
-      roundRect(ctx, barX, barY, Math.max(barH, barW * bleuPct), barH, 8); ctx.fill();
-      // 当前位置标记（竖线 + 圆点）
-      const curX = barX + barW * bleuPct;
-      ctx.fillStyle = '#1a1a1a';
-      ctx.beginPath(); ctx.arc(curX, barY + barH/2, 6, 0, Math.PI*2); ctx.fill();
-      ctx.fillStyle = '#fff';
-      ctx.beginPath(); ctx.arc(curX, barY + barH/2, 3, 0, Math.PI*2); ctx.fill();
-      // 刻度
-      ctx.fillStyle = '#9a9a8a';
-      ctx.font = '10px Consolas, monospace';
-      ctx.textAlign = 'center';
-      for (let b = bleuMin; b <= bleuMax; b++) {
-        const bx = barX + barW * (b - bleuMin) / (bleuMax - bleuMin);
-        ctx.fillText(b.toString(), bx, barY + barH + 16);
-      }
-      // 论文最优点标记（20% → 28.6）
-      const optX = barX + barW * (28.6 - bleuMin) / (bleuMax - bleuMin);
+      // 底部：真实说明（论文未对 CE 比例做 BLEU 扫描）
+      const noteY = 224;
       ctx.fillStyle = '#a8553a';
-      ctx.font = 'bold 10px "Microsoft YaHei", sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('★ 论文最优', optX, barY - 6);
-      // 当前 BLEU 数值（标记右侧）
-      ctx.fillStyle = '#1a1a1a';
-      ctx.font = 'bold 12px Consolas, monospace';
+      ctx.font = 'bold 12px "Microsoft YaHei", sans-serif';
       ctx.textAlign = 'left';
-      ctx.fillText(bleu, curX + 12, barY + barH/2 + 4);
+      ctx.fillText('论文设定：每个 batch 以 80% 概率抽 MSE、20% 概率抽 CE', 16, noteY);
+      ctx.fillStyle = '#5b7a8c';
+      ctx.font = '11.5px "Microsoft YaHei", sans-serif';
+      ctx.fillText('最佳结果 BLEU 26.4（WMT14 De-En，见 §10.1 Table 1）。', 16, noteY + 18);
 
       // 同步 HTML 标签
       if (lblMix) lblMix.textContent = v + '%';
-      if (lblBleu) lblBleu.textContent = 'BLEU ' + bleu + '（评价指标）';
+      if (lblBleu) lblBleu.textContent = '论文固定：80% MSE + 20% CE';
     }
     mixRange.addEventListener('input', drawMix);
     drawMix();
@@ -2400,8 +2363,8 @@ const trnStepData = [
   },
   {
     label: 'Step 2 · Denoise 分支（橄榄绿）',
-    math: 't ← logit-normal;  z ← t·x + (1−t)·ε;  L ← MSE',
-    desc: 'logit-normal 采样 t → 线性插值加噪 → 网络预测 x̂ → 代数转 v̂ → MSE loss。'
+    math: 't ← uniform[0,1];  z ← t·x + (1−t)·ε;  L ← MSE',
+    desc: '均匀采样 t → 线性插值加噪 → 网络预测 x̂ → 代数转 v̂ → MSE loss。'
   },
   {
     label: 'Step 3 · Decode 分支（赭橙）',
@@ -3556,9 +3519,9 @@ initFxCards();
     ctx.fillStyle = '#5b7a8c';
     ctx.font = '11px "Microsoft YaHei", sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText('■ 均匀（到处都练）', W - 200, topY + 14);
+    ctx.fillText('■ 均匀（ELF 处处等概率）', W - 220, topY + 14);
     ctx.fillStyle = '#a8553a';
-    ctx.fillText('■ logit-normal（集中练）', W - 200, topY + 30);
+    ctx.fillText('■ logit-normal（其他模型常用）', W - 220, topY + 30);
 
     // 底部说明
     ctx.fillStyle = '#5a5a5a';
@@ -3567,7 +3530,7 @@ initFxCards();
     ctx.fillText('训练时每个 batch 随机抽一个 t 值来训练', W/2, H - 12);
 
     if (lbl) lbl.textContent = muLogit.toFixed(1);
-    if (lblSigma) lblSigma.textContent = 't* ≈ ' + tStar.toFixed(2);
+    if (lblSigma) lblSigma.textContent = 'logit-normal 峰值 ≈ ' + tStar.toFixed(2) + '（对比）';
   }
 
   rng.addEventListener('input', draw);

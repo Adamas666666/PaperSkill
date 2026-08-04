@@ -61,10 +61,10 @@
   <div class="module">
     <div class="module-head">
       <span class="num">2.2</span>
-      <h4>真实嵌入空间：1024 维的 3D 投影</h4>
+      <h4>真实嵌入空间：连续嵌入的 3D 投影</h4>
     </div>
     <div class="module-body">
-      <p class="module-desc">实际 ELF 使用 768-1024 维向量。这里展示 36 个常用词的 3D 投影（PCA降维），可以旋转、缩放、点击查看最近邻。</p>
+      <p class="module-desc">实际 ELF 用冻结的 T5-small 编码器（嵌入维度 512），再用瓶颈层压到 128 维连续空间。这里展示 36 个常用词的 3D 投影（PCA 降维），可以旋转、缩放、点击查看最近邻。</p>
       <canvas id="cv-embed3d" class="point3d-canvas" width="800" height="320"></canvas>
       <div class="feedback" id="lbl-3d-pick" style="margin-top:6px;">👆 点击圆点查看词与最近邻</div>
     </div>
@@ -73,8 +73,8 @@
   <div class="embed-takeaway">
     <div class="et-item">
       <div class="et-icon">🏷️</div>
-      <div class="et-title">每个词 = 768个数字</div>
-      <div class="et-desc">就像每个人有身高、体重、性格、爱好...<br>词也用 768 个"特征数字"来描述</div>
+      <div class="et-title">每个词 = 一串特征数字</div>
+      <div class="et-desc">就像每个人有身高、体重、性格、爱好...<br>词也用一串"特征数字"来描述（ELF 用 512 维编码器嵌入）</div>
     </div>
     <div class="et-arrow">＋</div>
     <div class="et-item">

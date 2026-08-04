@@ -36,22 +36,25 @@
   <div class="module">
     <div class="module-head">
       <span class="num">10.1</span>
-      <h4>BLEU 成绩表</h4>
+      <h4>成绩表：翻译 BLEU + 摘要 ROUGE</h4>
           </div>
     <div class="module-body">
 
         <table class="paper" id="result-table">
-          <thead><tr><th>模型</th><th>类型</th><th>分数</th><th>参数</th></tr></thead>
+          <thead><tr><th>模型</th><th>类型</th><th>De-En BLEU↑</th><th>XSum ROUGE-1↑</th><th>参数</th></tr></thead>
           <tbody>
-            <tr data-detail="Transformer 基线。串行自回归生成，速度慢但稳定。"><td>Transformer-Base</td><td>自回归</td><td>27.3</td><td>65M</td></tr>
-            <tr class="row-target" data-detail="ELF 小型版。共享权重网络 + CFG + 连续扩散。"><td><strong>ELF-Small</strong> ⭐</td><td>扩散</td><td class="hl">27.8</td><td>72M</td></tr>
-            <tr data-detail="Transformer 大型版。BLEU 高但参数翻倍。"><td>Transformer-Big</td><td>自回归</td><td>28.4</td><td>213M</td></tr>
-            <tr class="row-target" data-detail="ELF 大型版，BLEU 持平甚至微超 Transformer-Big。"><td><strong>ELF-Big</strong> ⭐</td><td>扩散</td><td class="hl">28.6</td><td>220M</td></tr>
-            <tr data-detail="纯扩散基线，没有共享权重。"><td>Diffusion Baseline</td><td>扩散</td><td>26.1</td><td>68M</td></tr>
+            <tr data-detail="自回归基线 AR，WMT14 De-En BLEU 25.2。"><td>AR</td><td>自回归</td><td>25.2</td><td>30.5</td><td>99M</td></tr>
+            <tr data-detail="离散扩散基线 MDLM，翻译弱（18.4）但摘要 ROUGE-1 最高（33.4）。"><td>MDLM</td><td>离散扩散</td><td>18.4</td><td>33.4</td><td>99M</td></tr>
+            <tr data-detail="离散扩散 Duo（170M，含 35M 冻结编码器），BLEU 21.3。"><td>Duo</td><td>离散扩散</td><td>21.3</td><td>31.4</td><td>170M (+35M)</td></tr>
+            <tr data-detail="连续扩散 E2D2，BLEU 24.8。"><td>E2D2</td><td>扩散</td><td>24.8</td><td>28.4</td><td>99M</td></tr>
+            <tr data-detail="SeqDiffuSeq，BLEU 21.3，摘要较弱。"><td>SeqDiffuSeq</td><td>扩散</td><td>21.3</td><td>19.3</td><td>–</td></tr>
+            <tr data-detail="CDCD，BLEU 24.9（无摘要数据）。"><td>CDCD</td><td>扩散</td><td>24.9</td><td>–</td><td>–</td></tr>
+            <tr class="row-target" data-detail="ELF-B（105M，含 35M 冻结编码器）：De-En BLEU 26.4，XSum ROUGE-1 36.0，均超越所有同规模基线。"><td><strong>Ours (ELF-B)</strong> ⭐</td><td>扩散</td><td class="hl">26.4</td><td class="hl">36.0</td><td>105M (+35M)</td></tr>
           </tbody>
         </table>
 
-      <div class="feedback" id="lbl-result-detail">点行查看训练方式</div>
+      <div class="feedback" id="lbl-result-detail">点行查看说明（数据来自论文 §4.3 Table 1）</div>
+      <p style="font-size:12px;color:#8a8a7a;margin:8px 0 0;">指标：BLEU↑ 越高越好（WMT14 德→英翻译）；ROUGE-1↑ 越高越好（XSum 摘要）。参数栏 “(+35M)” 为冻结编码器。</p>
 
           </div>
   </div>
@@ -64,26 +67,27 @@
     <div class="module-body">
       <div class="compare-row">
         <div class="compare-cell good">
-          <div class="label">① BLEU 追平 SOTA</div>
-          <div class="val" style="color:var(--olive); font-size:22px;">28.6</div>
-          <div class="mini">ELF-Big &gt; Transformer-Big (28.4)</div>
+          <div class="label">① 翻译 BLEU（同规模 SOTA）</div>
+          <div class="val" style="color:var(--olive); font-size:22px;">26.4</div>
+          <div class="mini">ELF-B 超过 AR 基线 25.2 及所有同规模扩散模型（WMT14 De-En）</div>
         </div>
         <div class="compare-cell good">
-          <div class="label">② 共享权重 = 核心</div>
-          <div class="val" style="color:var(--olive); font-size:22px;">+1.7</div>
-          <div class="mini">有共享 27.8 vs 无共享 26.1</div>
+          <div class="label">② 共享权重解码</div>
+          <div class="val" style="color:var(--olive); font-size:18px;">优于两阶段</div>
+          <div class="mini">共享权重（20% CE）在 OWT 生成 PPL–熵权衡上延伸更好（§4.1 Fig 5b）</div>
         </div>
         <div class="compare-cell good">
-          <div class="label">③ CFG 甜蜜点</div>
-          <div class="val" style="color:var(--olive); font-size:22px;">ω≈2.5</div>
-          <div class="mini">ω=1: 26.3 / ω=2.5: 28.6 / ω=5: 28.1</div>
+          <div class="label">③ CFG 引导</div>
+          <div class="val" style="color:var(--olive); font-size:18px;">scale 1+2</div>
+          <div class="mini">主结果固定 self=1 / input=2；CFG 消融见 §4.1 Fig 4（OWT PPL–熵）</div>
         </div>
         <div class="compare-cell good">
-          <div class="label">④ 并行解码加速</div>
-          <div class="val" style="color:var(--olive); font-size:22px;">3.7×</div>
-          <div class="mini">ELF 320 t/s vs Transformer 85 t/s</div>
+          <div class="label">④ 并行解码</div>
+          <div class="val" style="color:var(--olive); font-size:18px;">计算量更低</div>
+          <div class="mini">扩散式并行解码；32 步即达 PPL 24。论文未给具体 tps / 加速倍数</div>
         </div>
       </div>
+      <p style="font-size:12px;color:#8a8a7a;margin:6px 0 0;">注：②③④ 为论文定性 / 消融结论（多基于 OWT 无条件生成评测）；论文未报告 tokens-per-second 或具体加速倍数。① 来自 §4.3 Table 1。</p>
 
 
 
