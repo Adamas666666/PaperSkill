@@ -1,0 +1,93 @@
+<section class="chap" id="sec13">
+  <h2 class="chap-title"><span class="num">§10.</span>结果：ELF 真实成绩<span class="badge-tag inf">实验</span></h2>
+
+  <div class="flow-mini">
+    <span class="flow-mini-step done">① 加噪</span>
+    <span class="flow-mini-arrow">→</span>
+    <span class="flow-mini-step done">② 嵌入</span>
+    <span class="flow-mini-arrow">→</span>
+    <span class="flow-mini-step done">③ 可逆</span>
+    <span class="flow-mini-arrow">→</span>
+    <span class="flow-mini-step done">④ Flow</span>
+    <span class="flow-mini-arrow">→</span>
+    <span class="flow-mini-step done">⑤ CFG</span>
+    <span class="flow-mini-arrow">→</span>
+    <span class="flow-mini-step done">⑥ 采样</span>
+    <span class="flow-mini-arrow">→</span>
+    <span class="flow-mini-step done">⑦ 训练</span>
+    <span class="flow-mini-arrow">→</span>
+    <span class="flow-mini-step done">⑧ 共享权重</span>
+    <span class="flow-mini-arrow">→</span>
+    <span class="flow-mini-step done">⑨ 技巧</span>
+    <span class="flow-mini-arrow">→</span>
+    <span class="flow-mini-step active">⑩ 结果</span>
+  </div>
+
+  <div class="analogy-card">
+    <div class="analogy-visual">
+      <canvas id="ana-result" width="244" height="130"></canvas>
+    </div>
+    <div class="analogy-body">
+      <div class="analogy-title">书法比赛：看谁写得好</div>
+      <div class="analogy-text">一幅幅字挂出来<b>比高下</b>——ELF在翻译/摘要任务上和其他方法比成绩。前面所有设计（噪声→嵌入→可逆→Flow→CFG→训练）是否有用，最终看BLEU/ROUGE分数说话。</div>
+    </div>
+  </div>
+
+  <div class="module">
+    <div class="module-head">
+      <span class="num">10.1</span>
+      <h4>BLEU 成绩表</h4>
+          </div>
+    <div class="module-body">
+
+        <table class="paper" id="result-table">
+          <thead><tr><th>模型</th><th>类型</th><th>分数</th><th>参数</th></tr></thead>
+          <tbody>
+            <tr data-detail="Transformer 基线。串行自回归生成，速度慢但稳定。"><td>Transformer-Base</td><td>自回归</td><td>27.3</td><td>65M</td></tr>
+            <tr class="row-target" data-detail="ELF 小型版。共享权重网络 + CFG + 连续扩散。"><td><strong>ELF-Small</strong> ⭐</td><td>扩散</td><td class="hl">27.8</td><td>72M</td></tr>
+            <tr data-detail="Transformer 大型版。BLEU 高但参数翻倍。"><td>Transformer-Big</td><td>自回归</td><td>28.4</td><td>213M</td></tr>
+            <tr class="row-target" data-detail="ELF 大型版，BLEU 持平甚至微超 Transformer-Big。"><td><strong>ELF-Big</strong> ⭐</td><td>扩散</td><td class="hl">28.6</td><td>220M</td></tr>
+            <tr data-detail="纯扩散基线，没有共享权重。"><td>Diffusion Baseline</td><td>扩散</td><td>26.1</td><td>68M</td></tr>
+          </tbody>
+        </table>
+
+      <div class="feedback" id="lbl-result-detail">点行查看训练方式</div>
+
+          </div>
+  </div>
+
+  <div class="module">
+    <div class="module-head">
+      <span class="num">10.2</span>
+      <h4>核心结论</h4>
+          </div>
+    <div class="module-body">
+      <div class="compare-row">
+        <div class="compare-cell good">
+          <div class="label">① BLEU 追平 SOTA</div>
+          <div class="val" style="color:var(--olive); font-size:22px;">28.6</div>
+          <div class="mini">ELF-Big &gt; Transformer-Big (28.4)</div>
+        </div>
+        <div class="compare-cell good">
+          <div class="label">② 共享权重 = 核心</div>
+          <div class="val" style="color:var(--olive); font-size:22px;">+1.7</div>
+          <div class="mini">有共享 27.8 vs 无共享 26.1</div>
+        </div>
+        <div class="compare-cell good">
+          <div class="label">③ CFG 甜蜜点</div>
+          <div class="val" style="color:var(--olive); font-size:22px;">ω≈2.5</div>
+          <div class="mini">ω=1: 26.3 / ω=2.5: 28.6 / ω=5: 28.1</div>
+        </div>
+        <div class="compare-cell good">
+          <div class="label">④ 并行解码加速</div>
+          <div class="val" style="color:var(--olive); font-size:22px;">3.7×</div>
+          <div class="mini">ELF 320 t/s vs Transformer 85 t/s</div>
+        </div>
+      </div>
+
+
+
+          </div>
+  </div>
+
+  </section>
