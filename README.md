@@ -25,7 +25,6 @@
 | [PARTICIPATING.md](docs/PARTICIPATING.md) | 分支、目录、导入、校验和 PR |
 | [SUBMISSION.md](docs/SUBMISSION.md) | GitHub 与考核外部材料的提交位置 |
 | [RUBRIC.md](docs/RUBRIC.md) | 评分权重和实质性修改标准 |
-| [LICENSE](LICENSE) | 仓库原创代码和文档的软件许可证 |
 
 ## 仓库结构
 
