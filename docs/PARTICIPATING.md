@@ -99,4 +99,4 @@ catalog/papers.json
 
 普通参与任务不得同时修改 `paper-skill/`、管理脚本、工作流或其他论文目录。检查通过后推送个人分支并创建 Pull Request，不要直接推送 `main`。
 
-审核、反馈和 `review -> published` 状态流转见 [REVIEWING.md](REVIEWING.md)。
+Pull Request 创建后，作品保持 `review` 状态。工程和内容检查通过后，根据审核意见将 `paper.json` 中的 `status` 改为 `published`，重新运行 `npm run catalog` 并推送到原 Pull Request。
