@@ -14,7 +14,7 @@ html_output/<paper-slug>_<source>/
 
 分支、导入、目录和检查命令统一见 [PARTICIPATING.md](PARTICIPATING.md)。Pull Request 应附关键页面截图、主要交互说明和需要审核者重点确认的问题。
 
-论文 PDF 和一页修改说明不进入 GitHub。项目文件、外部素材和公开信息的边界见 [ASSET_AND_PRIVACY.md](ASSET_AND_PRIVACY.md)。
+论文 PDF 和一页修改说明不进入 GitHub。项目不得包含未获授权的素材、密钥、个人隐私或本地绝对路径；使用论文图片或其他外部素材时，应在项目 `README.md` 中注明来源。
 
 ## 2. 考核外部材料
 
@@ -50,4 +50,4 @@ html_output/<paper-slug>_<source>/
 - [ ] 论文 PDF 或链接已通过指定私有渠道提交；
 - [ ] 修改说明不超过一页并包含至少三项实质性修改；
 - [ ] Pull Request 已附截图和交互说明；
-- [ ] 素材来源和参与者公开信息符合项目规范。
+- [ ] 素材来源已注明，仓库中不含个人隐私、密钥或本地绝对路径。

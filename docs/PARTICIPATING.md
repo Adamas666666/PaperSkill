@@ -69,7 +69,7 @@ html_output/<paper-slug>_<source>/
 - `skillVersion` 记录 `paper-skill/VERSION`；
 - 同一 `paperUrl` 可以有多个来源实现。
 
-不得提交 `node_modules/`、`dist/`、本地缓存、论文 PDF、密钥或未获授权的素材。详细边界见 [ASSET_AND_PRIVACY.md](ASSET_AND_PRIVACY.md)。
+不得提交 `node_modules/`、`dist/`、本地缓存、论文 PDF、密钥、个人隐私或未获授权的素材。使用论文图片或其他外部素材时，应在项目 `README.md` 中注明来源并确认允许公开使用。
 
 ## 5. 本地验收
 
