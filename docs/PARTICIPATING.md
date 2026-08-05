@@ -1,6 +1,6 @@
 # 参与指南
 
-本文只规定作品进入 GitHub 仓库的技术流程。参与者的完整教程项目统一提交到 `html_output/<paper-slug>_<source>/`，不得放在仓库根目录或其他目录。环境安装见 [SETUP.md](SETUP.md)，考核材料去向见 [SUBMISSION.md](SUBMISSION.md)。
+本文只规定作品进入 GitHub 仓库的技术流程。参与者的完整教程项目统一提交到 `html_output/<paper-slug>_<source>/`，不得放在仓库根目录或其他目录。完整自动化流程见 [AGENT_WORKFLOW.md](AGENT_WORKFLOW.md)，考核材料去向见 [SUBMISSION.md](SUBMISSION.md)。
 
 ## 1. 论文与目录标识
 
