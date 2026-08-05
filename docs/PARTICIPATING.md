@@ -1,6 +1,6 @@
 # 参与指南
 
-本文只规定作品进入 GitHub 仓库的技术流程。环境安装见 [SETUP.md](SETUP.md)，考核材料去向见 [SUBMISSION.md](SUBMISSION.md)。
+本文只规定作品进入 GitHub 仓库的技术流程。参与者的完整教程项目统一提交到 `html_output/<paper-slug>_<source>/`，不得放在仓库根目录或其他目录。环境安装见 [SETUP.md](SETUP.md)，考核材料去向见 [SUBMISSION.md](SUBMISSION.md)。
 
 ## 1. 论文与目录标识
 
@@ -21,7 +21,7 @@ html_output/resnet_team-a/
 <paper-short-name>_output/
 ```
 
-完成论文核查和人工修改后，再导入本仓库。
+完成论文核查和人工修改后，再通过下方导入命令将完整项目复制到本仓库的 `html_output/` 目录。不要手动只提交生成项目中的单个 `index.html`。
 
 ## 3. 创建分支并导入
 
@@ -42,6 +42,8 @@ npm run import -- <生成目录> <paper-slug> --source <来源标识> --source-b
 ```text
 html_output/<paper-slug>_<source>/
 ```
+
+该目录就是作品在 GitHub 中的最终提交位置。后续修改也应在这个目录内完成。
 
 ## 4. 项目结构
 

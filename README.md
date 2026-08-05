@@ -12,7 +12,7 @@
 2. 选择一篇机器学习或人工智能论文，在独立工作目录中调用 `paper-skill/`；
 3. 获得 `<paper-short-name>_output/` React + TypeScript 项目；
 4. 对照原论文核查内容，并完成至少三项实质性修改；
-5. 按 [参与指南](docs/PARTICIPATING.md) 导入、检查并通过 Pull Request 提交项目；
+5. 按 [参与指南](docs/PARTICIPATING.md) 将完整项目导入 `html_output/<paper-slug>_<source>/`，检查后通过 Pull Request 提交；
 6. 按 [提交说明](docs/SUBMISSION.md) 另行提交论文和一页修改说明，并使用最终教程完成 5–8 分钟展示。
 
 ## 使用文档
@@ -34,7 +34,7 @@
 PaperSkill/
 |-- docs/               # 环境、参与、提交、评分和审核说明
 |-- paper-skill/        # 共享生成 Skill，由核心维护者维护
-|-- html_output/        # 已收录的论文教程
+|-- html_output/        # 参与者最终教程项目的统一提交目录
 |-- catalog/            # 自动生成的论文索引
 |-- portal/             # GitHub Pages 集合入口
 |-- scripts/            # 导入、验证、索引和构建工具
@@ -42,3 +42,5 @@ PaperSkill/
 ```
 
 `main` 只通过 Pull Request 合并。自动检查负责工程门槛，论文事实、教学质量和人工修改仍需人工审核。
+
+参与者的最终作品统一提交到 `html_output/<paper-slug>_<source>/`。不要将项目直接放在仓库根目录，也不要把论文 PDF 或修改说明放入 `html_output/`。

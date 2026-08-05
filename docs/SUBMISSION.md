@@ -4,11 +4,13 @@ PaperSkill 考核包含“GitHub 作品提交”和“考核外部材料提交�
 
 ## 1. GitHub 作品
 
-GitHub 仓库只接收可以运行和构建的最终教程项目，位置为：
+GitHub 仓库只接收可以运行和构建的完整 React + TypeScript 最终教程项目，统一提交到：
 
 ```text
 html_output/<paper-slug>_<source>/
 ```
+
+这里提交的是包含 `package.json`、`src/`、`public/` 和 `paper.json` 等内容的完整项目文件夹，不是单独的 HTML 文件。项目不得放在仓库根目录、`docs/` 或其他位置。
 
 分支、导入、目录和检查命令统一见 [PARTICIPATING.md](PARTICIPATING.md)。Pull Request 应附关键页面截图、主要交互说明和需要审核者重点确认的问题。
 
