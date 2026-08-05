@@ -69,7 +69,7 @@ html_output/<paper-slug>_<source>/
 - `skillVersion` 记录 `paper-skill/VERSION`；
 - 同一 `paperUrl` 可以有多个来源实现。
 
-不得提交 `node_modules/`、`dist/`、本地缓存、论文 PDF、密钥或未获授权的素材。详细边界见 [ASSET_AND_PRIVACY.md](ASSET_AND_PRIVACY.md)。
+不得提交 `node_modules/`、`dist/`、本地缓存、论文 PDF、密钥、个人隐私或未获授权的素材。使用论文图片或其他外部素材时，应在项目 `README.md` 中注明来源并确认允许公开使用。
 
 ## 5. 本地验收
 
@@ -99,4 +99,4 @@ catalog/papers.json
 
 普通参与任务不得同时修改 `paper-skill/`、管理脚本、工作流或其他论文目录。检查通过后推送个人分支并创建 Pull Request，不要直接推送 `main`。
 
-审核、反馈和 `review -> published` 状态流转见 [REVIEWING.md](REVIEWING.md)。
+Pull Request 创建后，作品保持 `review` 状态。工程和内容检查通过后，根据审核意见将 `paper.json` 中的 `status` 改为 `published`，重新运行 `npm run catalog` 并推送到原 Pull Request。

@@ -28,4 +28,4 @@
 
 请附关键页面截图、主要交互说明，以及仍需审核者重点确认的内容。
 
-提交前请阅读 `docs/SUBMISSION.md`、`docs/RUBRIC.md` 和 `docs/ASSET_AND_PRIVACY.md`。
+提交前请阅读 `docs/SUBMISSION.md` 和 `docs/RUBRIC.md`。
