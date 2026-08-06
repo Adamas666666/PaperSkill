@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/paper.schema.json",
+  "title": "Paper tutorial metadata",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "slug",
+    "paperSlug",
+    "source",
+    "sourceBranch",
+    "title",
+    "paperUrl",
+    "participants",
+    "topics",
+    "skillVersion",
+    "status",
+    "entry"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*_[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "paperSlug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "source": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "sourceBranch": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 3 },
+    "authors": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "year": { "type": ["integer", "null"], "minimum": 1900, "maximum": 2100 },
+    "venue": { "type": "string" },
+    "paperUrl": { "type": "string", "pattern": "^https://" },
+    "participants": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "github": { "type": "string" }
+        }
+      }
+    },
+    "topics": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "skillVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "status": { "enum": ["draft", "review", "published"] },
+    "entry": { "const": "index.html" }
+  }
+}

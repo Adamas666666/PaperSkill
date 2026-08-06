@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "slug": "resnet_example",
+  "paperSlug": "resnet",
+  "source": "example",
+  "sourceBranch": "local/resnet-output",
+  "title": "Deep Residual Learning for Image Recognition",
+  "authors": [
+    "Kaiming He",
+    "Xiangyu Zhang",
+    "Shaoqing Ren",
+    "Jian Sun"
+  ],
+  "year": 2016,
+  "venue": "CVPR",
+  "paperUrl": "https://arxiv.org/abs/1512.03385",
+  "participants": [
+    {
+      "name": "示例维护者"
+    }
+  ],
+  "topics": [
+    "Computer Vision",
+    "CNN",
+    "Residual Learning"
+  ],
+  "skillVersion": "1.0.0",
+  "status": "published",
+  "entry": "index.html"
+}

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="由 paper-skill 与参与者共同制作的中文交互式论文教程集合。" />
+    <title>论文交互教程集合</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero-inner">
+        <p class="eyebrow">PAPER · EXPLAINED · INTERACTIVELY</p>
+        <h1>把论文读成一条<br /><span>可以探索的学习路径</span></h1>
+        <p class="intro">这里收录由 paper-skill 生成、参与者校对和完善的中文交互式 AI 论文教程。</p>
+        <a class="start-link" href="#start">开始制作一篇论文教程 ↓</a>
+        <div class="stats" aria-label="集合统计">
+          <div><strong id="paper-count">—</strong><span>篇教程</span></div>
+          <div><strong id="topic-count">—</strong><span>个主题</span></div>
+          <div><strong id="participant-count">—</strong><span>位参与者</span></div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="starter" id="start" aria-labelledby="starter-title">
+        <div class="starter-heading">
+          <div>
+            <p class="section-kicker">START HERE</p>
+            <h2 id="starter-title">选择论文，生成你的开始步骤</h2>
+          </div>
+          <p>填写信息后，页面会生成分支名、Skill 提示词和导入命令；所有操作仍在你克隆的本地仓库中完成。</p>
+        </div>
+
+        <div class="journey" aria-label="参与流程">
+          <div><b>01</b><span>自由选择论文</span></div>
+          <div><b>02</b><span>创建个人分支</span></div>
+          <div><b>03</b><span>调用 paper-skill</span></div>
+          <div><b>04</b><span>导入并提交 PR</span></div>
+        </div>
+
+        <form id="starter-form" class="starter-form">
+          <label><span>论文英文名</span><input id="start-title" required placeholder="Attention Is All You Need" /></label>
+          <label class="wide"><span>论文链接</span><input id="start-url" type="url" required placeholder="https://arxiv.org/abs/1706.03762" /></label>
+          <label><span>论文简称</span><input id="start-paper-slug" required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="attention-is-all-you-need" /><small>小写字母、数字和连字符</small></label>
+          <label><span>GitHub 用户名</span><input id="start-source" required pattern="[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*" placeholder="1223BETTYYANG" /><small>可包含大小写；生成目录时会自动转成小写来源标识</small></label>
+          <label><span>参与者姓名</span><input id="start-name" required placeholder="小明" /></label>
+          <button type="submit">生成我的操作步骤</button>
+        </form>
+
+        <div id="starter-result" class="starter-result" hidden aria-live="polite">
+          <article><div><b>第一步</b><h3>创建分支</h3></div><button class="copy-btn" type="button" data-copy="branch-command">复制</button><pre id="branch-command"></pre></article>
+          <article><div><b>第二步</b><h3>在论文工作目录调用 Skill</h3></div><button class="copy-btn" type="button" data-copy="skill-command">复制</button><pre id="skill-command"></pre></article>
+          <article><div><b>第三步</b><h3>把生成结果导入仓库</h3></div><button class="copy-btn" type="button" data-copy="import-command">复制</button><pre id="import-command"></pre></article>
+          <p class="result-note">导入后运行 <code>npm run validate</code>、<code>npm run catalog</code>、<code>npm run build:site</code>，再提交并创建 Pull Request。</p>
+        </div>
+      </section>
+
+      <div class="collection-heading"><p class="section-kicker">COLLECTION</p><h2>已经完成的论文教程</h2></div>
+      <section class="toolbar" aria-label="筛选论文">
+        <label class="search">
+          <span>搜索</span>
+          <input id="search" type="search" placeholder="论文、作者、主题或参与者" autocomplete="off" />
+        </label>
+        <label class="filter">
+          <span>主题</span>
+          <select id="topic-filter"><option value="">全部主题</option></select>
+        </label>
+      </section>
+      <p id="result-summary" class="result-summary" aria-live="polite"></p>
+      <section id="paper-grid" class="paper-grid" aria-label="论文教程"></section>
+      <div id="empty" class="empty" hidden>没有找到匹配的教程。</div>
+    </main>
+
+    <footer>
+      <p>由 paper-skill 生成 · 由社区共同审核与维护</p>
+    </footer>
+    <script src="./app.js" defer></script>
+  </body>
+</html>
