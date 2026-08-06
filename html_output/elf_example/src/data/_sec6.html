@@ -52,16 +52,16 @@
         <button class="tiny" id="btn-repair-reset" data-tip="把蓝点放回起点">↺ 重置</button>
         <button class="tiny ghost" id="btn-repair-train" data-tip="手动让蓝点按网络预测方向移动 5 步">▶ 训练几步</button>
         <button class="tiny ghost" id="btn-repair-release" data-tip="物理模拟：松手后球会沿梯度自动滚到目标">🚀 释放（自动滚）</button>
-        <span style="margin-left:auto; font-size:12.5px; color:var(--slate-2);" id="lbl-repair">误差: —</span>
+        <span style="margin-left:auto; font-size:15px; color:var(--slate-2);" id="lbl-repair">误差: —</span>
       </div>
       <div class="physics-ctrl">
         <label>物理参数</label>
         <span>摩擦:</span>
         <input type="range" id="rng-physics-friction" min="0" max="100" value="30" data-tip="摩擦越大球越快停下；0 = 永远在振荡">
-        <span style="font-size:11px; color:var(--slate); min-width:50px;" id="lbl-friction">0.30</span>
+        <span style="font-size:13px; color:var(--slate); min-width:50px;" id="lbl-friction">0.30</span>
         <span style="margin-left:6px;">步长:</span>
         <input type="range" id="rng-physics-step" min="1" max="50" value="20" data-tip="每步移动距离占当前距离的比例 (0.01-0.5)">
-        <span style="font-size:11px; color:var(--slate); min-width:50px;" id="lbl-step">0.20</span>
+        <span style="font-size:13px; color:var(--slate); min-width:50px;" id="lbl-step">0.20</span>
       </div>
 
           </div>
@@ -103,7 +103,7 @@
           <canvas id="cv-align-before" width="380" height="180"></canvas>
           <div class="align-stat" id="align-stat-before">MSE: — | 角度偏差: —</div>
         </div>
-        <div class="align-arrow" style="align-self:center; font-size:36px; color:var(--slate);">→</div>
+        <div class="align-arrow" style="align-self:center; font-size:20px; color:var(--slate);">→</div>
         <div class="align-cell">
           <div class="align-cell-head" style="color:var(--olive);">训练后</div>
           <canvas id="cv-align-after" width="380" height="180"></canvas>

@@ -2561,7 +2561,7 @@ window.drawFx_fx_ode = function(cv) {
         <label style="font-weight:600;color:#4a5d3a;">步数 N</label>
         <input type="range" min="2" max="80" value="30" step="1" style="flex:0 1 180px;height:6px;">
         <span class="val val-n" style="font-weight:700;color:#4a5d3a;min-width:38px;display:inline-block;">30</span>
-        <span style="color:#9a9484;font-size:11px;">（Δt=1/N）</span>
+        <span style="color:#9a9484;font-size:13px;">（Δt=1/N）</span>
       </span>
     `;
     cv.parentNode.insertBefore(ctrl, cv.nextSibling);
@@ -2802,7 +2802,7 @@ window.drawFx_fx_sde = function(cv) {
       <label style="font-weight:600;color:#a8553a;">噪声强度 η</label>
       <input type="range" min="0" max="100" value="30" step="1" style="flex:0 1 320px;height:6px;">
       <span class="val" style="font-weight:700;color:#a8553a;min-width:48px;display:inline-block;">0.30</span>
-      <span style="color:#9a9484;font-size:11px;">(0=纯ODE → 1=强随机)</span>
+      <span style="color:#9a9484;font-size:13px;">(0=纯ODE → 1=强随机)</span>
     `;
     cv.parentNode.insertBefore(ctrl, cv.nextSibling);
     const rng = ctrl.querySelector('input');
@@ -3013,7 +3013,7 @@ window.drawFx_fx_x2v = function(cv) {
     const ctrl = document.createElement('div');
     ctrl.className = 'ctrl fx-x2v-ctrl';
     ctrl.style.margin = '6px 0';
-    ctrl.innerHTML = '<label>时间 t</label><input type="range" min="5" max="95" value="30" step="1" style="flex:0 1 280px;"><span class="val">0.30</span><span class="val" style="color:#7a7568; font-size:11.5px;">（0=噪声 → 1=数据）</span>';
+    ctrl.innerHTML = '<label>时间 t</label><input type="range" min="5" max="95" value="30" step="1" style="flex:0 1 280px;"><span class="val">0.30</span><span class="val" style="color:#7a7568; font-size:13px;">（0=噪声 → 1=数据）</span>';
     cv.parentNode.insertBefore(ctrl, cv.nextSibling);
     const rng = ctrl.querySelector('input');
     const lbl = ctrl.querySelector('.val');
