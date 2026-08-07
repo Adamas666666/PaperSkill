@@ -21,6 +21,36 @@
     "tutorialUrl": "papers/elf_example/"
   },
   {
+    "slug": "resnet_cratoozy",
+    "paperSlug": "resnet",
+    "source": "cratoozy",
+    "sourceBranch": "paper/resnet-cratoozy",
+    "title": "Deep Residual Learning for Image Recognition",
+    "authors": [
+      "Kaiming He",
+      "Xiangyu Zhang",
+      "Shaoqing Ren",
+      "Jian Sun"
+    ],
+    "year": 2016,
+    "venue": "CVPR",
+    "paperUrl": "https://arxiv.org/abs/1512.03385",
+    "participants": [
+      {
+        "name": "cratoozy",
+        "github": "cratoozy"
+      }
+    ],
+    "topics": [
+      "Residual Learning",
+      "Image Classification",
+      "Deep Networks"
+    ],
+    "skillVersion": "1.0.0",
+    "status": "review",
+    "tutorialUrl": "papers/resnet_cratoozy/"
+  },
+  {
     "slug": "resnet_example",
     "paperSlug": "resnet",
     "source": "example",
