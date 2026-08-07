@@ -4,19 +4,31 @@
 const { spawnSync } = require('child_process');
 const { ROOT } = require('./lib/repository');
 
-const base = process.env.GITHUB_BASE_REF || process.argv[2];
+const pullRequestBase = process.env.GITHUB_BASE_REF;
+const base = pullRequestBase || process.argv[2];
 if (!base) {
   console.log('非 Pull Request 环境，跳过变更范围检查。');
   process.exit(0);
 }
 
-const result = spawnSync('git', ['diff', '--name-only', `origin/${base}...HEAD`], { cwd: ROOT, encoding: 'utf8' });
-if (result.status !== 0) {
-  console.error(result.stderr || '无法读取 Pull Request 变更范围。');
-  process.exit(1);
+const baseRef = base.startsWith('origin/') ? base : `origin/${base}`;
+
+function readGitFiles(args) {
+  const result = spawnSync('git', args, { cwd: ROOT, encoding: 'utf8' });
+  if (result.status !== 0) {
+    console.error(result.stderr || '无法读取 Pull Request 变更范围。');
+    process.exit(1);
+  }
+  return result.stdout.split(/\r?\n/).filter(Boolean);
 }
 
-const files = result.stdout.split(/\r?\n/).filter(Boolean).map((file) => file.replace(/\\/g, '/'));
+const changedFiles = pullRequestBase
+  ? readGitFiles(['diff', '--name-only', `${baseRef}...HEAD`])
+  : [
+      ...readGitFiles(['diff', '--name-only', baseRef]),
+      ...readGitFiles(['ls-files', '--others', '--exclude-standard']),
+    ];
+const files = [...new Set(changedFiles.map((file) => file.replace(/\\/g, '/')))].sort();
 const paperDirs = new Set(files.map((file) => file.match(/^html_output\/([^/]+)\//)?.[1]).filter(Boolean));
 const touchesSkill = files.some((file) => file.startsWith('paper-skill/'));
 const touchesPaper = paperDirs.size > 0;

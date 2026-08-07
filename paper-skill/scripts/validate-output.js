@@ -3,9 +3,8 @@
  * validate-output.js — automated structural validator for the paper-skill React + TS output.
  *
  * Runs as a hard gate after the project folder is generated (see scripts/validation-checklist.md).
- * All hard thresholds are mirrored from contract.md; if you change a number there, update the
- * CONFIG block below to keep them in sync (contract.md is the source of truth, this script is a
- * copy for the validator).
+ * All hard thresholds are loaded from contract.md so the validator cannot drift from the
+ * skill's single source of truth.
  *
  * Checks:
  *   1. required framework files exist (index.html, package.json, src/main.tsx, App.tsx,
@@ -28,12 +27,30 @@
 const fs = require('fs');
 const path = require('path');
 
-// --- CONFIG (mirror of contract.md §2, §3) ---
+// --- CONFIG (read directly from contract.md §2, §3) ---
+const contractPath = path.join(__dirname, '..', 'contract.md');
+const contract = fs.readFileSync(contractPath, 'utf8');
+
+function readContractInteger(field) {
+  const escapedField = field.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const match = contract.match(
+    new RegExp('\\|\\s*`' + escapedField + '`\\s*\\|\\s*(\\d+)\\s*\\|')
+  );
+  if (!match) {
+    throw new Error(`Missing numeric contract field: ${field}`);
+  }
+  const value = Number.parseInt(match[1], 10);
+  if (!Number.isInteger(value)) {
+    throw new Error(`Invalid numeric contract field: ${field}`);
+  }
+  return value;
+}
+
 const CONFIG = {
-  chapterCountMin: 6,
-  chapterCountMax: 10,
-  activeModulesMin: 10,
-  dualModuleChaptersMin: 1,
+  chapterCountMin: readContractInteger('chapterCountMin'),
+  chapterCountMax: readContractInteger('chapterCountMax'),
+  activeModulesMin: readContractInteger('activeModulesMin'),
+  dualModuleChaptersMin: readContractInteger('dualModuleChaptersMin'),
 };
 
 function fail(msg) {

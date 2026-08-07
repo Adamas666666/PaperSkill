@@ -15,26 +15,28 @@ Use this order exactly:
 5. Horizontal separator.
 6. `## Paper Metadata` with a fully populated table.
 7. Horizontal separator.
-8. `## Unified Everyday Theme: <theme>`.
-9. Three-candidate theme scoring record, winner justification, and rejection reasons.
-10. Theme mapping table.
-11. Paper-specific CSS token overrides.
-12. Canvas background and recurring visual motifs.
-13. Reusable Canvas drawing kit and exact scene palette.
-14. `<chapterCount>`-row visual interaction storyboard (default 10; per `contract.md` §2).
-15. Horizontal separator.
-16. `## <chapterCount>-Chapter Detailed Plan` (default 10; range 6–10 per `contract.md` §2).
-17. That many fully expanded `### §N ...` chapter sections in numerical order.
-18. Horizontal separator.
-19. `## Formula and Symbol Inventory`.
+8. `## Source Evidence and Boundary Matrix` with claim locators, conditions, evaluation protocols, metric directions, and approved wording.
+9. Horizontal separator.
+10. `## Unified Everyday Theme: <theme>`.
+11. Three-candidate theme scoring record, winner justification, and rejection reasons.
+12. Theme mapping table.
+13. Paper-specific CSS token overrides.
+14. Canvas background and recurring visual motifs.
+15. Reusable Canvas drawing kit and exact scene palette.
+16. `<chapterCount>`-row visual interaction storyboard (default 10; per `contract.md` §2).
+17. Horizontal separator.
+18. `## <chapterCount>-Chapter Detailed Plan` (default 10; range 6–10 per `contract.md` §2).
+19. That many fully expanded `### §N ...` chapter sections in numerical order.
 20. Horizontal separator.
-21. `## Verified Bilibili Recommendations`.
+21. `## Formula and Symbol Inventory`.
 22. Horizontal separator.
-23. `## Hero Two-Panel Canvas Design`.
+23. `## Verified Bilibili Recommendations`.
 24. Horizontal separator.
-25. `## Project Generation Instructions` with six ordered steps: scaffold the folder, fill `src/data/tutorial.ts`, add paper-specific widgets, add optional figures, enforce hard rules, validate the folder.
+25. `## Hero Two-Panel Canvas Design`.
+26. Horizontal separator.
+27. `## Project Generation Instructions` with six ordered steps: scaffold the folder, fill `src/data/tutorial.ts`, add paper-specific widgets, add optional figures, enforce hard rules, validate the folder.
 
-Do not move the generation instructions before the chapter plans. Do not omit separators, the directory tree, Hero specification, or the final five-step procedure.
+Do not move the generation instructions before the chapter plans. Do not omit separators, the directory tree, Hero specification, or the final six-step procedure.
 
 ## Required Chapter Order
 
@@ -131,7 +133,8 @@ The generated temporary `SKILL.md` must satisfy all of these checks (see `contra
 - the shared Canvas kit, exact scene palette, and `<chapterCount>`-row visual storyboard are complete;
 - every module names its state variables, visual encoding, synchronized outputs, and responsive behavior;
 - all visible labels and feedback copy are specified in Simplified Chinese;
-- result values and formulas are evidence-backed;
+- result values and formulas are evidence-backed, protocol-aware, and dimensionally consistent;
+- architecture controls contain only valid state combinations, with unavailable choices explained;
 - no `{{...}}`, `__...__`, `TBD`, `TODO`, "same as above", or `complete-chapter-N-plan` remains.
 
 There is **no global character minimum**. Length alone is not quality; the automated

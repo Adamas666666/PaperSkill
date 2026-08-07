@@ -1,6 +1,6 @@
 ---
 name: "paper-skill"
-description: "Analyze a machine-learning or AI paper and produce a polished Simplified Chinese interactive tutorial as a React + TypeScript (Vite) project folder. Use when a user provides a paper as a PDF, text, URL, or detailed description and wants an educational web app. Run two phases in one invocation: build a paper-specific tutorial skill in a task-scoped temporary directory, immediately use it to generate and validate the React+TS project folder, then delete the temporary skill (unless debug mode is on). Deliver only the final <paper-short-name>_output/ folder."
+description: "Analyze a machine-learning or AI paper and produce a polished Simplified Chinese interactive tutorial as a React + TypeScript (Vite) project folder. Use when a user provides a paper as a PDF, text, URL, or detailed description and wants an educational web app. Run two phases in one invocation: build a paper-specific tutorial skill in a task-scoped temporary directory, immediately use it to generate and validate the React+TS project folder, then delete the temporary skill unless debug mode is on. Deliver only the final paper-short-name_output folder."
 ---
 
 # Paper Tutorial Generator
@@ -11,9 +11,10 @@ All agent-facing instructions in this skill and its sub-files are in **English**
 
 ## Single Source of Truth
 
-All hard numeric constraints and the color semantics live in **`contract.md`**. Do not
-re-state or hard-code those numbers anywhere else — reference the relevant § instead. If
-you change a number, change it only in `contract.md`.
+All hard numeric constraints and the color semantics are canonical in **`contract.md`**.
+Human-facing summaries may repeat a value only with a reference to the relevant section;
+scripts must load thresholds from the contract rather than hard-code another copy. If a
+summary disagrees with `contract.md`, the contract wins.
 
 ## Required Outcome
 
@@ -85,14 +86,15 @@ Follow all steps in `scripts/generation-pipeline.md`:
 1. Read the paper source.
 2. Apply the four instructional design principles.
 3. Decompose the paper into problem, insight, math, architecture, training, inference, results, and terminology.
-4. Generate and score at least three paper-specific theme candidates, lock the winner, then assign each chapter a different simple action that clearly belongs to it.
-5. **Plan `chapterCount` chapters** per `contract.md` §2 (default 10; range 6–10). Pick a `paperType` per §2.2.
-6. Assign real-world animation scenes and varied interaction patterns.
-7. Design analogy cards and implementation-ready problem-first interactive modules.
-8. Extract a concise formula and symbol inventory.
-9. **Optionally** find and verify relevant Bilibili videos (best-effort; see `contract.md` §7).
-10. Materialize the paper-specific skill under a task-scoped temporary directory.
-11. Validate the temporary paperSkill (checklist + `validate-output.js` against the plan where applicable).
+4. Build a source-evidence matrix for every core claim, formula, architecture condition, and reported result before designing the tutorial.
+5. Generate and score at least three paper-specific theme candidates, lock the winner, then assign each chapter a different simple action that clearly belongs to it.
+6. **Plan `chapterCount` chapters** per `contract.md` §2 (default 10; range 6–10). Pick a `paperType` per §2.2.
+7. Assign real-world animation scenes and varied interaction patterns.
+8. Design analogy cards and implementation-ready problem-first interactive modules.
+9. Extract a concise formula and symbol inventory.
+10. **Optionally** find and verify relevant Bilibili videos (best-effort; see `contract.md` §7).
+11. Materialize the paper-specific skill under a task-scoped temporary directory.
+12. Validate the temporary paperSkill (checklist + `validate-output.js` against the plan where applicable).
 
 After Phase 1 passes, read **only** the generated temporary `SKILL.md` and its copied `assets/` directory, then immediately execute Phase 2. Do not re-open any original paper-skill document.
 
@@ -113,12 +115,16 @@ After Phase 1 passes, read **only** the generated temporary `SKILL.md` and its c
 13. Give each module one dominant learner operation. Drive its Canvas, selected path or component, value or technical evidence when applicable, and immediate feedback from the same state.
 14. Reuse one tutorial-wide Canvas drawing kit and restrained scene palette across the Hero, all analogy cards, and life-metaphor body modules. Keep the color semantics in `contract.md` §5 stable across chapters.
 15. Use technical graphics as compact, active evidence. Curves, distributions, feature views, bars, dimensions, and architecture nodes must update from the learner-controlled state and remain visually subordinate to one clear operation.
-16. Present the old-method limitation before introducing the paper's solution.
-17. Reveal chapters progressively. Do not show replay copy or next-section instructional copy inside the page.
-18. **Bilibili videos are optional** (per `contract.md` §7). Use real `bvid`s (e.g. `BV1xx...`) in `tutorial.bilibili`. If no relevant video exists at all, omit the `bilibili` array; if any relevant video is found, **always include and display it** (video + cover + views) even when Bilibili API verification fails — verification is not a gate.
-19. Continue directly from Phase 1 to Phase 2.
-20. Remove the temporary paperSkill on success or failure, unless `PAPER_SKILL_DEBUG=true`. Confirm that its exact resolved path no longer exists before responding (or, in debug mode, that it is preserved and its path is returned).
-21. Deliver only the final `<paper-short-name>_output/` folder; do not list or describe the temporary paperSkill.
+16. Anchor every core factual claim to a paper section, page, equation, figure, or table in the Phase 1 evidence matrix. Mark interpretations as interpretations; never upgrade an inference into a paper claim.
+17. State the conditions under which each architecture choice, training statement, comparison, and conclusion is valid. Do not present a conditional design choice as universal.
+18. Verify every formula's symbols, shapes or dimensions, sign, normalization, and surrounding assumptions before using it in prose or an interaction.
+19. Record every result's dataset, split or evaluation protocol, baseline, unit, and metric direction. Never compare values from incompatible protocols or treat lower-is-better and higher-is-better metrics alike. Cover major ablations, transfer results, and limitations when the paper reports them.
+20. Present the old-method limitation before introducing the paper's solution.
+21. Reveal chapters progressively. Do not show replay copy or next-section instructional copy inside the page.
+22. **Bilibili videos are optional** (per `contract.md` §7). Use real `bvid`s (e.g. `BV1xx...`) in `tutorial.bilibili`. If no relevant video exists at all, omit the `bilibili` array; if any relevant video is found, **always include and display it** (video + cover + views) even when Bilibili API verification fails — verification is not a gate.
+23. Continue directly from Phase 1 to Phase 2.
+24. Remove the temporary paperSkill on success or failure, unless `PAPER_SKILL_DEBUG=true`. Confirm that its exact resolved path no longer exists before responding (or, in debug mode, that it is preserved and its path is returned).
+25. Deliver only the final `<paper-short-name>_output/` folder; do not list or describe the temporary paperSkill.
 
 ## Resource Map
 
@@ -167,7 +173,7 @@ outline. Use `references/intermediate-skill-standard.md` plus `templates/skill-t
 as the portable canonical version. Lock the paper-specific theme before reading the
 exemplar; never transfer the exemplar's theme, objects, actions, labels, or mappings.
 
-1. Preserve this top-level order: frontmatter and introduction; directory structure; paper metadata; unified life-theme mapping and color overrides; `chapterCount` fully expanded chapter plans; formula symbol table; verified Bilibili table (optional); Hero comparison design; five-step project-generation instructions.
+1. Preserve this top-level order: frontmatter and introduction; directory structure; paper metadata; source-evidence and boundary matrix; unified life-theme mapping and color overrides; `chapterCount` fully expanded chapter plans; formula symbol table; verified Bilibili table (optional); Hero comparison design; six-step project-generation instructions.
 2. Fully write every chapter. Do not use aggregate placeholders or shorthand such as "same as above", "follow the schema", or `complete-chapter-N-plan`.
 3. Match the reference template's per-chapter order: core concept; chapter role; life-based animation scene; interaction patterns; analogy card; detailed Module N.1; insight bar when applicable; detailed Module N.2 when applicable; formula; three-item takeaway.
 4. For every module, record the title, purpose, presentation mode, exact operation, initial state, controls and state space, Canvas composition, state transitions, immediate feedback wording and colors, and the judgment the learner should form.
@@ -178,6 +184,7 @@ exemplar; never transfer the exemplar's theme, objects, actions, labels, or mapp
 9. Plan at least `activeModulesMin` active modules total, with at least `dualModuleChaptersMin` chapters containing two modules (per `contract.md` §3). Tooltip-only, hover-only, and passive autoplay elements do not count as active modules.
 10. Include exact Simplified Chinese labels and feedback copy where Phase 2 would otherwise need to invent them.
 11. **Portability:** the intermediate skill must be self-sufficient. It must not instruct Phase 2 to read `contract.md`, `references/`, `scripts/*.md`, `templates/`, or the parent `SKILL.md`. Phase 1 inlines every needed general rule — visual grammar, interaction patterns, color semantics, chapter order, and hard thresholds — into the intermediate skill's own specs. Phase 2 reads only the intermediate `SKILL.md` and its `assets/`.
+12. Include only valid combinations of learner-controlled states. For every disabled or impossible combination, define the constraint and visible explanation instead of silently drawing a technically invalid state.
 
 ## Reference Template UI Contract
 

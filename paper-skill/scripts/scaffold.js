@@ -4,8 +4,8 @@
  *
  * The deliverable is a self-contained Vite + React 18 + TypeScript project folder, not a
  * single HTML file. This script copies `assets/react-template/` to the target
- * `<paper-short-name>_output/` directory, injects the paper title into `package.json` and
- * `index.html`, and ensures `public/images/` exists for optional original figures.
+ * `<paper-short-name>_output/` directory, injects the paper title into `package.json`,
+ * `index.html`, and `README.md`, and ensures `public/images/` exists for optional original figures.
  *
  * The generator (Phase 2) then fills ONLY `src/data/tutorial.ts`, `src/styles/paper.css`,
  * `src/modules/*` (+ registry), and `public/images/*`. Framework files are never rewritten.
@@ -89,6 +89,15 @@ function main() {
     html = html.split('__PAPER_TITLE_ZH__').join(titleZh);
     html = html.split('__PAPER_TITLE_EN__').join(titleEn);
     fs.writeFileSync(htmlPath, html, 'utf8');
+  }
+
+  // --- inject README.md (paper-specific project title) ---
+  const readmePath = path.join(outputDir, 'README.md');
+  if (fs.existsSync(readmePath)) {
+    let readme = fs.readFileSync(readmePath, 'utf8');
+    readme = readme.split('__PAPER_TITLE_ZH__').join(titleZh);
+    readme = readme.split('__PAPER_TITLE_EN__').join(titleEn);
+    fs.writeFileSync(readmePath, readme, 'utf8');
   }
 
   // --- ensure public/images exists for optional original figures ---

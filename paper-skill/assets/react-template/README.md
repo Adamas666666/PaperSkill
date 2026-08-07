@@ -1,8 +1,8 @@
-# <论文简称> 交互式教程
+# __PAPER_TITLE_ZH__ 交互式教程
 
-由 **paper-skill** 生成的 React + TypeScript + Vite 项目（单页交互教程，全中文 UI）。
+基于论文 *__PAPER_TITLE_EN__*，由 **paper-skill** 生成的完整 React + TypeScript + Vite 网页项目。
 
-## 本地单个网页运行
+## 本地运行
 
 ```bash
 npm install
@@ -10,6 +10,8 @@ npm run dev       # 开发预览 http://localhost:5173
 npm run build     # 产出 dist/ 静态站点
 npm run preview   # 预览构建结果
 ```
+
+最终提交应保留整个项目目录，不要只复制 `index.html` 或 `dist/`。
 
 ## 目录结构
 

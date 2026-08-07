@@ -1,9 +1,10 @@
 # Contract — Single Source of Truth
 
-This file is the **only** place where the skill's hard numeric constraints and color
-semantics are defined. Every other file (`SKILL.md`, `references/*`, `scripts/*`,
-`templates/*`) must **reference** these values by section number and must **never**
-re-state or hard-code them. When a number needs to change, change it here once.
+This file is the **canonical** place where the skill's hard numeric constraints and color
+semantics are defined. Other instruction files may repeat a human-readable summary only
+when they cite the relevant section, but they must not define or validate an independent
+value. Automated validators load their thresholds directly from this file. When a number
+needs to change, change it here once.
 
 All prose written by the agent into the temporary paperSkill and the final React app stays
 in **Simplified Chinese**; this contract and the skill's own instruction files are in
@@ -14,10 +15,10 @@ in **Simplified Chinese**; this contract and the skill's own instruction files a
 ## §1 How to Use This Contract
 
 - Treat each value below as a load-bearing constraint, not a suggestion.
-- When another file needs a number or color, write "per `contract.md` §N" and copy the
-  value inline for clarity, but do not invent a second copy that can drift.
-- If you find a duplicated hard number in another file, replace it with a reference to
-  this contract.
+- When another file needs a number or color, write "per `contract.md` §N". An inline value
+  is a readability aid, not another source of truth.
+- If an inline summary disagrees with this contract, this contract wins and the summary
+  must be corrected. Scripts must read the value from this file rather than hard-code it.
 
 ---
 
@@ -223,6 +224,18 @@ to the agent self-checklist in `scripts/validation-checklist.md`). The script ch
 
 ---
 
+## §9 Debug Switch
+
+Support an environment flag `PAPER_SKILL_DEBUG=true`:
+
+- When set, the temporary paperSkill directory is **preserved** after generation, and its
+  absolute path is returned to the caller alongside the final project folder. This lets a human
+  inspect what Phase 1 produced.
+- When unset (default), the temporary paperSkill is deleted as usual.
+- The final project folder delivered to the end user is identical in both modes.
+
+---
+
 ## §10 Output Format (React + TypeScript Project Folder)
 
 The deliverable is a self-contained **Vite + React 18 + TypeScript** project folder named
@@ -265,15 +278,3 @@ The tutorial **may** embed the paper's original figures. This is optional, never
 - When no suitable figure exists, omit the field — do not fabricate figures. A best-effort PDF
   figure extraction may place images under `public/images/`, but the absence of figures is
   never a failure.
-
----
-
-## §9 Debug Switch
-
-Support an environment flag `PAPER_SKILL_DEBUG=true`:
-
-- When set, the temporary paperSkill directory is **preserved** after generation, and its
-  absolute path is returned to the caller alongside the final HTML. This lets a human
-  inspect what Phase 1 produced.
-- When unset (default), the temporary paperSkill is deleted as usual.
-- The final project folder delivered to the end user is identical in both modes.

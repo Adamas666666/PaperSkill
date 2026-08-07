@@ -1,6 +1,6 @@
 # Instructional Design Philosophy
 
-Apply all four principles to the chapter plan and final HTML. These are structural requirements, not decoration.
+Apply all four principles to the chapter plan and final tutorial project. These are structural requirements, not decoration.
 
 ## 1. Unconscious Design
 

@@ -34,11 +34,12 @@
    ```powershell
    powershell -ExecutionPolicy Bypass -File .\scripts\setup-participant.ps1 `
      -AgentSkillsDirectory "<Agent Skill 根目录>" `
-     -InstallMissingTools
+     -InstallMissingTools `
+     -ReplaceExistingSkill
    ```
 
 6. 其他系统执行等价检查和复制操作；
-7. 核对仓库与安装目录中的 `paper-skill/VERSION` 完全一致；
+7. 将仓库中的 `paper-skill/` 视为唯一来源，核对安装目录中的版本和完整文件指纹均与仓库一致；即使版本号相同，只要文件内容不同也必须用仓库副本替换；
 8. 重新加载 Agent 后确认能够识别 `paper-skill`。
 
 只有 GitHub 登录或 Fork 确认、管理员权限、缺失的 Git 身份和 Agent 重载需要参与者操作。
@@ -50,7 +51,7 @@
 3. 调用已安装的 `paper-skill`；
 4. 让 Skill 连续完成论文读取、教学规划、React + TypeScript 项目生成和结构验证；
 5. 获得唯一的 `<paper-short-name>_output/` 初版项目；
-6. 保留论文来源和生成项目路径，供后续核查和导入使用。
+6. 保留论文来源、生成项目路径，以及核心论断对应的章节、公式、表格或页码证据，供后续核查和导入使用。
 
 不要把初版直接当作最终作品，也不要在生成阶段停止 Paper Skill 的连续两阶段流程。
 
@@ -70,6 +71,9 @@ npm run build
 - 分别检查桌面端和移动端是否存在溢出、遮挡、空白或资源丢失；
 - 检查浏览器控制台和构建输出；
 - 修复生成造成的编译错误、资源路径错误和明显布局故障；
+- 核对核心概念与相近解释的边界、结构方案成立的条件、公式符号和维度；
+- 核对每个实验数字的评测协议和指标方向，避免混用“越高越好”与“越低越好”；
+- 对论文包含的主要消融、迁移结果和局限进行覆盖检查；
 - 记录初版中发现的论文内容、教学设计和交互问题，但不要把自动修复冒充人工实质性修改。
 
 只有项目能够安装、构建和完成基本浏览，才可以进入人工核查阶段。
@@ -94,20 +98,22 @@ Agent 应根据原论文和实际测试，向参与者列出候选问题，每�
 
 1. 重新执行生成项目的安装、构建和页面测试；
 2. 确认主要交互、桌面端和移动端均正常；
-3. 在作品仓库中创建 `paper/<paper-slug>-<github-user>` 分支；
-4. 按 `docs/PARTICIPATING.md` 运行 `npm run import -- ...`；
-5. 确认项目进入 `html_output/<paper-slug>_<source>/`；
-6. 检查 `paper.json`、论文链接、参与者信息、来源分支和 Skill 版本；
-7. 在仓库根目录运行：
+3. 再次让参与者确认公开展示名、GitHub 用户名、`paperSlug` 和 `source`；
+4. 在作品仓库中创建 `paper/<paper-slug>-<github-user>` 分支；
+5. 按 `docs/PARTICIPATING.md` 运行 `npm run import -- ...`；
+6. 确认项目进入 `html_output/<paper-slug>_<source>/`；
+7. 检查 `paper.json`、论文链接、参与者信息、来源分支和 Skill 版本；
+8. 在仓库根目录运行：
 
    ```powershell
    npm run validate
    npm run catalog
+   npm run validate:pr -- main
    npm run build:site
    ```
 
-8. 检查本次分支原则上只修改目标作品目录和 `catalog/papers.json`；
-9. 确认仓库中没有 `node_modules/`、`dist/`、论文 PDF、密钥、隐私、本地绝对路径或未授权素材。
+9. 检查本次分支原则上只修改目标作品目录和 `catalog/papers.json`；
+10. 确认仓库中没有 `node_modules/`、`dist/`、论文 PDF、密钥、隐私、本地绝对路径或未授权素材。
 
 ## 8. 阶段五：自动准备提交
 
@@ -121,6 +127,8 @@ Agent 应准备：
 - 5–8 分钟现场展示提纲。
 
 推送分支和创建 Pull Request 前，必须向参与者展示最终改动范围、验证结果和待提交内容，并获得确认。确认后可以协助推送个人分支和创建 Pull Request，不得直接推送 `main`。
+
+Pull Request 检查失败时必须先读日志：如果失败发生在仓库校验、构建或范围检查步骤，修复项目后再推送；如果发生在获取运行器、下载官方 Action 或访问 GitHub 服务阶段，先查看 GitHub Status，待服务恢复后使用 `Re-run jobs`，不得把平台故障误判为作品错误。
 
 论文 PDF 或链接、修改说明和教师要求的其他材料按 `docs/SUBMISSION.md` 通过指定私有渠道提交。入口未公布时，将其列为待办，不得上传到公开 GitHub。
 

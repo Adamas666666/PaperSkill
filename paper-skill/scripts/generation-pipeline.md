@@ -22,9 +22,17 @@ Extract this planning record:
 | Training                 | Objective, data, optimization, and practical techniques         |
 | Inference                | Runtime or sampling procedure                                   |
 | Results                  | Key benchmarks, ablations, limitations, and trade-offs          |
+| Boundary conditions      | Where each claim, design choice, or conclusion does and does not apply |
+| Evaluation protocols     | Dataset, split, baseline, unit, aggregation, and metric direction |
+| Transfer and limitations | Cross-task evidence, failure cases, and limitations reported by the paper |
 | Domain                   | Language, vision, audio, 3D, RL, graphs, optimization, or other |
 
-Do not continue until the paper's contribution can be explained in one plain sentence.
+Before continuing, create a source-evidence matrix with one row per core tutorial claim:
+
+| Tutorial claim | Exact source locator | Conditions / assumptions | Protocol / metric direction | Allowed tutorial wording |
+| -------------- | -------------------- | ------------------------ | --------------------------- | ------------------------ |
+
+Use page plus section, equation, figure, or table identifiers whenever available. Separate the paper's explicit statements from your interpretation. Reject unsupported causal language, comparisons across incompatible evaluation protocols, and universal wording for conditional architecture choices. Do not continue until the paper's contribution can be explained in one plain sentence and every planned technical claim has a source row.
 
 ## Step 2: Apply the Design Philosophy
 
@@ -157,6 +165,8 @@ For every module, specify all of these implementation fields:
 - state transitions for the main graphic, technical evidence, values, controls, and feedback after every meaningful operation;
 - exact immediate feedback wording and red/blue/green state colors;
 - paper evidence constraining the view;
+- valid state combinations, prohibited combinations, and the visible explanation for each disabled option;
+- dataset, evaluation protocol, unit, and higher-is-better or lower-is-better direction for every displayed result;
 - the judgment the learner should form.
 - responsive stacking, pointer hit mapping, and keyboard-equivalent behavior when feasible.
 
@@ -178,9 +188,10 @@ Select only equations essential to understanding. For each equation:
 2. Render it with Unicode and HTML only.
 3. Put it in `.formula-explain`.
 4. Make each symbol a clickable `.sym` with a matching `.sym-desc`.
-5. Limit each chapter to one or two core equations.
+5. Record each symbol's type, shape or dimension where meaningful, plus sign, normalization, and assumptions that affect interpretation.
+6. Limit each chapter to one or two core equations.
 
-Maintain a symbol table with the symbol, Simplified Chinese meaning, and first chapter of use.
+Maintain a symbol table with the symbol, Simplified Chinese meaning, type or shape, and first chapter of use.
 
 ## Step 9: Find High-View Bilibili Videos (Optional, Best-Effort — Attempt Every Run)
 
