@@ -25,6 +25,8 @@ function formatDuration(s: number): string {
   return m + ':' + (sec < 10 ? '0' : '') + sec;
 }
 
+let jsonpRequestSerial = 0;
+
 /**
  * Fetch metadata for each bvid and call `onLoad(bvid, data)` per card.
  * Best-effort: network/Api failures are swallowed and reported as null.
@@ -33,19 +35,29 @@ export function useBiliVideos(
   bvids: string[],
   onLoad: (bvid: string, data: BiliCard | null) => void
 ) {
+  const bvidKey = Array.from(
+    new Set(bvids.filter((bvid) => bvid && bvid.startsWith('BV')))
+  ).join('|');
+
   useEffect(() => {
     let cancelled = false;
-    const real = bvids.filter((b) => b && b.startsWith('BV'));
+    const real = bvidKey ? bvidKey.split('|') : [];
     if (real.length === 0) return;
 
-    let counter = 0;
+    const callbackHost = window as unknown as Record<string, unknown>;
+    const pending: Array<{ callbackName: string; script: HTMLScriptElement }> = [];
+
     real.forEach((bvid) => {
-      const cbName = '__bili_cb_' + ++counter + '_' + Date.now();
+      const callbackName = `__paper_skill_bili_${Date.now()}_${++jsonpRequestSerial}`;
       const script = document.createElement('script');
-      (window as unknown as Record<string, unknown>)[cbName] = (res: any) => {
+      const dispose = () => {
+        delete callbackHost[callbackName];
+        script.remove();
+      };
+
+      callbackHost[callbackName] = (res: any) => {
         if (cancelled) return;
-        delete (window as unknown as Record<string, unknown>)[cbName];
-        if (script.parentNode) script.parentNode.removeChild(script);
+        dispose();
         if (!res || res.code !== 0 || !res.data) {
           onLoad(bvid, null);
           return;
@@ -63,18 +75,27 @@ export function useBiliVideos(
         'https://api.bilibili.com/x/web-interface/view?bvid=' +
         bvid +
         '&jsonp=jsonp&callback=' +
-        cbName;
+        callbackName;
       script.onerror = () => {
         if (cancelled) return;
-        delete (window as unknown as Record<string, unknown>)[cbName];
-        if (script.parentNode) script.parentNode.removeChild(script);
+        dispose();
         onLoad(bvid, null);
       };
+      pending.push({ callbackName, script });
       document.body.appendChild(script);
     });
 
     return () => {
       cancelled = true;
+      pending.forEach(({ callbackName, script }) => {
+        // A fetched JSONP script may already be queued for execution. Keep a
+        // temporary no-op callback so late responses cannot raise ReferenceError.
+        callbackHost[callbackName] = () => undefined;
+        script.remove();
+        window.setTimeout(() => {
+          delete callbackHost[callbackName];
+        }, 60_000);
+      });
     };
-  }, [bvids, onLoad]);
+  }, [bvidKey, onLoad]);
 }
