@@ -147,19 +147,44 @@ function Test-SkillLayout {
   return $true
 }
 
+function Get-SkillFingerprint {
+  param([string]$Directory)
+
+  $root = [System.IO.Path]::GetFullPath($Directory).TrimEnd('\')
+  $records = Get-ChildItem -LiteralPath $root -Recurse -File |
+    Sort-Object FullName |
+    ForEach-Object {
+      $relativePath = $_.FullName.Substring($root.Length).TrimStart('\') -replace '\\', '/'
+      $fileHash = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+      "$relativePath`t$fileHash"
+    }
+
+  $payload = [System.Text.Encoding]::UTF8.GetBytes(($records -join "`n"))
+  $sha256 = [System.Security.Cryptography.SHA256]::Create()
+  try {
+    return ([System.BitConverter]::ToString($sha256.ComputeHash($payload))).Replace('-', '').ToLowerInvariant()
+  }
+  finally {
+    $sha256.Dispose()
+  }
+}
+
 function Install-PaperSkill {
   param([string]$SkillsRoot)
 
   $destination = Join-Path $SkillsRoot 'paper-skill'
   $repoVersion = (Get-Content -LiteralPath (Join-Path $skillSource 'VERSION') -Raw).Trim()
+  $repoFingerprint = Get-SkillFingerprint $skillSource
   $destinationReady = (Test-Path -LiteralPath $destination) -and (Test-SkillLayout $destination)
   $installedVersion = ''
+  $installedFingerprint = ''
   if ($destinationReady) {
     $installedVersion = (Get-Content -LiteralPath (Join-Path $destination 'VERSION') -Raw).Trim()
+    $installedFingerprint = Get-SkillFingerprint $destination
   }
 
-  if ($destinationReady -and $installedVersion -eq $repoVersion -and -not $ReplaceExistingSkill) {
-    Write-Host "Paper Skill is already complete. Version: $repoVersion"
+  if ($destinationReady -and $installedVersion -eq $repoVersion -and $installedFingerprint -eq $repoFingerprint -and -not $ReplaceExistingSkill) {
+    Write-Host "Paper Skill already matches the repository. Version: $repoVersion"
     return $destination
   }
 
@@ -188,8 +213,9 @@ function Install-PaperSkill {
     Move-Item -LiteralPath $staging -Destination $destination
 
     $copiedVersion = (Get-Content -LiteralPath (Join-Path $destination 'VERSION') -Raw).Trim()
-    if ($copiedVersion -ne $repoVersion -or -not (Test-SkillLayout $destination)) {
-      throw 'The installed Paper Skill failed its version or layout check.'
+    $copiedFingerprint = Get-SkillFingerprint $destination
+    if ($copiedVersion -ne $repoVersion -or $copiedFingerprint -ne $repoFingerprint -or -not (Test-SkillLayout $destination)) {
+      throw 'The installed Paper Skill failed its version, content, or layout check.'
     }
 
     if ($hasBackup) {

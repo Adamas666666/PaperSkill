@@ -62,7 +62,7 @@
   --radius: var(--ui-radius-lg);
   --radius-sm: var(--ui-radius-md);
 
-  /* System typography only: the final HTML remains standalone. */
+  /* System typography only: the built webpage does not depend on external fonts. */
   --ui-font-sans: "Segoe UI", "PingFang SC", "Hiragino Sans GB", Arial, sans-serif;
   --ui-font-mono: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
 

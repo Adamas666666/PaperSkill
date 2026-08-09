@@ -13,7 +13,7 @@ How to use:
    `contract.md`. Do not re-state them here as separate copies; the generated skill restates
    only what Phase 2 must know, self-contained.
 3. Write the generated skill (this intermediate SKILL.md) in **English** — it is a skill
-   document that Phase 2 executes. The HTML it produces is the **Simplified Chinese** tutorial.
+   document that Phase 2 executes. The web project it produces is the **Simplified Chinese** tutorial.
    Phase-1 operational notes (this file's outer text) also stay English.
 4. Replace every `{{placeholder}}`. Do not emit shorthand ("same as above", "follow the
    schema", "complete-chapter-N-plan"). The detail floor is **field completeness, not length**:
@@ -63,6 +63,16 @@ self-contained **Simplified Chinese** interactive tutorial web app as a project 
 | Core problem         | {{core-problem}}   |
 | Core contribution    | {{core-insight}}   |
 | Keywords             | {{keywords}}       |
+
+---
+
+## Source Evidence and Boundary Matrix
+
+| Tutorial claim | Exact paper locator | Conditions / assumptions | Protocol / metric direction | Approved tutorial wording |
+| -------------- | ------------------- | ------------------------ | --------------------------- | ------------------------- |
+{{source-evidence-rows}}
+
+Every chapter, formula, architecture control, and result below must stay within these recorded boundaries. Phase 2 must not strengthen an interpretation into a paper claim or enable an invalid state combination.
 
 ---
 

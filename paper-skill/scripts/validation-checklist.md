@@ -15,11 +15,17 @@ working directory; the generator then fills `src/data/tutorial.ts`, `src/styles/
 - [ ] The temporary directory is outside `skills/`, and the workspace.
 - [ ] `assets/react-template/` exists and contains the full Vite + React + TS scaffold (`src/`, `index.html`, `package.json`, `vite.config.ts`, `tsconfig*.json`).
 - [ ] `scripts/scaffold.js` and `scripts/validate-output.js` are copied beside the temporary `SKILL.md` (they sit beside `assets/` in the temp root).
-- [ ] `SKILL.md` follows the reference template order exactly: introduction and tree; metadata; unified theme; `chapterCount` detailed chapters; symbol table; Bilibili table (optional); Hero design; project-generation instructions.
+- [ ] `SKILL.md` follows the reference template order exactly: introduction and tree; metadata; source-evidence and boundary matrix; unified theme; `chapterCount` detailed chapters; symbol table; Bilibili table (optional); Hero design; project-generation instructions.
 
 ### Plan Quality
 
 - [ ] Paper title, short name, venue, authors, problem, insight, architecture, training, inference, results, and limitations are recorded.
+- [ ] A source-evidence matrix anchors every core tutorial claim to a page plus section, equation, figure, or table when available.
+- [ ] Explicit paper statements are separated from interpretation; unsupported causal wording and universal claims have been removed.
+- [ ] Architecture choices and interaction states include their dimensional, training, inference, or evaluation preconditions; technically impossible combinations are disabled and explained.
+- [ ] Every formula records symbol meaning, type or shape where meaningful, sign, normalization, and assumptions.
+- [ ] Every reported result records dataset, split or protocol, baseline, unit, and whether higher or lower is better; incompatible protocols are not compared directly.
+- [ ] Major ablations, transfer results, failure cases, and limitations reported by the paper are represented or explicitly scoped out with a reason.
 - [ ] One familiar anchor everyday theme is selected for the entire tutorial.
 - [ ] At least three candidate themes from different activity families were scored on mechanism fit, ten-action coverage, visual clarity, technical linkability, thematic continuity, and originality.
 - [ ] At least one candidate was newly invented rather than copied verbatim from the library, and the winner has a paper-specific justification plus rejection reasons for the other candidates.
@@ -129,6 +135,11 @@ working directory; the generator then fills `src/data/tutorial.ts`, `src/styles/
 - [ ] Visible explanatory prose is natural Simplified Chinese.
 - [ ] Formula cards use Unicode and HTML, with clickable symbols and matching descriptions.
 - [ ] Results and limitations match the paper and are not invented.
+- [ ] Core claims retain the scope and boundary recorded in the source-evidence matrix; analogy language does not overstate causality or applicability.
+- [ ] Architecture controls expose only technically valid combinations and explain unavailable choices.
+- [ ] Formula symbols, dimensions, signs, normalization, and assumptions match the paper.
+- [ ] Result labels include the correct protocol and metric direction; higher-is-better and lower-is-better comparisons use the correct visual and verbal conclusion.
+- [ ] When the paper reports them, major ablations, cross-task transfer results, failure cases, and limitations are covered rather than replaced by a single headline benchmark.
 - [ ] Bilibili videos are optional: when present, every `bvid` is real and displayed with a baked-in `cover` and `views` (the runtime `useBiliVideos` loader is best-effort enrichment only, since the unsigned `view` API is often rejected in end-user browsers). Verification of accessibility is not required to display. When absent, the video section is simply omitted because no relevant video exists.
 - [ ] Original paper figures are optional (per `contract.md` §11): when included, the image lives in `public/images/` and is referenced via a `figure` field (`/images/...` path or absolute URL); when omitted, no figure is fabricated.
 - [ ] No unnecessary template or implementation comments remain in `src/data/tutorial.ts`.
