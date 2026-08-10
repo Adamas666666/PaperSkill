@@ -25,7 +25,7 @@
 
 ## 3. 阶段一：自动准备环境
 
-1. 获取或更新 `https://github.com/ReductTech/PaperSkill`；
+1. 获取或更新 `https://github.com/1223BETTYYANG/PaperSkill`；
 2. 根据参与者权限使用官方仓库或个人 Fork；
 3. 检查 Node.js 20+、npm、Git、Git 身份和 GitHub 连接；
 4. 找到当前 Agent 的 Skill 根目录；

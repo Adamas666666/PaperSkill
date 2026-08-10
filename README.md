@@ -6,14 +6,14 @@
 
 考核重点是准确理解论文、发现初版问题，并将人工修改落实到最终教程中，而不只是生成页面。
 
-**在线入口：** https://reducttech.github.io/PaperSkill/#start
+**在线入口：** https://1223bettyyang.github.io/PaperSkill/#start
 
 ## 快速开始
 
 选择一篇机器学习或人工智能论文，将 PDF、LaTeX 或论文链接连同下面这条完整指令发送给支持 Skill 的 Agent：
 
 ```text
-请获取或更新 https://github.com/ReductTech/PaperSkill，读取并严格执行 docs/AGENT_WORKFLOW.md，使用我提供的论文从环境配置开始连续完成 Paper Skill 安装、初版项目生成、依赖安装、构建和页面检查、人工修改协作、作品导入、仓库校验以及 Pull Request 准备。
+请获取或更新 https://github.com/1223BETTYYANG/PaperSkill，读取并严格执行 docs/AGENT_WORKFLOW.md，使用我提供的论文从环境配置开始连续完成 Paper Skill 安装、初版项目生成、依赖安装、构建和页面检查、人工修改协作、作品导入、仓库校验以及 Pull Request 准备。
 
 能够自动执行的操作不要交还给我逐条处理。只在文档规定的账号授权、论文确认、至少三项实质性修改、最终提交确认和现场展示节点让我参与。缺少参与者信息或目录标识时集中询问，不要在其他阶段中断。未完成全部验证时不要报告流程完成。
 ```
