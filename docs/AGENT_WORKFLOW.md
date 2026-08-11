@@ -31,7 +31,7 @@
 4. 根据参与者权限使用官方仓库或个人 Fork；
 5. 检查 Node.js 20+、npm、Git、Git 身份和 GitHub 连接；命令行尚未获得 GitHub 授权时，调用官方登录流程并等待参与者确认；
 6. 找到当前 Agent 的 Skill 根目录；
-7. 在 Windows 上优先运行：
+7. 根据操作系统运行对应的自动配置入口。Windows 使用：
 
    ```powershell
    powershell -ExecutionPolicy Bypass -File .\scripts\setup-participant.ps1 `
@@ -40,9 +40,19 @@
      -ReplaceExistingSkill
    ```
 
-8. 其他系统执行等价检查和复制操作；
-9. 将仓库中的 `paper-skill/` 视为唯一来源，核对安装目录中的版本和完整文件指纹均与仓库一致；即使版本号相同，只要文件内容不同也必须用仓库副本替换；
-10. 重新加载 Agent 后确认能够识别 `paper-skill`。
+   macOS 或 Linux 使用：
+
+   ```bash
+   chmod +x ./scripts/setup-participant.sh
+   ./scripts/setup-participant.sh \
+     --agent-skills-directory "<Agent Skill 根目录>" \
+     --install-missing-tools \
+     --replace-existing-skill
+   ```
+
+   Shell 脚本会自动识别 macOS 的 Homebrew，或 Linux 的 apt、dnf、yum、pacman、zypper、apk。需要管理员权限、安装 Xcode Command Line Tools 或刷新终端环境时，应暂停并让参与者确认后继续；
+8. 将仓库中的 `paper-skill/` 视为唯一来源，核对安装目录中的版本和完整文件指纹均与仓库一致；即使版本号相同，只要文件内容不同也必须用仓库副本替换；
+9. 重新加载 Agent 后确认能够识别 `paper-skill`。
 
 GitHub 账号注册、邮箱验证、登录或 Fork 授权、管理员权限、缺失的 Git 身份和 Agent 重载需要参与者操作；其中 GitHub 账号登录必须在本阶段最先完成，不得推迟到提交阶段。
 

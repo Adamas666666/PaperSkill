@@ -22,6 +22,15 @@
 
 选手只需阅读本页和 [评分标准](docs/RUBRIC.md)。其余流程文件由 Agent 自动读取并执行；当前有效文件及用途见 [文档索引](docs/README.md)。外部材料的具体提交入口以考核通知为准。
 
+## 系统支持
+
+环境配置会根据选手电脑的操作系统自动分流：
+
+- Windows 使用 `scripts/setup-participant.ps1` 和 PowerShell/winget；
+- macOS、Linux 使用 `scripts/setup-participant.sh`，脚本会识别 Homebrew 或当前 Linux 发行版的包管理器。
+
+两种入口执行相同的 Node.js 20+、npm、Git、Git 身份、GitHub 连接、Paper Skill 版本与文件指纹检查。系统差异只影响安装方式，不改变后续论文生成、项目构建、仓库校验和提交标准。完整命令由 Agent 按 [全流程执行规范](docs/AGENT_WORKFLOW.md) 自动运行，选手只需处理系统授权、GitHub 登录和必要的安装确认。
+
 ## 仓库结构
 
 ```text
