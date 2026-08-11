@@ -45,6 +45,8 @@ self-contained **Simplified Chinese** interactive tutorial web app as a project 
 {{paper-short-name}}-tutorial/
 ├── SKILL.md ← this file (chapter plan + generation rules)
 ├── scaffold.js ← React+TS project scaffolder (copied beside assets/)
+├── assemble-chapter-packets.js ← single writer for chapter data and widget registry
+├── validate-output.js ← final structural gate
 └── assets/
     └── react-template/  (full Vite+React+TS scaffold, copied into the output folder)
 ```
@@ -78,6 +80,19 @@ self-contained **Simplified Chinese** interactive tutorial web app as a project 
 {{source-evidence-rows}}
 
 Every chapter, formula, architecture control, and result below must stay within these recorded boundaries. Phase 2 must not strengthen an interpretation into a paper claim or enable an invalid state combination.
+
+### Immutable Shared Chapter Contract
+
+- **Chapter order, dependencies, and ownership:** {{chapter-ownership-contract}}
+- **Canonical terminology:** {{canonical-terminology}}
+- **Formula symbol meanings:** {{canonical-symbol-contract}}
+- **Theme, semantic colors, and Canvas helpers:** {{shared-visual-contract}}
+- **State and widget naming conventions:** {{shared-state-widget-contract}}
+- **Global metadata, Hero, videos, and selected figures:** {{shared-global-content-contract}}
+
+Every chapter packet must follow this contract. A packet may expand only its assigned chapters and
+widgets; it cannot redefine a tutorial-wide term, symbol, evidence boundary, theme color, helper,
+global field, or another chapter's content.
 
 ---
 
@@ -259,34 +274,49 @@ directory (scaffold.js sits beside `assets/`). This copies `assets/react-templat
 the paper title into `package.json` and `index.html`, and ensures `public/images/` exists.
 Do **not** re-emit the framework files — they are already complete.
 
-### Step 2: Fill `src/data/tutorial.ts` (the only content file)
+### Step 2: Create the shared record and isolated packet directories
 
-Replace every `__XXX__` placeholder from the "{{chapterCount}}-Chapter Detailed Plan" above
-into the `tutorial` object:
+Under the recorded task-scoped temporary root, create `chapter-work/shared.json` with the final
+`meta`, `hero`, and optional `bilibili` objects. Do not put chapters in this file. Create disjoint
+packet directories under `chapter-work/packets/<packet-id>/`, using the ownership in the immutable
+shared contract. No packet may write into the output project.
 
-- `meta` — titles, venue, authors, core problem/insight, keywords.
-- `hero` — old/new descriptions; each side may set `figure` to `/images/...` and/or `componentId`.
-- each chapter — `kind: "chapter"`, title, badge, `bridge`, `analogy` (title/text; optional
-  `figure`/`componentId`), `modules` (each `kind: "module"`, title, desc, `componentId`),
-  `insight`, `formula`, `takeaways`.
-- `bilibili` (optional) — real `bvid`s (e.g. `BV1xx...`), each with `title` and a baked-in
-  `cover` (https thumbnail from the API `pic` field); omit the array entirely if no video.
+### Step 3: Produce chapter and widget packets
 
-Replace `__METAPHOR_CSS__` inside `src/styles/paper.css` `:root {}` with the paper-specific
-color overrides (or remove the placeholder line if no override is needed). Keep the
-`kind: "chapter"` / `kind: "module"` fields so `validate-output.js` can count them.
+Each packet contains:
 
-### Step 3: Add paper-specific widgets (optional but recommended)
+```text
+<packet-id>/
+|-- packet.json
+|-- chapters/
+|   `-- chapter-N.json
+`-- modules/
+    `-- <component-id>.tsx
+```
 
-For each `componentId` used (hero sides, analogy cards, modules) beyond the seeded
-`example-slider`, create `src/modules/<id>.tsx` exporting a `React.FC<WidgetProps>` component
-and register it: `widgetRegistry['<id>'] = <Component>` in `src/modules/registry.tsx`. Use
-`canvasKit.ts` (`setupCanvas` / `observeCanvas`) for sizing and off-screen pausing. Each widget
-owns one canvas or synchronized comparison and one dominant operation; it must update feedback
-and (when meaningful) values/output/path. A missing id degrades gracefully (the `Module`
-component shows a notice), but register every id for a complete tutorial.
+`packet.json` has `chapters`, an array of relative chapter JSON paths, and `widgets`, an array of
+objects with `componentId`, `exportName`, and relative `file` path. Each chapter JSON matches
+`ChapterDef`: keep `kind: "chapter"`, `kind: "module"`, the assigned `chap-N` ID, final Simplified
+Chinese copy, and registered component IDs. Every widget exports the exact named React component,
+uses `canvasKit.ts`, owns one dominant operation, and updates feedback plus meaningful values,
+output, path, or state.
 
-### Step 4: Hard rules (must obey)
+Run disjoint packets concurrently only when safe parallel task execution is available. Otherwise
+produce the identical packet files sequentially. Workers read this immutable skill but write only
+inside their assigned packet directory; they never edit `tutorial.ts`, `registry.tsx`, `paper.css`,
+or another packet.
+
+### Step 4: Assemble shared files once
+
+Run `node assemble-chapter-packets.js <outputDir> <task-temp-root>/chapter-work`. This helper is the
+only writer for `src/data/tutorial.ts`, packet widget copies, and `src/modules/registry.tsx`. Fix any
+duplicate/missing chapter, module, widget, path, export, or component-registration error it reports.
+
+Then replace `__METAPHOR_CSS__` inside `src/styles/paper.css` `:root {}` once with the approved
+paper-specific color overrides (or remove the placeholder line). Do not let packet workers edit
+global CSS.
+
+### Step 5: Hard rules (must obey)
 
 1. **Data-driven, no framework edits**: all chapter content lives in `src/data/tutorial.ts`. Do
    not edit framework files (`src/components/*`, `src/lib/*`, `src/styles/{tokens,components}.css`,
@@ -318,10 +348,16 @@ component shows a notice), but register every id for a complete tutorial.
 12. **Source isolation**: do not reopen the original paper or read the Phase 1 source cache. Use
     only the evidence and boundaries in this skill plus figures already staged under
     `assets/react-template/public/images/`.
+13. **Single-writer assembly**: chapter workers write isolated packets only. The coordinator runs
+    the assembler, writes `paper.css` once, and performs the final cross-chapter review. Parallel
+    work never changes the quality rules or skips a validation gate.
 
-### Step 5: Validate the folder
+### Step 6: Review and validate the folder
 
-Run `node validate-output.js <outputDir>` from this skill's directory as the hard gate. Confirm:
+Before validation, review the assembled tutorial for canonical terminology, symbol meanings,
+evidence boundaries, chapter transitions, duplicated explanations, theme/color consistency,
+interaction coverage, and result coverage. Then run `node validate-output.js <outputDir>` from
+this skill's directory as the hard gate. Confirm:
 no leftover `__XXX__` / `__METAPHOR_CSS__` / `TBD` / `TODO` in `src/data/tutorial.ts`,
 `src/styles/paper.css`, or `src/modules/*`; chapter/module counts match the plan; every `bvid`
 (if any) is real; and it passes the gate. Deliver only the `<outputDir>` folder.
@@ -344,12 +380,14 @@ no leftover `__XXX__` / `__METAPHOR_CSS__` / `TBD` / `TODO` in `src/data/tutoria
 5. Do not leave generic module instructions — specify the final controls, Canvas content, feedback
    strings, and the learner's takeaway for each module.
 6. Write the generated Markdown to the task-scoped temporary paperSkill directory, then copy
-   `assets/` (which contains `react-template/`) and `scripts/scaffold.js` + `scripts/validate-output.js`
-   beside it. Copy only selected original figures from the validated cache into
+   `assets/` (which contains `react-template/`) and `scripts/scaffold.js`,
+   `scripts/assemble-chapter-packets.js`, and `scripts/validate-output.js` beside it. Copy only
+   selected original figures from the validated cache into
    `assets/react-template/public/images/` before Phase 2.
 7. Immediately execute the temporary paperSkill to generate the React + TS project folder
-   (Phase 2 reads **only** this skill + its `assets/react-template/` + `scaffold.js`; it does not
-   reopen the original paper or source cache).
+   (Phase 2 reads **only** this skill + its `assets/react-template/` + copied helpers; it does not
+   reopen the original paper or source cache). Use isolated chapter packets and the assembler even
+   when packet generation must run sequentially.
 8. After generation, delete the exact task-scoped temporary root containing both the source cache
-   and temporary paperSkill, then confirm it no longer exists.
+   packet work, and temporary paperSkill, then confirm it no longer exists.
 9. Deliver only the final `<paper-short-name>_output/` folder.

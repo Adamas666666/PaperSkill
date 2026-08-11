@@ -173,6 +173,20 @@ Requirements:
 11. Use compact technical evidence only when it clarifies the mechanism. Link it to the same state instead of placing an unrelated passive chart beside the metaphor.
 12. Prefer the proven compositions in the visual standard: stress plus repair, clickable progression plus inset, synchronized old/new, physical magnitude plus mathematical magnitude, chips plus trade-off bars, step-through route, interactive architecture map, inspect-and-compare, and verified result race.
 
+### Step 5A: Lock the Shared Chapter Contract Before Parallel Work
+
+Before expanding any chapter, write one immutable shared contract in task state containing:
+
+- the ordered chapter list, each chapter's role, prerequisites, and allowed evidence rows;
+- canonical Chinese and English terminology plus one meaning for every formula symbol;
+- the selected theme, semantic colors, reusable Canvas helpers, widget naming rules, and state conventions;
+- global metadata, Hero comparison, result protocols, Bilibili selection, and selected figure paths;
+- the chapter JSON schema and deterministic ownership of every chapter and `componentId`.
+
+Partition the chapters into disjoint packets. If safe parallel task execution is available, process packets concurrently with bounded concurrency; otherwise process the same packets sequentially. A packet may read the validated source cache, shared contract, and its assigned chapter plans, but it must write only inside its own packet directory. It must never edit another packet, the output project, `tutorial.ts`, `registry.tsx`, or `paper.css`.
+
+Steps 6-8 below are applied per assigned chapter packet. After all packets return, the coordinator checks chapter transitions, terminology, symbols, evidence wording, duplicated explanations, interaction-pattern coverage, visual consistency, and result coverage. Fix all cross-packet disagreements before Step 9. Parallel execution is an optimization only; it cannot relax any content or validation requirement.
+
 ## Step 6: Design Each Analogy Card
 
 For each chapter, specify:
@@ -307,9 +321,12 @@ The task root now has this structure:
 ```text
 <task-temp-root>/
 |-- source-cache/              <- validated in Step 1; never read by Phase 2
+|-- plan-packets/              <- isolated Phase 1 chapter drafts
 `-- <paper-short-name>-tutorial/
     |-- SKILL.md
     |-- scaffold.js            <- React+TS project scaffolder (copied beside assets/)
+    |-- assemble-chapter-packets.js <- single writer for Phase 2 chapter packets
+    |-- validate-output.js
     `-- assets/
         `-- react-template/    <- full Vite + React + TS scaffold
 ```
@@ -323,13 +340,13 @@ Before generating the temporary `SKILL.md`:
 
 Generate `SKILL.md` with the same top-level and per-chapter order as the exemplar. Copy its detail level, not its paper facts. Fully expand all `chapterCount` chapters; never emit aggregate placeholders, "same as above", or `complete-chapter-N-plan` shorthand. The detail floor is **field-completeness, not raw length** (per `contract.md` §6): every required field filled, `chapterPlanMinChars` (soft, 600) of real detail per chapter, and **no global character minimum**.
 
-Fill every placeholder with the outputs from Steps 1-9. Include source kind, SHA-256 digest, locator scheme, and selected cached-figure IDs in the paper metadata; never include a temporary absolute path. Copy this skill's complete `assets/` directory (which contains `react-template/`) and `scripts/scaffold.js` + `scripts/validate-output.js` into the temporary paperSkill (`scaffold.js` sits beside `assets/` in the temp root).
+Fill every placeholder with the coordinator-approved outputs from Steps 1-9. Include source kind, SHA-256 digest, locator scheme, and selected cached-figure IDs in the paper metadata; never include a temporary absolute path. Copy this skill's complete `assets/` directory (which contains `react-template/`) and `scripts/scaffold.js`, `scripts/assemble-chapter-packets.js`, and `scripts/validate-output.js` into the temporary paperSkill (the helpers sit beside `assets/` in the intermediate skill directory).
 
 When the tutorial will use an original paper figure, copy the already cached image into the temporary `assets/react-template/public/images/` now and record its `/images/...` path in the intermediate skill. Do not reopen the original source during this step. Images staged here are copied into the final project automatically by `scaffold.js`.
 
 ## Step 11: Validate Phase 1
 
-Run every Phase 1 check in `scripts/validation-checklist.md`. Where possible, also dry-run
+Run the coordinator consistency pass and every Phase 1 check in `scripts/validation-checklist.md`. Where possible, also dry-run
 `scripts/validate-output.js` against the planned structure (chapter count, module count,
 placeholders). Fix failures before continuing.
 
@@ -348,37 +365,48 @@ Follow the temporary paperSkill exactly.
    skill directory (scaffold.js sits beside `assets/`). This copies `assets/react-template/` to
    `<outputDir>` (the caller's working directory, named `<paper-short-name>_output`), injects the
    paper title into `package.json` + `index.html`, and ensures `public/images/` exists.
-2. Fill `src/data/tutorial.ts` inside `<outputDir>`: replace every `__XXX__` placeholder with the
-   chapter plan content, keep the `kind: "chapter"` / `kind: "module"` fields, and set `bilibili`
-   to real `bvid`s or omit it.
-3. Replace `__METAPHOR_CSS__` inside `src/styles/paper.css` `:root {}` with the paper-specific
-   color overrides (or remove the placeholder line).
-4. Add paper-specific widgets under `<outputDir>/src/modules/*` and register each `componentId` in
-   `src/modules/registry.tsx`. Each widget uses `canvasKit.ts` (`setupCanvas`/`observeCanvas`) for
-   sizing and off-screen pausing. A missing id degrades gracefully but should be registered.
-5. Use only original figures already staged in `assets/react-template/public/images/` during
+2. Create `<task-temp-root>/chapter-work/shared.json` serially with the final `meta`, `hero`, and
+   optional `bilibili` objects. Create one isolated directory per packet under
+   `chapter-work/packets/<packet-id>/`.
+3. For each packet, write `packet.json`, chapter JSON files, and widget TSX files only inside that
+   packet directory. `packet.json` has `chapters` (relative JSON paths) and `widgets`; each widget
+   entry has `componentId`, `exportName`, and a relative `file` path. Chapter JSON must match
+   `ChapterDef`, keep `kind: "chapter"` / `kind: "module"`, and use only its assigned chapter IDs.
+   Run disjoint packets concurrently when safe parallel task support exists; otherwise produce them
+   sequentially with the identical format. Workers never write into `<outputDir>`.
+4. After every packet completes, the single coordinator runs
+   `node assemble-chapter-packets.js <outputDir> <task-temp-root>/chapter-work`. The helper rejects
+   duplicate or missing chapter IDs, duplicate module/widget IDs, path escapes, missing widget
+   exports, and unregistered `componentId`s; it alone writes `src/data/tutorial.ts`, copies packet
+   widgets, and writes `src/modules/registry.tsx`.
+5. Replace `__METAPHOR_CSS__` inside `src/styles/paper.css` `:root {}` once, after packet assembly,
+   with the coordinator-approved paper-specific color overrides (or remove the placeholder line).
+6. Use only original figures already staged in `assets/react-template/public/images/` during
    Phase 1 and reference them via the `figure` field (`/images/...`). Omit any figure that does
    not fit. Do not reopen the original paper or read `source-cache/` in Phase 2.
-6. Do NOT edit framework files: `src/components/*`, `src/lib/*`, `src/styles/{tokens,components}.css`,
+7. Do NOT edit framework files: `src/components/*`, `src/lib/*`, `src/styles/{tokens,components}.css`,
    `App.tsx`, `main.tsx`, config files. Keep all visible explanatory copy in natural Simplified
    Chinese.
-7. The app renders exactly `chapterCount` (6–10) progressively revealed chapters (handled by
+8. The app renders exactly `chapterCount` (6–10) progressively revealed chapters (handled by
    `App.tsx` + `useProgressiveChapters`). Videos (if any) appear only after the last chapter.
-8. Give every widget one dominant operation; implement the shared Canvas drawing kit once and
+9. Give every widget one dominant operation; implement the shared Canvas drawing kit once and
    reuse it. Keep the tutorial-wide scene palette and semantic color mapping stable across chapters.
-9. Drive each module's canvas/technical evidence, values, selected controls, and feedback from its
+10. Drive each module's canvas/technical evidence, values, selected controls, and feedback from its
    specified state model.
-10. Run `scripts/validate-output.js <outputDir>` as the hard structural gate and fix all failures.
+11. Run one coordinator review across the assembled page, then run `validate-output.js <outputDir>`
+    as the hard structural gate and fix all failures. The review must check cross-chapter terminology,
+    symbol meanings, evidence boundaries, transitions, duplication, theme/color consistency, module
+    coverage, and desktop/mobile behavior.
     Do not re-read original paper-skill documents — the intermediate skill plus its
-    `assets/react-template/` and `scaffold.js` are sufficient for Phase 2.
+    `assets/react-template/`, `scaffold.js`, and `assemble-chapter-packets.js` are sufficient for Phase 2.
 
 ## Cleanup and Delivery
 
 After validation, or before reporting any blocker:
 
-1. Resolve the recorded task-scoped temporary root, source-cache path, and intermediate path again.
-2. Confirm both child paths are inside the exact task root created in Step 1 and that the task root is not a broad system temporary directory.
-3. **Debug branch:** if `PAPER_SKILL_DEBUG=true`, skip deletion. Preserve and return the exact task root so a human can inspect both the source cache and Phase 1 output. The delivered folder is identical.
+1. Resolve the recorded task-scoped temporary root, source-cache path, packet-work paths, and intermediate path again.
+2. Confirm every child path is inside the exact task root created in Step 1 and that the task root is not a broad system temporary directory.
+3. **Debug branch:** if `PAPER_SKILL_DEBUG=true`, skip deletion. Preserve and return the exact task root so a human can inspect the source cache, packet work, and Phase 1 output. The delivered folder is identical.
 4. Otherwise, recursively remove only that exact task-scoped root. Do not use wildcards, an unresolved variable, or the system temporary parent as the target.
-5. Confirm the task root, source cache, and intermediate skill no longer exist (or, in debug mode, that all are preserved).
+5. Confirm the task root and all source-cache, packet-work, and intermediate children no longer exist (or, in debug mode, that all are preserved).
 6. Deliver only the final `<paper-short-name>_output/` folder path. Do not mention, list, or expose temporary artifacts except the task-root debug path when debug mode is on.

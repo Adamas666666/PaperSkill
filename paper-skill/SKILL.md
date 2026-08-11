@@ -40,14 +40,16 @@ paper PDF, text, URL, or description
   -> analyze the cached paper record and build a temporary paperSkill
   -> validate the temporary paperSkill (agent checklist + validate-output.js on a dry run if possible)
   -> Phase 2: immediately execute that paperSkill
-  -> scaffold the React+TS project folder (scaffold.js) and fill src/data/tutorial.ts / paper.css / modules / images
+  -> scaffold the React+TS project folder (scaffold.js)
+  -> generate isolated chapter packets in parallel when safe, or sequentially as a fallback
+  -> assemble tutorial.ts / registry / modules once (assemble-chapter-packets.js), then fill paper.css / images
   -> validate the project folder (validate-output.js)
-  -> delete the temporary paperSkill (unless debug)
+  -> delete the exact task-scoped temporary root (unless debug)
   -> return only the final folder path
 ```
 
 Do not stop, ask for confirmation, or send a final response between phases. If either phase
-is blocked, clean up the temporary paperSkill before reporting the blocker.
+is blocked, clean up the exact task-scoped temporary root before reporting the blocker.
 
 ## Phase 1 Required Reading (rules for building the intermediate skill)
 
@@ -75,6 +77,8 @@ Phase 2 only executes the intermediate skill. Its entire input is:
 - the `assets/react-template/` directory copied beside it (the full Vite+React+TS scaffold), and
 - `scaffold.js` — a portable build helper that sits beside `assets/` in the temporary
   root and copies the template into the caller's working directory (run it, do not modify it), and
+- `assemble-chapter-packets.js` — the single-writer helper that merges isolated chapter data and
+  widgets into `src/data/tutorial.ts` and `src/modules/registry.tsx`, and
 - running `scripts/validate-output.js` as the hard structural gate.
 
 Any selected original figures must already have been copied from the validated source cache
@@ -85,8 +89,8 @@ Do **not** open the original paper-skill's `SKILL.md`, `contract.md`,
 `references/`, `scripts/*.md` (except `validate-output.js`), or `templates/`
 during Phase 2. Every rule those files contain must already be inlined into the
 intermediate skill by Phase 1, so Phase 2 needs nothing outside the temporary
-directory. `scaffold.js` is a portable build helper, not a rule source — run it
-unchanged.
+directory. `scaffold.js` and `assemble-chapter-packets.js` are portable build helpers,
+not rule sources — run them unchanged.
 
 ## Phase 1 Summary
 
@@ -99,13 +103,16 @@ Follow all steps in `scripts/generation-pipeline.md`:
 4. Build a source-evidence matrix for every core claim, formula, architecture condition, and reported result before designing the tutorial.
 5. Generate and score at least three paper-specific theme candidates, lock the winner, then assign each chapter a different simple action that clearly belongs to it.
 6. **Plan `chapterCount` chapters** per `contract.md` §2 (default 10; range 6–10). Pick a `paperType` per §2.2.
-7. Assign real-world animation scenes and varied interaction patterns.
-8. Design analogy cards and implementation-ready problem-first interactive modules.
-9. Extract a concise formula and symbol inventory.
-10. **Optionally** find and verify relevant Bilibili videos (best-effort; see `contract.md` §7).
-11. Stage any selected cached paper figures into the temporary React scaffold.
-12. Materialize the paper-specific skill under the same task-scoped temporary root.
-13. Validate the temporary paperSkill (checklist + `validate-output.js` against the plan where applicable).
+7. Lock one shared chapter contract: evidence boundaries, chapter roles and dependencies, terminology,
+   symbol meanings, theme, visual kit, state conventions, and output schema.
+8. Assign real-world animation scenes and varied interaction patterns. Draft disjoint chapter packets
+   concurrently only when the Agent supports isolated parallel work; otherwise draft the same packets sequentially.
+9. Design analogy cards and implementation-ready problem-first interactive modules inside those packets.
+10. Extract a concise formula and symbol inventory, then run one coordinator consistency pass across all packets.
+11. **Optionally** find and verify relevant Bilibili videos (best-effort; see `contract.md` §7).
+12. Stage any selected cached paper figures into the temporary React scaffold.
+13. Materialize the paper-specific skill under the same task-scoped temporary root.
+14. Validate the temporary paperSkill (checklist + `validate-output.js` against the plan where applicable).
 
 After Phase 1 passes, read **only** the generated temporary `SKILL.md` and its copied `assets/` directory, then immediately execute Phase 2. Do not re-open any original paper-skill document.
 
@@ -134,12 +141,17 @@ After Phase 1 passes, read **only** the generated temporary `SKILL.md` and its c
 21. Reveal chapters progressively. Do not show replay copy or next-section instructional copy inside the page.
 22. **Bilibili videos are optional** (per `contract.md` §7). Use real `bvid`s (e.g. `BV1xx...`) in `tutorial.bilibili`. If no relevant video exists at all, omit the `bilibili` array; if any relevant video is found, **always include and display it** (video + cover + views) even when Bilibili API verification fails — verification is not a gate.
 23. Continue directly from Phase 1 to Phase 2.
-24. Remove the temporary paperSkill on success or failure, unless `PAPER_SKILL_DEBUG=true`. Confirm that its exact resolved path no longer exists before responding (or, in debug mode, that it is preserved and its path is returned).
+24. Remove the exact task-scoped temporary root on success or failure, unless `PAPER_SKILL_DEBUG=true`. Confirm that the root, source cache, and temporary paperSkill no longer exist before responding (or, in debug mode, that the root is preserved and its path is returned).
 25. Deliver only the final `<paper-short-name>_output/` folder; do not list or describe the temporary paperSkill.
 26. Never repeatedly parse or reopen the original paper after the canonical source cache passes
     validation. Later Phase 1 work reads the cache; Phase 2 reads the evidence-backed temporary
     skill and already staged figures. If the first extraction is unusable, replace the incomplete
     cache with one corrected extraction before continuing rather than performing ad hoc rereads.
+27. Parallelize only disjoint chapter drafts after the shared tutorial contract is locked. Workers
+    write isolated packets and never edit `tutorial.ts`, `registry.tsx`, `paper.css`, or another
+    worker's files. One coordinator assembles shared files, checks cross-chapter terminology,
+    evidence, transitions, duplication, and coverage, then runs every normal validation gate.
+    When safe parallel execution is unavailable, use the identical packet contract sequentially.
 
 ## Resource Map
 
@@ -172,6 +184,7 @@ paper-skill/
 |   |-- chapter-template.md
 |   |-- validation-checklist.md
 |   |-- validate-source-cache.js  <- validates the temporary canonical paper cache
+|   |-- assemble-chapter-packets.js <- single-writer merge for isolated chapter drafts
 |   |-- validate-output.js        <- automated structural validator (folder)
 |   `-- scaffold.js               <- React+TS project scaffolder (copied beside assets/)
 `-- templates/
@@ -199,8 +212,11 @@ exemplar; never transfer the exemplar's theme, objects, actions, labels, or mapp
 8. **Detail floor is field-completeness, not raw length** (per `contract.md` §6): every required field filled, `chapterPlanMinChars` (soft) met per chapter, no global character minimum.
 9. Plan at least `activeModulesMin` active modules total, with at least `dualModuleChaptersMin` chapters containing two modules (per `contract.md` §3). Tooltip-only, hover-only, and passive autoplay elements do not count as active modules.
 10. Include exact Simplified Chinese labels and feedback copy where Phase 2 would otherwise need to invent them.
-11. **Portability:** the intermediate skill must be self-sufficient. It must not instruct Phase 2 to read `contract.md`, `references/`, `scripts/*.md`, `templates/`, or the parent `SKILL.md`. Phase 1 inlines every needed general rule — visual grammar, interaction patterns, color semantics, chapter order, and hard thresholds — into the intermediate skill's own specs. Phase 2 reads only the intermediate `SKILL.md` and its `assets/`.
+11. **Portability:** the intermediate skill must be self-sufficient. It must not instruct Phase 2 to read `contract.md`, `references/`, `scripts/*.md`, `templates/`, or the parent `SKILL.md`. Phase 1 inlines every needed general rule — visual grammar, interaction patterns, color semantics, chapter order, and hard thresholds — into the intermediate skill's own specs. Phase 2 reads only the intermediate `SKILL.md`, its `assets/`, and the copied scaffold/assembly helpers.
 12. Include only valid combinations of learner-controlled states. For every disabled or impossible combination, define the constraint and visible explanation instead of silently drawing a technically invalid state.
+13. Include an immutable shared chapter contract and deterministic chapter ownership. No chapter
+    packet may redefine tutorial-wide terminology, symbol meanings, evidence wording, theme colors,
+    shared drawing primitives, or another chapter's content.
 
 ## Reference Template UI Contract
 
@@ -222,8 +238,8 @@ source of truth rather than as optional starter styles; the generator fills only
 
 If the environment variable `PAPER_SKILL_DEBUG` is set to `true`:
 
-- Preserve the exact task-scoped temporary root, including `source-cache/` and the temporary paperSkill.
+- Preserve the exact task-scoped temporary root, including `source-cache/`, packet work, and the temporary paperSkill.
 - Return its absolute path to the caller alongside the final folder path so a human can inspect Phase 1 output.
 - The delivered project folder is identical to non-debug mode.
 
-Otherwise, delete the temporary paperSkill as usual and never expose its path.
+Otherwise, delete the exact task-scoped temporary root as usual and never expose its path.

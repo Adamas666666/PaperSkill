@@ -7,8 +7,9 @@
  * `<paper-short-name>_output/` directory, injects the paper title into `package.json`,
  * `index.html`, and `README.md`, and ensures `public/images/` exists for optional original figures.
  *
- * The generator (Phase 2) then fills ONLY `src/data/tutorial.ts`, `src/styles/paper.css`,
- * `src/modules/*` (+ registry), and `public/images/*`. Framework files are never rewritten.
+ * The Phase 2 coordinator assembles `src/data/tutorial.ts` and `src/modules/*` (+ registry)
+ * from isolated chapter packets, then fills `src/styles/paper.css` and `public/images/*`.
+ * Framework files are never rewritten.
  *
  * Template resolution: scaffold.js lives next to `scripts/`, while the template lives under
  * `assets/react-template/`. When run from the temporary paperSkill (copied beside
@@ -106,7 +107,7 @@ function main() {
 
   console.log('Scaffolded React+TS project at: ' + outputDir);
   console.log('  package name : ' + packageName);
-  console.log('  next step    : fill src/data/tutorial.ts, then `npm install && npm run dev`');
+  console.log('  next step    : prepare isolated chapter packets and run assemble-chapter-packets.js');
 }
 
 main();

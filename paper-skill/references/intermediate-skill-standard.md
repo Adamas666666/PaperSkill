@@ -34,7 +34,7 @@ Use this order exactly:
 24. Horizontal separator.
 25. `## Hero Two-Panel Canvas Design`.
 26. Horizontal separator.
-27. `## Project Generation Instructions` with six ordered steps: scaffold the folder, fill `src/data/tutorial.ts`, add paper-specific widgets, add optional figures, enforce hard rules, validate the folder.
+27. `## Project Generation Instructions` with ordered steps to scaffold the folder, create an immutable shared chapter contract, produce isolated chapter/widget packets, assemble shared files once, add optional figures, enforce hard rules, and validate the folder.
 
 Do not move the generation instructions before the chapter plans. Do not omit separators, the directory tree, Hero specification, or the final six-step procedure.
 
@@ -164,8 +164,31 @@ The intermediate skill is the only artifact Phase 2 reads. It must be self-conta
 - Do not instruct Phase 2 to read `contract.md`, `references/`, `scripts/*.md`, `templates/`, or the parent `SKILL.md`.
 - Do not instruct Phase 2 to reopen the original paper or read the Phase 1 `source-cache/`. Embed all required evidence and source boundaries in the intermediate skill, and stage selected cached figures in `assets/react-template/public/images/` before Phase 2.
 - Inline every general rule Phase 2 would otherwise need: visual grammar (from `visual-interaction-standard.md`), interaction patterns, color semantics (from `contract.md` §5), chapter order, and hard thresholds.
-- The copied `assets/react-template/` directory (plus `scaffold.js`) supplies the project scaffold; Phase 2 reads those files but no original paper-skill document.
+- The copied `assets/react-template/` directory plus `scaffold.js` and `assemble-chapter-packets.js` supplies and assembles the project; Phase 2 reads those files but no original paper-skill document.
 - Phase 2 follows the embedded per-module specs and runs `validate-output.js` as the structural gate.
+
+## Parallel Chapter Packet Contract
+
+Parallel work begins only after the complete evidence matrix, chapter order, terminology,
+symbol table, theme, semantic colors, Canvas kit, state conventions, and widget naming rules are
+locked. Record these as one immutable shared contract inside the intermediate Skill.
+
+- Give every chapter and `componentId` exactly one owner.
+- Let workers read the shared contract and their assigned chapter plans, but write only to their
+  isolated packet directories. They never edit the output project or another packet.
+- Store shared `meta`, `hero`, and optional `bilibili` data once in `shared.json`.
+- Give each packet a `packet.json` listing relative chapter JSON paths and widget entries with
+  `componentId`, `exportName`, and relative TSX file path.
+- Make every chapter JSON conform to `ChapterDef`; make every widget export the exact named React
+  component declared by its packet.
+- Use `assemble-chapter-packets.js` as the only writer for `src/data/tutorial.ts`, packet widget
+  copies, and `src/modules/registry.tsx`.
+- When parallel task support is unavailable, generate the identical packets sequentially rather
+  than falling back to direct shared-file edits.
+
+After assembly, one coordinator must review terminology, formula symbols, evidence boundaries,
+chapter transitions, duplicated explanations, theme/color consistency, interaction coverage, and
+result coverage before the normal validation gate.
 
 ## Final Phase 1 Gate
 

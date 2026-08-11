@@ -1,6 +1,6 @@
 # Validation Checklist
 
-Run Phase 1 and Phase 2 in the same invocation. Fix every failed item before continuing. Clean up the temporary paperSkill before any final response or blocker report.
+Run Phase 1 and Phase 2 in the same invocation. Fix every failed item before continuing. Clean up the exact task-scoped temporary root before any final response or blocker report.
 
 The deliverable is a **React + TypeScript (Vite) project folder** `<paper-short-name>_output/`,
 not a single HTML file. `scripts/scaffold.js` copies `assets/react-template/` into the caller's
@@ -25,12 +25,16 @@ working directory; the generator then fills `src/data/tutorial.ts`, `src/styles/
 - [ ] `SKILL.md` exists and is fully populated under the task-scoped temporary paperSkill directory.
 - [ ] The temporary directory is outside `skills/`, and the workspace.
 - [ ] `assets/react-template/` exists and contains the full Vite + React + TS scaffold (`src/`, `index.html`, `package.json`, `vite.config.ts`, `tsconfig*.json`).
-- [ ] `scripts/scaffold.js` and `scripts/validate-output.js` are copied beside the temporary `SKILL.md` (they sit beside `assets/` in the temp root).
+- [ ] `scripts/scaffold.js`, `scripts/assemble-chapter-packets.js`, and `scripts/validate-output.js` are copied beside the temporary `SKILL.md` (they sit beside `assets/` in the intermediate skill directory).
 - [ ] `SKILL.md` follows the reference template order exactly: introduction and tree; metadata with source-cache provenance; source-evidence and boundary matrix; unified theme; `chapterCount` detailed chapters; symbol table; Bilibili table (optional); Hero design; project-generation instructions.
 - [ ] Every selected original figure was copied from the validated cache into the temporary scaffold's `public/images/`; no figure requires Phase 2 to reopen the paper or source cache.
 
 ### Plan Quality
 
+- [ ] One immutable shared chapter contract locks evidence boundaries, chapter order and dependencies, terminology, formula symbols, theme/colors, Canvas helpers, state conventions, widget naming, and chapter ownership before any parallel work.
+- [ ] Every chapter and `componentId` has exactly one owner; Phase 1 workers wrote only to isolated plan-packet directories and never edited another packet.
+- [ ] When parallel execution was unavailable, the same packet format was produced sequentially rather than bypassing isolation.
+- [ ] The coordinator reviewed all plan packets for terminology, symbols, evidence wording, transitions, duplication, theme consistency, interaction-pattern coverage, and result coverage before materializing the temporary Skill.
 - [ ] Paper title, short name, venue, authors, problem, insight, architecture, training, inference, results, and limitations are recorded.
 - [ ] A source-evidence matrix anchors every core tutorial claim to a page plus section, equation, figure, or table when available.
 - [ ] Explicit paper statements are separated from interpretation; unsupported causal wording and universal claims have been removed.
@@ -75,6 +79,10 @@ working directory; the generator then fills `src/data/tutorial.ts`, `src/styles/
 
 - [ ] Exactly one `<paper-short-name>_output/` folder is produced in the caller's working directory.
 - [ ] `scaffold.js` created the folder from `assets/react-template/`; `package.json` name and `index.html` title reflect the paper.
+- [ ] `chapter-work/shared.json` contains the single global `meta`, `hero`, and optional `bilibili` records.
+- [ ] Every packet owns disjoint chapter IDs and contains a valid `packet.json`, chapter JSON files, and its own widget TSX files.
+- [ ] Workers never wrote directly to the output project; `assemble-chapter-packets.js` was the only writer of `tutorial.ts`, packet widget copies, and `registry.tsx`.
+- [ ] Packet assembly completed without duplicate/missing chapter IDs, duplicate module/widget IDs, path escapes, missing exports, or unregistered `componentId`s.
 - [ ] No KaTeX, MathJax, CDN, external font, or local media folder is required; the only dependencies are `react` and `react-dom`.
 - [ ] The only permitted network-backed feature is the optional Bilibili metadata loader (per `contract.md` §7).
 - [ ] `src/data/tutorial.ts` is fully filled: `meta`, `hero`, exactly `chapterCount` (`kind:"chapter"`) entries, and `bilibili` (optional). Every `module` entry has `kind:"module"` and a `componentId` registered in `src/modules/registry.tsx`.
@@ -94,6 +102,7 @@ working directory; the generator then fills `src/data/tutorial.ts`, `src/styles/
   registered for a complete tutorial.
 - [ ] Optionally, paper-specific widgets live under `src/modules/*` and are registered in
   `registry.tsx` via `widgetRegistry['id'] = Component`.
+- [ ] `src/data/tutorial.ts` and `src/modules/registry.tsx` were assembled once by the coordinator; no parallel worker modified either file or `src/styles/paper.css`.
 
 ### UI and Responsive Behavior
 
@@ -176,8 +185,8 @@ The script exits non-zero on any failure; treat that as a blocker.
 
 ## Cleanup Gate
 
-- [ ] The recorded task root, source-cache path, and intermediate path were resolved again before cleanup.
-- [ ] The source cache and intermediate skill were confirmed as children of the exact task-scoped root created before source parsing.
+- [ ] The recorded task root, source-cache path, packet-work paths, and intermediate path were resolved again before cleanup.
+- [ ] The source cache, plan packets, chapter-work packets, and intermediate skill were confirmed as children of the exact task-scoped root created before source parsing.
 - [ ] Only that exact task-scoped root was recursively removed; no wildcard, unresolved variable, or broad system temporary directory was used.
-- [ ] The task root, source cache, and temporary paperSkill no longer exist.
+- [ ] The task root, source cache, packet work, and temporary paperSkill no longer exist.
 - [ ] The final response exposes only the project folder, never the intermediate path or contents.
