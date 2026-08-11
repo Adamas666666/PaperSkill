@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "slug": "compllm_yin102570",
+  "paperSlug": "compllm",
+  "source": "yin102570",
+  "sourceBranch": "paper/compllm-yin102570",
+  "title": "COMPLLM: COMPRESSION FOR LONG CONTEXT Q&A",
+  "authors": [],
+  "year": null,
+  "venue": "",
+  "paperUrl": "https://arxiv.org/abs/2509.19228",
+  "participants": [
+    {
+      "name": "Yinjiayi",
+      "github": "yin102570"
+    }
+  ],
+  "topics": [],
+  "skillVersion": "1.1.0",
+  "status": "review",
+  "entry": "index.html"
+}
