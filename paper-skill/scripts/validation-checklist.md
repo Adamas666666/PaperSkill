@@ -9,13 +9,25 @@ working directory; the generator then fills `src/data/tutorial.ts`, `src/styles/
 
 ## Phase 1: Temporary PaperSkill
 
+### Canonical Source Cache
+
+- [ ] One task-scoped temporary root was created before reading the paper, and its exact resolved path is recorded.
+- [ ] `source-cache/manifest.json`, `content.md`, and `evidence.json` exist beneath that root.
+- [ ] `content.md` contains the complete normalized source with stable page markers for PDF input or file/section markers for LaTeX input.
+- [ ] `manifest.json` records source kind, origin, SHA-256 digest, locator scheme, page count when applicable, metadata, and a figure inventory.
+- [ ] Every exported original figure stays under `source-cache/figures/`; a figure that could not be exported retains its locator and caption with `file: null`.
+- [ ] `evidence.json` contains the same claim, locator, conditions, protocol, and allowed wording rows used by the intermediate Skill.
+- [ ] `node scripts/validate-source-cache.js <source-cache>` passes before tutorial planning continues.
+- [ ] After cache validation, no Phase 1 step reopens or reparses the original paper; all evidence comes from the canonical cache.
+
 ### Structure
 
 - [ ] `SKILL.md` exists and is fully populated under the task-scoped temporary paperSkill directory.
 - [ ] The temporary directory is outside `skills/`, and the workspace.
 - [ ] `assets/react-template/` exists and contains the full Vite + React + TS scaffold (`src/`, `index.html`, `package.json`, `vite.config.ts`, `tsconfig*.json`).
 - [ ] `scripts/scaffold.js` and `scripts/validate-output.js` are copied beside the temporary `SKILL.md` (they sit beside `assets/` in the temp root).
-- [ ] `SKILL.md` follows the reference template order exactly: introduction and tree; metadata; source-evidence and boundary matrix; unified theme; `chapterCount` detailed chapters; symbol table; Bilibili table (optional); Hero design; project-generation instructions.
+- [ ] `SKILL.md` follows the reference template order exactly: introduction and tree; metadata with source-cache provenance; source-evidence and boundary matrix; unified theme; `chapterCount` detailed chapters; symbol table; Bilibili table (optional); Hero design; project-generation instructions.
+- [ ] Every selected original figure was copied from the validated cache into the temporary scaffold's `public/images/`; no figure requires Phase 2 to reopen the paper or source cache.
 
 ### Plan Quality
 
@@ -142,6 +154,7 @@ working directory; the generator then fills `src/data/tutorial.ts`, `src/styles/
 - [ ] When the paper reports them, major ablations, cross-task transfer results, failure cases, and limitations are covered rather than replaced by a single headline benchmark.
 - [ ] Bilibili videos are optional: when present, every `bvid` is real and displayed with a baked-in `cover` and `views` (the runtime `useBiliVideos` loader is best-effort enrichment only, since the unsigned `view` API is often rejected in end-user browsers). Verification of accessibility is not required to display. When absent, the video section is simply omitted because no relevant video exists.
 - [ ] Original paper figures are optional (per `contract.md` §11): when included, the image lives in `public/images/` and is referenced via a `figure` field (`/images/...` path or absolute URL); when omitted, no figure is fabricated.
+- [ ] Every local original figure came from the validated Phase 1 cache and was already staged in the temporary scaffold before Phase 2 began.
 - [ ] No unnecessary template or implementation comments remain in `src/data/tutorial.ts`.
 
 ## Automated Validator Gate
@@ -163,7 +176,8 @@ The script exits non-zero on any failure; treat that as a blocker.
 
 ## Cleanup Gate
 
-- [ ] The recorded temporary path was resolved and confirmed to be under the task-scoped temporary root.
-- [ ] Only the exact temporary paperSkill directory was recursively removed.
-- [ ] The temporary paperSkill directory no longer exists.
+- [ ] The recorded task root, source-cache path, and intermediate path were resolved again before cleanup.
+- [ ] The source cache and intermediate skill were confirmed as children of the exact task-scoped root created before source parsing.
+- [ ] Only that exact task-scoped root was recursively removed; no wildcard, unresolved variable, or broad system temporary directory was used.
+- [ ] The task root, source cache, and temporary paperSkill no longer exist.
 - [ ] The final response exposes only the project folder, never the intermediate path or contents.

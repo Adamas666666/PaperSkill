@@ -23,8 +23,9 @@ How to use:
    count differs from 10, merge or split adjacent roles; never reorder the pedagogy
    (problem → insight → mechanism → method → training → results).
 6. Write the result to the task-scoped temporary `<paper-short-name>-tutorial/SKILL.md`, then
-   copy this parent Skill's `assets/` directory beside it. Never write the intermediate under
-   `skills/` or the workspace.
+   copy this parent Skill's `assets/` directory beside it. Stage any selected images from the
+   validated source cache in `assets/react-template/public/images/` before Phase 2. Never write
+   the intermediate under `skills/` or the workspace.
 
 `````markdown
 ---
@@ -60,6 +61,10 @@ self-contained **Simplified Chinese** interactive tutorial web app as a project 
 | Authors              | {{authors}}        |
 | Affiliation          | {{affiliations}}   |
 | Domain tags          | {{domain}}         |
+| Source kind          | {{source-kind}}    |
+| Source SHA-256       | {{source-sha256}}  |
+| Locator scheme       | {{locator-scheme}} |
+| Cached figures used  | {{cached-figure-ids}} |
 | Core problem         | {{core-problem}}   |
 | Core contribution    | {{core-insight}}   |
 | Keywords             | {{keywords}}       |
@@ -310,6 +315,9 @@ component shows a notice), but register every id for a complete tutorial.
 10. **Responsive**: keep the breakpoints in `components.css`; text, controls, and widgets must not
     overlap or overflow.
 11. No "→ next section" or "click to replay" style guidance/replay text.
+12. **Source isolation**: do not reopen the original paper or read the Phase 1 source cache. Use
+    only the evidence and boundaries in this skill plus figures already staged under
+    `assets/react-template/public/images/`.
 
 ### Step 5: Validate the folder
 
@@ -323,8 +331,9 @@ no leftover `__XXX__` / `__METAPHOR_CSS__` / `TBD` / `TODO` in `src/data/tutoria
 
 ## Parent Skill Instructions (Phase 1, you run this — not part of the generated skill)
 
-1. Fill every `{{placeholder}}` with evidence-backed, paper-specific content in **English** — the
-   generated skill is a blueprint document; the Chinese tutorial is authored by Phase 2 from it.
+1. Fill every `{{placeholder}}` with evidence-backed, paper-specific content from the validated
+   source cache in **English** — the generated skill is a blueprint document; the Chinese tutorial
+   is authored by Phase 2 from it. Never embed the temporary cache path.
 2. Field completeness, not length: every module names its `interaction`, `Canvas content`, and
    `feedback`; there is no global character minimum.
 3. Preserve the exact section order above. Expand `chapterCount` chapters (default 10; 6–10 per
@@ -336,8 +345,11 @@ no leftover `__XXX__` / `__METAPHOR_CSS__` / `TBD` / `TODO` in `src/data/tutoria
    strings, and the learner's takeaway for each module.
 6. Write the generated Markdown to the task-scoped temporary paperSkill directory, then copy
    `assets/` (which contains `react-template/`) and `scripts/scaffold.js` + `scripts/validate-output.js`
-   beside it.
+   beside it. Copy only selected original figures from the validated cache into
+   `assets/react-template/public/images/` before Phase 2.
 7. Immediately execute the temporary paperSkill to generate the React + TS project folder
-   (Phase 2 reads **only** this skill + its `assets/react-template/` + `scaffold.js`).
-8. After generation, delete the temporary paperSkill and confirm it no longer exists.
+   (Phase 2 reads **only** this skill + its `assets/react-template/` + `scaffold.js`; it does not
+   reopen the original paper or source cache).
+8. After generation, delete the exact task-scoped temporary root containing both the source cache
+   and temporary paperSkill, then confirm it no longer exists.
 9. Deliver only the final `<paper-short-name>_output/` folder.

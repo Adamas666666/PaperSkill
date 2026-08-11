@@ -228,10 +228,10 @@ to the agent self-checklist in `scripts/validation-checklist.md`). The script ch
 
 Support an environment flag `PAPER_SKILL_DEBUG=true`:
 
-- When set, the temporary paperSkill directory is **preserved** after generation, and its
-  absolute path is returned to the caller alongside the final project folder. This lets a human
-  inspect what Phase 1 produced.
-- When unset (default), the temporary paperSkill is deleted as usual.
+- When set, the exact task-scoped temporary root containing `source-cache/` and the temporary
+  paperSkill is **preserved** after generation, and its absolute path is returned to the caller
+  alongside the final project folder. This lets a human inspect source extraction and Phase 1 output.
+- When unset (default), that exact task-scoped root is deleted after validation.
 - The final project folder delivered to the end user is identical in both modes.
 
 ---

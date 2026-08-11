@@ -13,7 +13,7 @@ Use this order exactly:
 3. One-paragraph purpose and standalone-output statement.
 4. Complete directory tree with all six bundled resources.
 5. Horizontal separator.
-6. `## Paper Metadata` with a fully populated table.
+6. `## Paper Metadata` with a fully populated table, including source kind, source SHA-256, locator scheme, and selected cached-figure IDs.
 7. Horizontal separator.
 8. `## Source Evidence and Boundary Matrix` with claim locators, conditions, evaluation protocols, metric directions, and approved wording.
 9. Horizontal separator.
@@ -162,6 +162,7 @@ Tooltip-only clicks do not count. The module must update highlighting plus at le
 The intermediate skill is the only artifact Phase 2 reads. It must be self-contained:
 
 - Do not instruct Phase 2 to read `contract.md`, `references/`, `scripts/*.md`, `templates/`, or the parent `SKILL.md`.
+- Do not instruct Phase 2 to reopen the original paper or read the Phase 1 `source-cache/`. Embed all required evidence and source boundaries in the intermediate skill, and stage selected cached figures in `assets/react-template/public/images/` before Phase 2.
 - Inline every general rule Phase 2 would otherwise need: visual grammar (from `visual-interaction-standard.md`), interaction patterns, color semantics (from `contract.md` §5), chapter order, and hard thresholds.
 - The copied `assets/react-template/` directory (plus `scaffold.js`) supplies the project scaffold; Phase 2 reads those files but no original paper-skill document.
 - Phase 2 follows the embedded per-module specs and runs `validate-output.js` as the structural gate.

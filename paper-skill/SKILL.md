@@ -28,11 +28,16 @@ response (unless `PAPER_SKILL_DEBUG=true`; see below). Never write that intermed
 under `skills/`, the workspace, or another persistent location. Never expose its path or
 contents to the user.
 
+The same temporary root contains one canonical `source-cache/`. Parse the supplied PDF,
+LaTeX, text, URL, or description into that cache once, validate it, and use only the cached
+record for the rest of Phase 1. Do not persist or deliver the cache.
+
 ## Continuous Two-Phase Contract
 
 ```text
 paper PDF, text, URL, or description
-  -> Phase 1: analyze the paper and build a temporary paperSkill
+  -> Phase 1: parse once into a validated source-cache
+  -> analyze the cached paper record and build a temporary paperSkill
   -> validate the temporary paperSkill (agent checklist + validate-output.js on a dry run if possible)
   -> Phase 2: immediately execute that paperSkill
   -> scaffold the React+TS project folder (scaffold.js) and fill src/data/tutorial.ts / paper.css / modules / images
@@ -72,6 +77,10 @@ Phase 2 only executes the intermediate skill. Its entire input is:
   root and copies the template into the caller's working directory (run it, do not modify it), and
 - running `scripts/validate-output.js` as the hard structural gate.
 
+Any selected original figures must already have been copied from the validated source cache
+into the temporary scaffold's `public/images/` during Phase 1. Phase 2 does not reopen the
+original paper or read `source-cache/`.
+
 Do **not** open the original paper-skill's `SKILL.md`, `contract.md`,
 `references/`, `scripts/*.md` (except `validate-output.js`), or `templates/`
 during Phase 2. Every rule those files contain must already be inlined into the
@@ -83,7 +92,8 @@ unchanged.
 
 Follow all steps in `scripts/generation-pipeline.md`:
 
-1. Read the paper source.
+1. Read the paper source once, materialize `source-cache/` with normalized content, locators,
+   metadata, figure inventory, and evidence rows, then run `scripts/validate-source-cache.js`.
 2. Apply the four instructional design principles.
 3. Decompose the paper into problem, insight, math, architecture, training, inference, results, and terminology.
 4. Build a source-evidence matrix for every core claim, formula, architecture condition, and reported result before designing the tutorial.
@@ -93,8 +103,9 @@ Follow all steps in `scripts/generation-pipeline.md`:
 8. Design analogy cards and implementation-ready problem-first interactive modules.
 9. Extract a concise formula and symbol inventory.
 10. **Optionally** find and verify relevant Bilibili videos (best-effort; see `contract.md` §7).
-11. Materialize the paper-specific skill under a task-scoped temporary directory.
-12. Validate the temporary paperSkill (checklist + `validate-output.js` against the plan where applicable).
+11. Stage any selected cached paper figures into the temporary React scaffold.
+12. Materialize the paper-specific skill under the same task-scoped temporary root.
+13. Validate the temporary paperSkill (checklist + `validate-output.js` against the plan where applicable).
 
 After Phase 1 passes, read **only** the generated temporary `SKILL.md` and its copied `assets/` directory, then immediately execute Phase 2. Do not re-open any original paper-skill document.
 
@@ -125,6 +136,10 @@ After Phase 1 passes, read **only** the generated temporary `SKILL.md` and its c
 23. Continue directly from Phase 1 to Phase 2.
 24. Remove the temporary paperSkill on success or failure, unless `PAPER_SKILL_DEBUG=true`. Confirm that its exact resolved path no longer exists before responding (or, in debug mode, that it is preserved and its path is returned).
 25. Deliver only the final `<paper-short-name>_output/` folder; do not list or describe the temporary paperSkill.
+26. Never repeatedly parse or reopen the original paper after the canonical source cache passes
+    validation. Later Phase 1 work reads the cache; Phase 2 reads the evidence-backed temporary
+    skill and already staged figures. If the first extraction is unusable, replace the incomplete
+    cache with one corrected extraction before continuing rather than performing ad hoc rereads.
 
 ## Resource Map
 
@@ -156,6 +171,7 @@ paper-skill/
 |   |-- generation-pipeline.md
 |   |-- chapter-template.md
 |   |-- validation-checklist.md
+|   |-- validate-source-cache.js  <- validates the temporary canonical paper cache
 |   |-- validate-output.js        <- automated structural validator (folder)
 |   `-- scaffold.js               <- React+TS project scaffolder (copied beside assets/)
 `-- templates/
@@ -173,7 +189,7 @@ outline. Use `references/intermediate-skill-standard.md` plus `templates/skill-t
 as the portable canonical version. Lock the paper-specific theme before reading the
 exemplar; never transfer the exemplar's theme, objects, actions, labels, or mappings.
 
-1. Preserve this top-level order: frontmatter and introduction; directory structure; paper metadata; source-evidence and boundary matrix; unified life-theme mapping and color overrides; `chapterCount` fully expanded chapter plans; formula symbol table; verified Bilibili table (optional); Hero comparison design; six-step project-generation instructions.
+1. Preserve this top-level order: frontmatter and introduction; directory structure; paper metadata with source-cache provenance; source-evidence and boundary matrix; unified life-theme mapping and color overrides; `chapterCount` fully expanded chapter plans; formula symbol table; verified Bilibili table (optional); Hero comparison design; six-step project-generation instructions.
 2. Fully write every chapter. Do not use aggregate placeholders or shorthand such as "same as above", "follow the schema", or `complete-chapter-N-plan`.
 3. Match the reference template's per-chapter order: core concept; chapter role; life-based animation scene; interaction patterns; analogy card; detailed Module N.1; insight bar when applicable; detailed Module N.2 when applicable; formula; three-item takeaway.
 4. For every module, record the title, purpose, presentation mode, exact operation, initial state, controls and state space, Canvas composition, state transitions, immediate feedback wording and colors, and the judgment the learner should form.
@@ -206,7 +222,7 @@ source of truth rather than as optional starter styles; the generator fills only
 
 If the environment variable `PAPER_SKILL_DEBUG` is set to `true`:
 
-- Preserve the temporary paperSkill directory after generation.
+- Preserve the exact task-scoped temporary root, including `source-cache/` and the temporary paperSkill.
 - Return its absolute path to the caller alongside the final folder path so a human can inspect Phase 1 output.
 - The delivered project folder is identical to non-debug mode.
 

@@ -2,9 +2,57 @@
 
 Execute all steps in order. Phase 1 and Phase 2 are one continuous operation. Do not return after Phase 1.
 
-## Step 1: Read and Decompose the Paper
+## Step 1: Build and Validate the Canonical Source Cache
 
-Accept a local PDF, pasted text, an arXiv or paper URL, or a sufficiently detailed user description. Use the available document or web tools to read the source.
+Accept a local PDF, pasted text, an arXiv or paper URL, or a sufficiently detailed user description. Before opening the source, create one task-scoped temporary root with the environment's standard temporary-directory facility. Resolve and record its absolute path, then create `source-cache/` beneath it.
+
+Use the available document or web tools to perform one complete source pass. Materialize this cache:
+
+```text
+<task-temp-root>/
+`-- source-cache/
+    |-- manifest.json
+    |-- content.md
+    |-- evidence.json
+    `-- figures/          <- extracted original figures when available
+```
+
+- `content.md` contains the normalized complete text. Preserve explicit page markers for PDF input and stable file/section markers for LaTeX input so every later locator can resolve without reopening the source.
+- `figures/` contains usable original figures extracted during the same source pass. If an image cannot be exported, retain its locator and caption in the manifest with `file: null`.
+- `manifest.json` uses this schema; paths are relative to `source-cache/` and SHA-256 is calculated from the supplied source bytes or normalized source text:
+
+```json
+{
+  "schemaVersion": 1,
+  "sourceKind": "pdf",
+  "origin": "participant-provided path or URL",
+  "sourceSha256": "64-character SHA-256 digest",
+  "contentFile": "content.md",
+  "evidenceFile": "evidence.json",
+  "locatorScheme": "page + section/equation/figure/table",
+  "pageCount": 12,
+  "metadata": {
+    "title": "Exact paper title",
+    "authors": ["Author One"],
+    "venue": "Conference, journal, or preprint",
+    "year": "2024"
+  },
+  "figures": [
+    {
+      "id": "figure-1",
+      "locator": "page 3, Figure 1",
+      "caption": "Original caption",
+      "file": "figures/figure-1.png"
+    }
+  ]
+}
+```
+
+Use `pageCount: null` for a source without fixed pages and an empty `figures` array when no original figure is available. Never fabricate metadata, locators, captions, or images.
+
+After this cache is created, do not reopen or reparse the original paper during normal execution. All later Phase 1 steps must read `content.md`, `manifest.json`, `evidence.json`, and cached figures. If the first extraction is incomplete or corrupt, replace the incomplete cache with one corrected complete extraction before continuing; do not accumulate repeated partial reads.
+
+Decompose the cached record into this planning record:
 
 Extract this planning record:
 
@@ -32,7 +80,15 @@ Before continuing, create a source-evidence matrix with one row per core tutoria
 | Tutorial claim | Exact source locator | Conditions / assumptions | Protocol / metric direction | Allowed tutorial wording |
 | -------------- | -------------------- | ------------------------ | --------------------------- | ------------------------ |
 
-Use page plus section, equation, figure, or table identifiers whenever available. Separate the paper's explicit statements from your interpretation. Reject unsupported causal language, comparisons across incompatible evaluation protocols, and universal wording for conditional architecture choices. Do not continue until the paper's contribution can be explained in one plain sentence and every planned technical claim has a source row.
+Use page plus section, equation, figure, or table identifiers whenever available. Separate the paper's explicit statements from your interpretation. Reject unsupported causal language, comparisons across incompatible evaluation protocols, and universal wording for conditional architecture choices. Serialize the same rows to `evidence.json` as `{"claims":[...]}`; each row has `claim`, `locator`, `conditions`, `protocol`, and `allowedWording` strings. Use explicit values such as `not applicable` rather than an empty field.
+
+Run this hard gate before Step 2:
+
+```bash
+node scripts/validate-source-cache.js <task-temp-root>/source-cache
+```
+
+Do not continue until the validator passes, the paper's contribution can be explained in one plain sentence, and every planned technical claim has a source row. After the gate, use the cache as the only paper evidence source.
 
 ## Step 2: Apply the Design Philosophy
 
@@ -238,7 +294,7 @@ lookup.
 
 ## Step 10: Build the Temporary PaperSkill
 
-Create a task-scoped temporary root with the environment's standard temporary-directory facility. Under it, create `<paper-short-name>-tutorial/`. Resolve and record its absolute path.
+Reuse the exact task-scoped temporary root recorded in Step 1. Under it, create `<paper-short-name>-tutorial/`. Resolve and record the intermediate skill's absolute path.
 
 Safety requirements:
 
@@ -246,14 +302,16 @@ Safety requirements:
 - Use only the recorded absolute path for subsequent reads and writes.
 - Never use an unresolved variable, wildcard, or broad temp root as a cleanup target.
 
-Build this structure:
+The task root now has this structure:
 
 ```text
-<paper-short-name>-tutorial/
-|-- SKILL.md
-|-- scaffold.js                <- React+TS project scaffolder (copied beside assets/)
-`-- assets/
-    `-- react-template/        <- full Vite + React + TS scaffold (copied verbatim)
+<task-temp-root>/
+|-- source-cache/              <- validated in Step 1; never read by Phase 2
+`-- <paper-short-name>-tutorial/
+    |-- SKILL.md
+    |-- scaffold.js            <- React+TS project scaffolder (copied beside assets/)
+    `-- assets/
+        `-- react-template/    <- full Vite + React + TS scaffold
 ```
 
 Before generating the temporary `SKILL.md`:
@@ -265,7 +323,9 @@ Before generating the temporary `SKILL.md`:
 
 Generate `SKILL.md` with the same top-level and per-chapter order as the exemplar. Copy its detail level, not its paper facts. Fully expand all `chapterCount` chapters; never emit aggregate placeholders, "same as above", or `complete-chapter-N-plan` shorthand. The detail floor is **field-completeness, not raw length** (per `contract.md` §6): every required field filled, `chapterPlanMinChars` (soft, 600) of real detail per chapter, and **no global character minimum**.
 
-Fill every placeholder with the outputs from Steps 1-9. Copy this skill's complete `assets/` directory (which contains `react-template/`) and `scripts/scaffold.js` + `scripts/validate-output.js` into the temporary paperSkill (`scaffold.js` sits beside `assets/` in the temp root).
+Fill every placeholder with the outputs from Steps 1-9. Include source kind, SHA-256 digest, locator scheme, and selected cached-figure IDs in the paper metadata; never include a temporary absolute path. Copy this skill's complete `assets/` directory (which contains `react-template/`) and `scripts/scaffold.js` + `scripts/validate-output.js` into the temporary paperSkill (`scaffold.js` sits beside `assets/` in the temp root).
+
+When the tutorial will use an original paper figure, copy the already cached image into the temporary `assets/react-template/public/images/` now and record its `/images/...` path in the intermediate skill. Do not reopen the original source during this step. Images staged here are copied into the final project automatically by `scaffold.js`.
 
 ## Step 11: Validate Phase 1
 
@@ -296,8 +356,9 @@ Follow the temporary paperSkill exactly.
 4. Add paper-specific widgets under `<outputDir>/src/modules/*` and register each `componentId` in
    `src/modules/registry.tsx`. Each widget uses `canvasKit.ts` (`setupCanvas`/`observeCanvas`) for
    sizing and off-screen pausing. A missing id degrades gracefully but should be registered.
-5. Copy the paper's original figures (optional) into `<outputDir>/public/images/` and reference
-   them via the `figure` field (`/images/...`). Omit any figure that does not fit.
+5. Use only original figures already staged in `assets/react-template/public/images/` during
+   Phase 1 and reference them via the `figure` field (`/images/...`). Omit any figure that does
+   not fit. Do not reopen the original paper or read `source-cache/` in Phase 2.
 6. Do NOT edit framework files: `src/components/*`, `src/lib/*`, `src/styles/{tokens,components}.css`,
    `App.tsx`, `main.tsx`, config files. Keep all visible explanatory copy in natural Simplified
    Chinese.
@@ -315,9 +376,9 @@ Follow the temporary paperSkill exactly.
 
 After validation, or before reporting any blocker:
 
-1. Resolve the recorded intermediate path again.
-2. Confirm it is a child of the task-scoped temporary root and is the exact directory created in Step 10.
-3. **Debug branch:** if `PAPER_SKILL_DEBUG=true`, skip deletion. Preserve the exact directory and return its absolute path to the caller alongside the final folder path so a human can inspect Phase 1 output. The delivered folder is identical.
-4. Otherwise, recursively remove only that exact directory. Do not use wildcards or delete a broad temporary root.
-5. Confirm the directory no longer exists (or, in debug mode, that it is preserved).
-6. Deliver only the final `<paper-short-name>_output/` folder path. Do not mention, list, or expose the temporary paperSkill (except its debug path when debug mode is on).
+1. Resolve the recorded task-scoped temporary root, source-cache path, and intermediate path again.
+2. Confirm both child paths are inside the exact task root created in Step 1 and that the task root is not a broad system temporary directory.
+3. **Debug branch:** if `PAPER_SKILL_DEBUG=true`, skip deletion. Preserve and return the exact task root so a human can inspect both the source cache and Phase 1 output. The delivered folder is identical.
+4. Otherwise, recursively remove only that exact task-scoped root. Do not use wildcards, an unresolved variable, or the system temporary parent as the target.
+5. Confirm the task root, source cache, and intermediate skill no longer exist (or, in debug mode, that all are preserved).
+6. Deliver only the final `<paper-short-name>_output/` folder path. Do not mention, list, or expose temporary artifacts except the task-root debug path when debug mode is on.
