@@ -38,7 +38,7 @@
     ],
     "topics": [],
     "skillVersion": "1.0.0",
-    "status": "review",
+    "status": "published",
     "tutorialUrl": "papers/elf_example/"
   },
   {
@@ -68,7 +68,7 @@
       "Deep Networks"
     ],
     "skillVersion": "1.0.0",
-    "status": "review",
+    "status": "published",
     "tutorialUrl": "papers/resnet_cratoozy/"
   },
   {
