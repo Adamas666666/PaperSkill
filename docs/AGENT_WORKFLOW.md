@@ -76,6 +76,8 @@ npm install
 npm run build
 ```
 
+首次安装成功后，记录 `package.json` 以及项目中实际存在的依赖锁文件（如 `package-lock.json`、`npm-shrinkwrap.json`、`pnpm-lock.yaml` 或 `yarn.lock`）的内容指纹，并确认 `node_modules/` 可用。该记录仅用于人工修改后的依赖复用判断，不写入最终作品。
+
 同时完成：
 
 - 运行 `paper-skill/scripts/validate-output.js` 检查项目结构；
@@ -112,14 +114,15 @@ Agent 应根据原论文和实际测试，向参与者列出候选问题，每�
 
 收到参与者明确的修改完成确认后，Agent 应自动继续：
 
-1. 重新执行生成项目的安装、构建和页面测试；
-2. 确认主要交互、桌面端和移动端均正常；
-3. 再次让参与者确认公开展示名、GitHub 用户名、`paperSlug` 和 `source`；
-4. 在作品仓库中创建 `paper/<paper-slug>-<github-user>` 分支；
-5. 按 `docs/PARTICIPATING.md` 运行 `npm run import -- ...`；
-6. 确认项目进入 `html_output/<paper-slug>_<source>/`；
-7. 检查 `paper.json`、论文链接、参与者信息、来源分支和 Skill 版本；
-8. 在仓库根目录运行：
+1. 比较当前 `package.json` 和依赖锁文件与首次安装后的内容指纹：如果文件集合和内容均未变化且 `node_modules/` 仍可用，跳过依赖安装；如果任一文件新增、删除或改变，或者 `node_modules/` 缺失，则重新执行 `npm install`；
+2. 无论是否跳过安装，都必须重新执行 `npm run build` 和页面测试。若跳过安装后构建因依赖缺失或损坏失败，应自动执行一次 `npm install` 后重新构建；
+3. 确认主要交互、桌面端和移动端均正常；
+4. 再次让参与者确认公开展示名、GitHub 用户名、`paperSlug` 和 `source`；
+5. 在作品仓库中创建 `paper/<paper-slug>-<github-user>` 分支；
+6. 按 `docs/PARTICIPATING.md` 运行 `npm run import -- ...`；
+7. 确认项目进入 `html_output/<paper-slug>_<source>/`；
+8. 检查 `paper.json`、论文链接、参与者信息、来源分支和内部追踪字段；
+9. 在仓库根目录运行：
 
    ```powershell
    npm run validate
@@ -128,8 +131,8 @@ Agent 应根据原论文和实际测试，向参与者列出候选问题，每�
    npm run build:site
    ```
 
-9. 检查本次分支原则上只修改目标作品目录和 `catalog/papers.json`；
-10. 确认仓库中没有 `node_modules/`、`dist/`、论文 PDF、密钥、隐私、本地绝对路径或未授权素材。
+10. 检查本次分支原则上只修改目标作品目录和 `catalog/papers.json`；
+11. 确认仓库中没有 `node_modules/`、`dist/`、论文 PDF、密钥、隐私、本地绝对路径或未授权素材。
 
 ## 8. 阶段五：自动准备提交
 
@@ -152,7 +155,7 @@ Pull Request 检查失败时必须先读日志：如果失败发生在仓库校�
 
 Agent 最终报告必须包含：
 
-- 环境和 Paper Skill 版本；
+- 环境和 Paper Skill 完整性状态；
 - 论文与生成项目路径；
 - 参与者已明确确认人工修改完成，以及已记录的主要修改内容；
 - 项目构建、结构验证、桌面端和移动端检查结果；
