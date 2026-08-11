@@ -57,6 +57,6 @@ PaperSkill/
 
 `main` 只通过 Pull Request 合并。自动检查负责工程门槛，论文事实、教学质量和人工修改仍需人工审核。
 
-参与者的最终作品统一提交到 `html_output/<paper-slug>_<source>/`。提交时，请将用于展示的演示 PPT 放入同一作品目录，与完整网页项目一并提交。不要将项目直接放在仓库根目录，也不要把论文 PDF 或修改说明放入 `html_output/`。
+参与者的最终作品统一提交到 `html_output/<paper-slug>_<source>/`。提交时，请将用于展示的演示 PPT 统一命名为 `presentation.pptx`，放入同一作品目录并与完整网页项目一并提交。不要修改 `html_output/` 的目录名称，也不要将项目直接放在仓库根目录。
 
 Pull Request 检查失败时，先打开检查详情区分“项目校验失败”和“GitHub Actions 服务异常”。具体判断与重新运行步骤见 [参与指南的检查处理说明](docs/PARTICIPATING.md#7-pull-request-检查失败时)。
