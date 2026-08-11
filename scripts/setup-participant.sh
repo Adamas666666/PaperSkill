@@ -19,7 +19,7 @@ Options:
   --git-name NAME                Git commit user name
   --git-email EMAIL              Git commit email
   --install-missing-tools        Install missing Git/Node.js with the system package manager
-  --replace-existing-skill       Replace an existing paper-skill installation
+  --replace-existing-skill       Replace an existing paper-skill installation when it differs
   --non-interactive              Do not prompt; fail when required values are missing
   --skip-github-check            Skip the origin connectivity check
   -h, --help                     Show this help
@@ -333,7 +333,7 @@ install_paper_skill() {
     installed_version="$(tr -d '[:space:]' < "$destination/VERSION")"
     installed_fingerprint="$(skill_fingerprint "$destination")"
   fi
-  if [[ "$replace_existing_skill" == false && -n "$installed_version" && "$installed_version" == "$repo_version" && "$installed_fingerprint" == "$repo_fingerprint" ]]; then
+  if [[ -n "$installed_version" && "$installed_version" == "$repo_version" && "$installed_fingerprint" == "$repo_fingerprint" ]]; then
     echo "Paper Skill already matches the repository. Version: $repo_version"
     printf '%s\n' "$destination"
     return

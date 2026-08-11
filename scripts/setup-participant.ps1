@@ -183,7 +183,7 @@ function Install-PaperSkill {
     $installedFingerprint = Get-SkillFingerprint $destination
   }
 
-  if ($destinationReady -and $installedVersion -eq $repoVersion -and $installedFingerprint -eq $repoFingerprint -and -not $ReplaceExistingSkill) {
+  if ($destinationReady -and $installedVersion -eq $repoVersion -and $installedFingerprint -eq $repoFingerprint) {
     Write-Host "Paper Skill already matches the repository. Version: $repoVersion"
     return $destination
   }
