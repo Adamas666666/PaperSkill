@@ -1,6 +1,6 @@
 # 参与指南
 
-本文只规定作品进入 GitHub 仓库的技术流程。参与者的完整教程项目统一提交到 `html_output/<paper-slug>_<source>/`，不得放在仓库根目录或其他目录。完整自动化流程见 [AGENT_WORKFLOW.md](AGENT_WORKFLOW.md)，考核材料去向见 [SUBMISSION.md](SUBMISSION.md)。
+本文只规定作品进入 GitHub 仓库的技术流程。参与者的完整教程项目和演示 PPT 统一提交到 `html_output/<paper-slug>_<source>/`，不得放在仓库根目录或其他目录。完整自动化流程见 [AGENT_WORKFLOW.md](AGENT_WORKFLOW.md)，考核材料去向见 [SUBMISSION.md](SUBMISSION.md)。
 
 ## 1. 论文与目录标识
 
@@ -43,7 +43,7 @@ npm run import -- <生成目录> <paper-slug> --source <来源标识> --source-b
 html_output/<paper-slug>_<source>/
 ```
 
-该目录就是作品在 GitHub 中的最终提交位置。后续修改也应在这个目录内完成。
+该目录就是作品在 GitHub 中的最终提交位置。导入项目后，将演示 PPT 复制到该目录并统一命名为 `presentation.pptx`；后续修改也应在这个目录内完成。不要修改 `html_output/` 或作品目录的名称。
 
 ## 4. 项目结构
 
@@ -58,6 +58,7 @@ html_output/<paper-slug>_<source>/
 |-- index.html
 |-- vite.config.ts
 |-- tsconfig.json
+|-- presentation.pptx
 |-- public/
 `-- src/
 ```
@@ -87,6 +88,7 @@ npm run build:site
 
 - 页面中文表达自然，论文事实、公式、实验数字和局限准确；
 - 所有主要交互均可操作，移动端没有明显溢出；
+- 演示 PPT 已命名为 `presentation.pptx`、放入对应作品目录，并且文件可以正常打开；
 - 图片来源和论文链接可追溯；
 - 页面中没有个人隐私、密钥或本地绝对路径。
 

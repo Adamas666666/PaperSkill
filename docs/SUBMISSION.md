@@ -12,6 +12,8 @@ html_output/<paper-slug>_<source>/
 
 这里提交的是包含 `package.json`、`src/`、`public/` 和 `paper.json` 等内容的完整项目文件夹，不是单独的 HTML 文件。项目不得放在仓库根目录、`docs/` 或其他位置。
 
+用于展示的演示 PPT 也必须放入同一作品目录，与网页项目一起提交，并统一命名为 `presentation.pptx`。`html_output/` 及作品目录的名称不得因此改变。
+
 分支、导入、目录和检查命令统一见 [PARTICIPATING.md](PARTICIPATING.md)。Pull Request 应附关键页面截图、主要交互说明和需要审核者重点确认的问题。
 
 论文 PDF 和一页修改说明不进入 GitHub。项目不得包含未获授权的素材、密钥、个人隐私或本地绝对路径；使用论文图片或其他外部素材时，应在项目 `README.md` 中注明来源。
@@ -22,7 +24,7 @@ html_output/<paper-slug>_<source>/
 
 1. 原论文 PDF 或有效论文链接；
 2. 一页以内的修改说明；
-3. 教师另行要求的展示材料。
+3. 教师另行要求、且未明确要求放入作品目录的其他材料。
 
 具体入口和截止时间以考核通知为准。入口尚未公布时应联系教师或组织者确认，不要通过公开 GitHub Issue 上传论文或个人材料。
 
@@ -47,6 +49,7 @@ html_output/<paper-slug>_<source>/
 ## 4. 提交检查
 
 - [ ] 项目已按参与指南通过检查并创建 Pull Request；
+- [ ] 演示 PPT 已命名为 `presentation.pptx` 并放入对应作品目录；
 - [ ] 论文 PDF 或链接已通过指定私有渠道提交；
 - [ ] 修改说明不超过一页并包含至少三项实质性修改；
 - [ ] Pull Request 已附截图和交互说明；
