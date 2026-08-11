@@ -184,7 +184,7 @@ function Install-PaperSkill {
   }
 
   if ($destinationReady -and $installedVersion -eq $repoVersion -and $installedFingerprint -eq $repoFingerprint) {
-    Write-Host "Paper Skill already matches the repository. Version: $repoVersion"
+    Write-Host 'Paper Skill already matches the repository.'
     return $destination
   }
 
@@ -215,7 +215,7 @@ function Install-PaperSkill {
     $copiedVersion = (Get-Content -LiteralPath (Join-Path $destination 'VERSION') -Raw).Trim()
     $copiedFingerprint = Get-SkillFingerprint $destination
     if ($copiedVersion -ne $repoVersion -or $copiedFingerprint -ne $repoFingerprint -or -not (Test-SkillLayout $destination)) {
-      throw 'The installed Paper Skill failed its version, content, or layout check.'
+      throw 'The installed Paper Skill failed its integrity or layout check.'
     }
 
     if ($hasBackup) {
@@ -242,7 +242,7 @@ function Install-PaperSkill {
     }
   }
 
-  Write-Host "Paper Skill installed. Version: $repoVersion"
+  Write-Host 'Paper Skill installed and verified.'
   return $destination
 }
 

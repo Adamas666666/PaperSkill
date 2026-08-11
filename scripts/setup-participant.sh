@@ -334,7 +334,7 @@ install_paper_skill() {
     installed_fingerprint="$(skill_fingerprint "$destination")"
   fi
   if [[ -n "$installed_version" && "$installed_version" == "$repo_version" && "$installed_fingerprint" == "$repo_fingerprint" ]]; then
-    echo "Paper Skill already matches the repository. Version: $repo_version"
+    echo "Paper Skill already matches the repository."
     printf '%s\n' "$destination"
     return
   fi
@@ -378,7 +378,7 @@ install_paper_skill() {
   if [[ "$had_backup" == true ]]; then
     safe_remove_staging "$backup" "$skills_root"
   fi
-  echo "Paper Skill installed. Version: $repo_version"
+  echo "Paper Skill installed and verified."
   printf '%s\n' "$destination"
 }
 

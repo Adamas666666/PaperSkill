@@ -3,7 +3,6 @@
 - 论文：
 - 目录：`html_output/<paper-slug>_<source>/`
 - 来源分支：
-- 使用的 paper-skill 版本：请填写 `paper-skill/VERSION`
 
 ## 本次工作
 

@@ -50,8 +50,8 @@
      --replace-existing-skill
    ```
 
-   Shell 脚本会自动识别 macOS 的 Homebrew，或 Linux 的 apt、dnf、yum、pacman、zypper、apk。两个系统入口均会在 Paper Skill 版本和完整文件指纹一致时跳过安装；替换参数只用于在检测到差异时自动更新。需要管理员权限、安装 Xcode Command Line Tools 或刷新终端环境时，应暂停并让参与者确认后继续；
-8. 将仓库中的 `paper-skill/` 视为唯一来源，核对安装目录中的版本和完整文件指纹均与仓库一致；即使版本号相同，只要文件内容不同也必须用仓库副本替换；
+   Shell 脚本会自动识别 macOS 的 Homebrew，或 Linux 的 apt、dnf、yum、pacman、zypper、apk。两个系统入口均会在 Paper Skill 内部标识和完整文件指纹一致时跳过安装；替换参数只用于在检测到差异时自动更新。需要管理员权限、安装 Xcode Command Line Tools 或刷新终端环境时，应暂停并让参与者确认后继续；
+8. 将仓库中的 `paper-skill/` 视为唯一来源，核对安装目录中的内部标识和完整文件指纹均与仓库一致；即使内部标识相同，只要文件内容不同也必须用仓库副本替换。内部标识仅用于仓库维护和自动校验，不向参与者展示，也不要求参与者填写；
 9. 重新加载 Agent 后确认能够识别 `paper-skill`。
 
 GitHub 账号注册、邮箱验证、登录或 Fork 授权、管理员权限、缺失的 Git 身份和 Agent 重载需要参与者操作；其中 GitHub 账号登录必须在本阶段最先完成，不得推迟到提交阶段。

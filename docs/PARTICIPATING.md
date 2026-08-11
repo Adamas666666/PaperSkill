@@ -62,11 +62,10 @@ html_output/<paper-slug>_<source>/
 `-- src/
 ```
 
-`paper.json` 必须符合 `schemas/paper.schema.json`。其中：
+`paper.json` 必须符合 `schemas/paper.schema.json`，并由导入脚本自动生成。参与者无需填写或修改仓库内部追踪字段。其中：
 
 - `slug` 必须等于 `paperSlug + "_" + source` 并与目录名一致；
 - `sourceBranch` 记录参与分支；
-- `skillVersion` 记录 `paper-skill/VERSION`；
 - 同一 `paperUrl` 可以有多个来源实现。
 
 不得提交 `node_modules/`、`dist/`、本地缓存、论文 PDF、密钥、个人隐私或未获授权的素材。使用论文图片或其他外部素材时，应在项目 `README.md` 中注明来源并确认允许公开使用。
