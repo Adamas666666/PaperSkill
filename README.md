@@ -18,7 +18,7 @@
 - `elf_example`：演示视频同款网页，经过了人工修改
 - `resnet_example`：paper-skill 原始输出，未经过人工修改
 
-**在线查看已提交的论文教程网页集：**🌐https://reducttech.github.io/PaperSkill/#search
+**在线查看已提交的论文教程网页集：** 🌐https://reducttech.github.io/PaperSkill/#search
 
 ## 🚀快速开始
 
