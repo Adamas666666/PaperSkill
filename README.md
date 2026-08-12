@@ -4,7 +4,7 @@
 
 **考核流程：选手打开自己的智能体应用（例如 Codex、WorkBuddy 等），输入论文并调用本仓库的 [paper-skill 技能](paper-skill) -> 生成初版待修改网页 -> 选手理解论文、打磨修改网页 -> 将成品网页提交到本仓库的 html_output**
 
->注：调用 paper-skill 只是为了快速迭代出网页雏形方便修改，如有更好的创意，可以不按照 paper-skill 生成的章节结构、UI样式等。
+>注：调用 paper-skill 只是为了快速做出网页雏形方便修改，如有更好的创意，可不受 paper-skill 输出的章节结构、UI 样式等限制自由调整。
 
 最终成果必须以完整的 React + TypeScript（Vite）网页项目形式提交，禁止提交单 HTML 文件，必须包含能够安装、运行和构建的完整项目结构，仓库会将其构建为可访问的网页。
 
@@ -22,7 +22,7 @@
 
 #### 方式一 · 手动命令行
 
-手动下载仓库、调用 paper-skill 生成网页、修改并提交 PR。完整的操作流程请阅读👉 https://reducttech.github.io/PaperSkill/#start
+手动下载仓库、调用 paper-skill 生成网页、修改并提交 PR。完整的操作流程请阅读👉[完整流程](https://reducttech.github.io/PaperSkill/#start)
 
 #### 方式二 · 智能体自动下载
 
@@ -50,9 +50,9 @@ Agent 生成网页初版并完成基础检查后，这一步就结束了。接�
 
 支持 Windows、macOS 和 Linux。本地环境需要准备 Node.js 20+、npm、Git。
 
->在方式二 · 智能体自动构建中，环境准备会根据当前系统自动选择对应安装方式。系统差异只影响安装过程，不影响后续生成、构建、校验和提交流程。除必要授权和确认外，其余步骤可由 Agent 自动完成。
+>在方式二 · 智能体自动下载中，环境准备会根据当前系统自动选择对应安装方式。系统差异只影响安装过程，不影响后续生成、构建、校验和提交流程。除必要授权和确认外，其余步骤可由 Agent 自动完成。
 
-另外，需要你拥有一个可以使用 skill 的智能体应用，例如 Codex（ChatGPT）、WorkBuddy、Claude Code、Trae Work 等。
+另外，需要有一个能使用 skill 的智能体应用，例如 Codex（ChatGPT）、WorkBuddy、Claude Code、Trae Work 等。
 
 ## 仓库结构
 
