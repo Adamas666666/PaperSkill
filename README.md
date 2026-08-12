@@ -2,13 +2,15 @@
 
 本仓库用于组织 AI 与机器学习等交互式论文教学网页考核，并集中收录同学们制作的中文交互式论文教学网页。
 
-**考核流程：选手打开自己的智能体应用（例如 Codex、WorkBuddy 等），输入论文并调用本仓库的 [paper-skill 技能](paper-skill) -> 生成初版待修改网页 -> 选手理解论文、打磨修改网页 -> 将成品网页提交到本仓库的 html_output**
+## 📋考核流程
+
+选手打开自己的智能体应用（例如 Codex、WorkBuddy 等），输入论文并调用本仓库的 [paper-skill 技能](paper-skill) -> 生成初版待修改网页 -> 选手理解论文、打磨修改网页 -> 将成品网页提交到本仓库的 html_output。
 
 >注：调用 paper-skill 只是为了快速做出网页雏形方便修改，如有更好的创意，可不受 paper-skill 输出的章节结构、UI 样式等限制自由调整。
 
 最终成果必须以完整的 React + TypeScript（Vite）网页项目形式提交，禁止提交单 HTML 文件，必须包含能够安装、运行和构建的完整项目结构，仓库会将其构建为可访问的网页。
 
-## 成品示例
+## 🖼️成品示例
 
 **观看成品网页效果：** [▶️演示视频（仅供参考）](https://my.feishu.cn/file/G0akbSBtYoIBoLx0DEMcJSbunEg)
 
@@ -16,9 +18,9 @@
 - `elf_example`：演示视频同款网页，经过了人工修改
 - `resnet_example`：paper-skill 原始输出，未经过人工修改
 
-**选手可在线查看已提交的论文教程网页集：** https://reducttech.github.io/PaperSkill/#search
+**在线查看已提交的论文教程网页集：**🌐https://reducttech.github.io/PaperSkill/#search
 
-## 快速开始
+## 🚀快速开始
 
 #### 方式一 · 手动命令行
 
@@ -32,29 +34,29 @@
 请访问仓库 https://github.com/ReductTech/PaperSkill，首先读取 docs/AGENT_WORKFLOW.md（菜单模式），不必读取项目中的其他源码，先向我展示功能菜单，由我选择要执行的功能。
 ```
 
-#### 初版完成后，你需要做什么
+#### 📝初版完成后，你需要做什么
 
 Agent 生成网页初版并完成基础检查后，这一步就结束了。接下来请你核查和修改网页，不要直接提交。
 
 你可以重点检查这些内容：
 
-- 论文内容是否准确；
-- 讲解顺序是否清楚；
-- 交互、图示和页面是否真正帮助理解。
+- ✅论文内容是否准确；
+- ✅讲解顺序是否清楚；
+- ✅交互、图示和页面是否真正帮助理解。
 
 修改完成后，继续执行导入仓库、校验和 Pull Request 准备。
 
-具体评分要求见 [评分标准](docs/RUBRIC.md)。
+具体评分要求见📌[评分标准](docs/RUBRIC.md)。
 
-## 系统支持
+## ⚙️系统支持
 
 支持 Windows、macOS 和 Linux。本地环境需要准备 Node.js 20+、npm、Git。
 
 >在方式二 · 智能体自动下载中，环境准备会根据当前系统自动选择对应安装方式。系统差异只影响安装过程，不影响后续生成、构建、校验和提交流程。除必要授权和确认外，其余步骤可由 Agent 自动完成。
 
-另外，需要有一个能使用 skill 的智能体应用，例如 Codex（ChatGPT）、WorkBuddy、Claude Code、Trae Work 等。
+另外，需要一个能使用 skill 的智能体应用，例如 Codex（ChatGPT）、WorkBuddy、Claude Code、Trae Work 等。
 
-## 仓库结构
+## 📂仓库结构
 
 ```text
 PaperSkill/
