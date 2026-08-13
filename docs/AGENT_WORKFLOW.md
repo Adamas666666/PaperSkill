@@ -48,11 +48,10 @@ Agent **只读取 `README.md` 与 `docs/` 下的文档**来理解「该做什么
 - GitHub 用户名；
 - 作品来源标识 `source`；
 - 论文目录标识 `paperSlug`；
-- 演示 PPT 的本地路径（执行“导入主仓库”时再询问，导入后统一命名为 `presentation.pptx`）；
 
 `paperSlug` 和 `source` 只能使用小写字母、数字和中间连字符。Agent 可以给出建议值，但应让参与者确认论文和身份信息。
 
-> 菜单模式提示：各功能可能在不同会话中分别调用。建议将已收集的论文与身份信息（paperSlug、source、participant、github、生成项目路径、演示 PPT 路径、已安装 skill 版本）记录到本地状态文件，跨功能调用时复用，避免重复询问。不得提交到仓库。
+> 菜单模式提示：各功能可能在不同会话中分别调用。建议将已收集的论文与身份信息（paperSlug、source、participant、github、生成项目路径、已安装 skill 版本）记录到本地状态文件，跨功能调用时复用，避免重复询问。不得提交到仓库。
 
 ## 4. 功能与说明文件对照
 

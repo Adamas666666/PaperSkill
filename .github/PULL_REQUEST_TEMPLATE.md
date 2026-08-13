@@ -18,7 +18,6 @@
 - [ ] 已运行 `npm run build:paper -- <paper-slug>_<source>`
 - [ ] 页面交互、移动端布局和资源路径正常
 - [ ] 论文事实、公式和实验数字已人工核对
-- [ ] 演示 PPT 已命名为 `presentation.pptx`、放入对应作品目录，并且可以正常打开
 - [ ] 未提交 `node_modules/`、`dist/`、密钥或本地绝对路径
 - [ ] 图片与外部素材具有可追溯来源，并记录在项目 `README.md`
 - [ ] 所有参与者已知晓姓名或展示名及 GitHub 信息会公开显示并表示同意
