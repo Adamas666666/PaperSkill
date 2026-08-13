@@ -16,8 +16,10 @@
    npm run validate
    npm run catalog
    npm run validate:pr -- main
-   npm run build:site
+   npm run build:paper -- <paper-slug>_<source>
    ```
+
+   普通参与任务只构建本次作品。`npm run build:site` 仅用于管理员完整验收、共享构建逻辑修改和正式 Pages 部署；`npm run catalog` 仍需生成全部作品的总索引，但不会构建网页。
 
 10. 检查本次分支原则上只修改目标作品目录和 `catalog/papers.json`；
 11. 确认目标作品目录中包含可正常打开的 `presentation.pptx`；

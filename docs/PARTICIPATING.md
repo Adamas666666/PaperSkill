@@ -79,10 +79,11 @@ html_output/<paper-slug>_<source>/
 npm run validate
 npm run catalog
 npm run validate:pr -- main
-npm run build:site
+npm run build:paper -- <paper-slug>_<source>
 ```
 
 `npm run validate:pr` 在普通本地终端中没有 Pull Request 基准信息，会主动跳过；本地验收必须显式追加 `-- main`。
+`npm run build:paper` 只安装、检查并构建本次提交的教程，普通参与者不需要在本地重复构建仓库中的全部作品。`npm run build:site` 保留给管理员完整验收、共享构建逻辑修改和 GitHub Pages 正式部署。
 
 还应人工确认：
 
@@ -103,13 +104,15 @@ catalog/papers.json
 
 普通参与任务不得同时修改 `paper-skill/`、管理脚本、工作流或其他论文目录。检查通过后推送个人分支并创建 Pull Request，不要直接推送 `main`。
 
-Pull Request 创建后，作品保持 `review` 状态。工程和内容检查通过后，根据审核意见将 `paper.json` 中的 `status` 改为 `published`，重新运行 `npm run catalog` 并推送到原 Pull Request。
+Pull Request 创建后，作品保持 `review` 状态。工程和内容检查通过后，根据审核意见将 `paper.json` 中的 `status` 改为 `published`，重新运行 `npm run catalog` 并推送到原 Pull Request。`npm run catalog` 始终根据全部 `paper.json` 重新生成轻量的总索引，不构建论文网页，因此不需要也不应改成单篇模式。
+
+管理员应优先在合并前确认作品已经是 `published`，且 `paper.json` 与 `catalog/papers.json` 在同一个 Pull Request 中保持同步；这样合并后无需再手工运行目录命令。如果管理员在合并后才把状态改成 `published`，仍必须在最新的 `main` 上运行 `npm run catalog`，并将作品的 `paper.json` 与更新后的 `catalog/papers.json` 一起提交。构建改为单篇模式不会改变这条规则。
 
 ## 7. Pull Request 检查失败时
 
 先点击失败检查的名称或 `View details` 查看日志，不要仅根据红色叉号修改项目：
 
-- 日志已经执行到 `validate`、`catalog:check`、`validate:pr` 或 `build:site`：按具体报错修改项目，再提交新的分支提交；
+- 日志已经执行到 `validate`、`catalog:check`、`validate:pr`、`build:changed` 或 `build:site`：按具体报错修改项目，再提交新的分支提交；
 - 日志停在等待托管运行器、下载 `actions/checkout`、`Service Unavailable` 或 GitHub API 错误：这是平台服务问题，先查看 [GitHub Status](https://www.githubstatus.com/)；
 - GitHub Actions 恢复后，在检查详情页选择 `Re-run jobs`，无需创建重复提交；
 - 检查变成绿色后再合并 Pull Request。不要为了绕过检查直接推送 `main`。

@@ -15,7 +15,7 @@
 
 - [ ] 已运行 `npm run validate`
 - [ ] 已运行 `npm run catalog`
-- [ ] 已运行 `npm run build:site`
+- [ ] 已运行 `npm run build:paper -- <paper-slug>_<source>`
 - [ ] 页面交互、移动端布局和资源路径正常
 - [ ] 论文事实、公式和实验数字已人工核对
 - [ ] 演示 PPT 已命名为 `presentation.pptx`、放入对应作品目录，并且可以正常打开

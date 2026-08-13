@@ -36,6 +36,7 @@ starterForm.addEventListener('submit', (event) => {
   document.querySelector('#branch-command').textContent = `git switch main\ngit pull origin main\ngit switch -c ${branch}`;
   document.querySelector('#skill-command').textContent = `$paper-skill 请阅读并分析《${title}》（${url}），制作成完整的中文交互式论文教程。`;
   document.querySelector('#import-command').textContent = `npm run import -- <生成目录> ${paperSlug} --source ${source} --source-branch ${branch} --title "${title}" --paper-url "${url}" --participant "${name}" --github "${githubUser}"`;
+  document.querySelector('#build-paper-command').textContent = `npm run build:paper -- ${paperSlug}_${source}`;
   starterResult.hidden = false;
   starterResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 });

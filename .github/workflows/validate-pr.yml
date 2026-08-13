@@ -35,5 +35,6 @@ jobs:
         run: npm run validate:pr
       - name: Check generated catalog
         run: npm run catalog:check
-      - name: Build all tutorials and portal
-        run: npm run build:site
+      - name: Build changed tutorials
+        if: github.event_name == 'pull_request'
+        run: npm run build:changed

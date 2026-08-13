@@ -10,6 +10,12 @@ const outputArg = process.argv.includes('--output') ? process.argv[process.argv.
 const outputRoot = path.resolve(ROOT, outputArg);
 const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 
+function valuesFor(flag) {
+  return process.argv.slice(2).flatMap((arg, index, args) => arg === flag && args[index + 1] ? [args[index + 1]] : []);
+}
+
+const requestedPapers = valuesFor('--paper');
+
 function run(args, cwd) {
   const command = process.platform === 'win32' ? (process.env.ComSpec || 'cmd.exe') : npm;
   const commandArgs = process.platform === 'win32' ? ['/d', '/s', '/c', npm, ...args] : args;
@@ -18,8 +24,18 @@ function run(args, cwd) {
   if (result.status !== 0) process.exit(result.status || 1);
 }
 
+const allSubmissions = listSubmissions();
+const submissionsBySlug = new Map(allSubmissions.map((submission) => [submission.slug, submission]));
+const submissions = requestedPapers.length
+  ? [...new Set(requestedPapers)].map((slug) => {
+      const submission = submissionsBySlug.get(slug);
+      if (!submission) throw new Error(`论文目录不存在：html_output/${slug}`);
+      return submission;
+    })
+  : allSubmissions;
+
 fs.mkdirSync(outputRoot, { recursive: true });
-for (const submission of listSubmissions()) {
+for (const submission of submissions) {
   console.log(`\n构建 ${submission.slug}...`);
   run(['ci', '--no-audit', '--no-fund'], submission.dir);
   // paper-skill projects intentionally use noEmit; check application types without
@@ -41,4 +57,4 @@ for (const submission of listSubmissions()) {
   if (!fs.existsSync(path.join(dist, 'index.html'))) throw new Error(`${submission.slug} 未生成 dist/index.html`);
   fs.cpSync(dist, path.join(outputRoot, submission.slug), { recursive: true, force: true });
 }
-console.log(`\n全部教程已构建到 ${path.relative(ROOT, outputRoot)}。`);
+console.log(`\n${requestedPapers.length ? `${submissions.length} 篇指定教程` : '全部教程'}已构建到 ${path.relative(ROOT, outputRoot)}。`);
