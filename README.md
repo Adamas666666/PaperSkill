@@ -15,7 +15,7 @@
 **观看成品网页效果：** [▶️演示视频（仅供参考）](https://my.feishu.cn/file/G0akbSBtYoIBoLx0DEMcJSbunEg)
 
 `html_output` 目录当前保留一个成品示例网页：
-- `elf_example`：演示视频同款网页，经过了人工修改
+- `elf_embedded_language_flows`：演示视频同款网页，经过了人工修改
 
 **在线查看已提交的论文教程网页集：** 🌐https://reducttech.github.io/PaperSkill/#search
 
@@ -72,6 +72,6 @@ PaperSkill/
 
 `main` 只通过 Pull Request 合并。自动检查负责工程门槛，论文事实、教学质量和人工修改仍需人工审核。
 
-参与者的最终网页项目统一提交到 `html_output/<paper-name>/`。( `paperName` 为论文名称：论文标题全称小写加下划线，例如：attention_is_all_you_need)。不要修改 `html_output/` 的目录名称，也不要将项目直接放在仓库根目录。
+参与者的最终网页项目统一提交到 `html_output/<paper-name>/`。其中 `paper-name` 为论文网页目录名称：论文标题全称小写 + 下划线，例如：attention_is_all_you_need 。不要修改 `html_output/` 的目录名称，也不要将项目直接放在仓库根目录。
 
 Pull Request 检查失败时，先打开检查详情区分“项目校验失败”和“GitHub Actions 服务异常”。具体判断与重新运行步骤见 [参与指南的检查处理说明](docs/PARTICIPATING.md#7-pull-request-检查失败时)。
