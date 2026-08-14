@@ -9,8 +9,8 @@
 //  模块数 >= 10、至少一章含两个模块）。
 //
 //  下方骨架仅为满足计数校验的最小占位，所有模块复用内置 example-slider，
-//  无实际教学含义；如需真正的内容结构，请参考 paper-skill 生成的
-//  resnet_example/src/data/tutorial.ts。
+//  无实际教学含义；如需真正的内容结构，请参考
+//  paper-skill/assets/react-template/src/data/tutorial.ts。
 // ============================================================================
 
 import type { TutorialData } from '../types';

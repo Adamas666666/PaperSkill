@@ -1,26 +1,5 @@
 [
   {
-    "slug": "compllm_yin102570",
-    "paperSlug": "compllm",
-    "source": "yin102570",
-    "sourceBranch": "paper/compllm-yin102570",
-    "title": "COMPLLM: COMPRESSION FOR LONG CONTEXT Q&A",
-    "authors": [],
-    "year": null,
-    "venue": "",
-    "paperUrl": "https://arxiv.org/abs/2509.19228",
-    "participants": [
-      {
-        "name": "Yinjiayi",
-        "github": "yin102570"
-      }
-    ],
-    "topics": [],
-    "skillVersion": "1.1.0",
-    "status": "published",
-    "tutorialUrl": "papers/compllm_yin102570/"
-  },
-  {
     "slug": "elf_example",
     "paperSlug": "elf",
     "source": "example",
@@ -40,64 +19,5 @@
     "skillVersion": "1.0.0",
     "status": "published",
     "tutorialUrl": "papers/elf_example/"
-  },
-  {
-    "slug": "resnet_cratoozy",
-    "paperSlug": "resnet",
-    "source": "cratoozy",
-    "sourceBranch": "paper/resnet-cratoozy",
-    "title": "Deep Residual Learning for Image Recognition",
-    "authors": [
-      "Kaiming He",
-      "Xiangyu Zhang",
-      "Shaoqing Ren",
-      "Jian Sun"
-    ],
-    "year": 2016,
-    "venue": "CVPR",
-    "paperUrl": "https://arxiv.org/abs/1512.03385",
-    "participants": [
-      {
-        "name": "cratoozy",
-        "github": "cratoozy"
-      }
-    ],
-    "topics": [
-      "Residual Learning",
-      "Image Classification",
-      "Deep Networks"
-    ],
-    "skillVersion": "1.0.0",
-    "status": "published",
-    "tutorialUrl": "papers/resnet_cratoozy/"
-  },
-  {
-    "slug": "resnet_example",
-    "paperSlug": "resnet",
-    "source": "example",
-    "sourceBranch": "local/resnet-output",
-    "title": "Deep Residual Learning for Image Recognition",
-    "authors": [
-      "Kaiming He",
-      "Xiangyu Zhang",
-      "Shaoqing Ren",
-      "Jian Sun"
-    ],
-    "year": 2016,
-    "venue": "CVPR",
-    "paperUrl": "https://arxiv.org/abs/1512.03385",
-    "participants": [
-      {
-        "name": "示例维护者"
-      }
-    ],
-    "topics": [
-      "Computer Vision",
-      "CNN",
-      "Residual Learning"
-    ],
-    "skillVersion": "1.0.0",
-    "status": "published",
-    "tutorialUrl": "papers/resnet_example/"
   }
 ]

@@ -14,9 +14,8 @@
 
 **观看成品网页效果：** [▶️演示视频（仅供参考）](https://my.feishu.cn/file/G0akbSBtYoIBoLx0DEMcJSbunEg)
 
-`html_output`目录存放了两个示例网页：
+`html_output` 目录当前保留一个成品示例网页：
 - `elf_example`：演示视频同款网页，经过了人工修改
-- `resnet_example`：paper-skill 原始输出，未经过人工修改
 
 **在线查看已提交的论文教程网页集：** 🌐https://reducttech.github.io/PaperSkill/#search
 
