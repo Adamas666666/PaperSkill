@@ -1,12 +1,12 @@
-# Paper Skill : 论文教学网页生成Skill
+# Paper Skill : 1分钟理解论文内核——论文交互网页生成Skill
 
-本仓库用于组织 AI 与机器学习等交互式论文教学网页考核，并集中收录同学们制作的中文交互式论文教学网页。
+本仓库用于组织 AI 与机器学习等交互式论文学习网页考核，并集中收录同学们制作的交互式论文学习网页。
 
-## 📋考核流程
+## 📋流程
 
 选手打开自己的智能体应用（例如 Codex、WorkBuddy 等），输入论文并调用本仓库的 [paper-skill 技能](paper-skill) -> 生成初版待修改网页 -> 选手理解论文、打磨修改网页 -> 将成品网页提交到本仓库的 html_output。
 
->注：调用 paper-skill 只是为了快速做出网页雏形方便修改，如有更好的创意，可不受 paper-skill 输出的章节结构、UI 样式等限制自由调整。
+>注：调用 paper-skill 只是为了快速做出网页雏形方便修改，通常无法一步到位做到直观理解论文，需要共创者提供更好的创意，并且可不受 paper-skill 输出的章节结构、UI 样式等限制自由调整。
 
 最终成果必须以完整的 React + TypeScript（Vite）网页项目形式提交，禁止提交单 HTML 文件，必须包含能够安装、运行和构建的完整项目结构，仓库会将其构建为可访问的网页。
 
@@ -71,6 +71,6 @@ PaperSkill/
 
 `main` 只通过 Pull Request 合并。自动检查负责工程门槛，论文事实、教学质量和人工修改仍需人工审核。
 
-参与者的最终网页项目统一提交到 `html_output/<paper-slug>_<source>/`。不要修改 `html_output/` 的目录名称，也不要将项目直接放在仓库根目录。汇报 PPT 不放入 GitHub 仓库，由同学按照考核通知通过飞书提交。
+参与者的最终网页项目统一提交到 `html_output/<paper-slug>_<source>/`。不要修改 `html_output/` 的目录名称，也不要将项目直接放在仓库根目录。
 
 Pull Request 检查失败时，先打开检查详情区分“项目校验失败”和“GitHub Actions 服务异常”。具体判断与重新运行步骤见 [参与指南的检查处理说明](docs/PARTICIPATING.md#7-pull-request-检查失败时)。
