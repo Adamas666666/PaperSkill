@@ -1,9 +1,6 @@
 {
   "schemaVersion": 1,
-  "slug": "elf_example",
-  "paperSlug": "elf",
-  "source": "example",
-  "sourceBranch": "paper/elf-happycodingday",
+  "paperName": "elf_embedded_language_flows",
   "title": "ELF: Embedded Language Flows",
   "authors": [],
   "year": null,

@@ -21,7 +21,7 @@ function nodeScript(name, args = []) {
 const base = process.env.GITHUB_BASE_REF || process.argv[2] || 'main';
 const baseRef = base.startsWith('origin/') ? base : `origin/${base}`;
 const changedFiles = git(['diff', '--name-only', `${baseRef}...HEAD`]);
-const paperSlugs = [...new Set(changedFiles.map((file) => file.match(/^html_output\/([^/]+)\//)?.[1]).filter(Boolean))];
+const paperNames = [...new Set(changedFiles.map((file) => file.match(/^html_output\/([^/]+)\//)?.[1]).filter(Boolean))];
 const fullBuildPrefixes = ['scripts/', 'paper-skill/', 'schemas/'];
 const fullBuildFiles = new Set(['package.json', '.github/workflows/validate-pr.yml', '.github/workflows/deploy-pages.yml']);
 const needsFullBuild = changedFiles.some((file) => fullBuildPrefixes.some((prefix) => file.startsWith(prefix)) || fullBuildFiles.has(file));
@@ -30,9 +30,9 @@ if (needsFullBuild) {
   console.log('检测到共享构建、Skill 或校验逻辑变化，执行全量站点构建。');
   nodeScript('build-site.js');
 }
-if (paperSlugs.length > 0) {
-  console.log(`仅构建本次变更的教程：${paperSlugs.join(', ')}`);
-  nodeScript('build-all.js', ['--output', 'site/papers', ...paperSlugs.flatMap((slug) => ['--paper', slug])]);
+if (paperNames.length > 0) {
+  console.log(`仅构建本次变更的教程：${paperNames.join(', ')}`);
+  nodeScript('build-all.js', ['--output', 'site/papers', ...paperNames.flatMap((paperName) => ['--paper', paperName])]);
 }
 
 console.log('本次变更不涉及教程或共享构建逻辑，跳过教程构建。');

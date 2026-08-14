@@ -25,7 +25,7 @@ function trackedForbidden(submission) {
 function main() {
   const submissions = listSubmissions();
   if (submissions.length === 0) {
-    console.error('没有找到论文目录：html_output/<paper-slug>_<source>/');
+    console.error('没有找到论文目录：html_output/<paper-name>/');
     process.exit(1);
   }
 
@@ -33,7 +33,7 @@ function main() {
   console.log(`验证 ${submissions.length} 篇论文教程...`);
 
   for (const submission of submissions) {
-    console.log(`\n[${submission.slug}]`);
+    console.log(`\n[${submission.paperName}]`);
     for (const file of requiredFiles) {
       if (!fs.existsSync(path.join(submission.dir, file))) {
         console.error(`  ✗ 缺少 ${file}`);
@@ -49,7 +49,7 @@ function main() {
 
     try {
       const meta = metadataFor(submission);
-      const errors = validateMetadata(meta, submission.slug);
+      const errors = validateMetadata(meta, submission.paperName);
       for (const error of errors) {
         console.error(`  ✗ paper.json：${error}`);
         failures += 1;

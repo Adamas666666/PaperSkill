@@ -42,17 +42,27 @@
         <form id="starter-form" class="starter-form">
           <label><span>论文英文名</span><input id="start-title" required placeholder="Attention Is All You Need" /></label>
           <label class="wide"><span>论文链接</span><input id="start-url" type="url" required placeholder="https://arxiv.org/abs/1706.03762" /></label>
-          <label><span>论文简称</span><input id="start-paper-slug" required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="attention-is-all-you-need" /><small>小写字母、数字和连字符</small></label>
-          <label><span>GitHub 用户名</span><input id="start-source" required pattern="[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*" placeholder="your-github-username" /><small>可包含大小写；生成目录时会自动转成小写来源标识</small></label>
+          <label><span>论文网页目录名称</span><input id="start-paper-name" required pattern="[a-z0-9]+(?:_[a-z0-9]+)*" placeholder="attention_is_all_you_need" /><small>小写字母、数字，单词间用下划线</small></label>
+          <label><span>GitHub 用户名</span><input id="start-source" required pattern="[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*" placeholder="your-github-username" /><small>可包含大小写；用于记录参与者 GitHub 账号</small></label>
           <label><span>参与者姓名</span><input id="start-name" required placeholder="小明" /></label>
           <button type="submit">生成我的操作步骤</button>
         </form>
 
         <div id="starter-result" class="starter-result" hidden aria-live="polite">
+          <div class="paper-dir"><span>应导入的仓库目录为：</span><code id="paper-dir-name"></code></div>
           <article><div><b>第一步</b><h3>创建分支</h3></div><button class="copy-btn" type="button" data-copy="branch-command">复制</button><pre id="branch-command"></pre></article>
           <article><div><b>第二步</b><h3>在论文工作目录调用 Skill</h3></div><button class="copy-btn" type="button" data-copy="skill-command">复制</button><pre id="skill-command"></pre></article>
           <article><div><b>第三步</b><h3>把生成结果导入仓库</h3></div><button class="copy-btn" type="button" data-copy="import-command">复制</button><pre id="import-command"></pre></article>
-          <p class="result-note">导入后运行 <code>npm run validate</code>、<code>npm run catalog</code>、<code>npm run validate:pr -- main</code>、<code id="build-paper-command">npm run build:paper -- &lt;paper-slug&gt;_&lt;source&gt;</code>，再提交并创建 Pull Request（借助fork在你的仓库中拉取PaperSkill）。</p>
+          <div class="result-note">
+            <p class="note-lead">导入后依次运行以下命令：</p>
+            <ol class="result-commands">
+              <li><code>npm run validate</code></li>
+              <li><code>npm run catalog</code></li>
+              <li><code>npm run validate:pr -- main</code></li>
+              <li><code id="build-paper-command">npm run build:paper -- &lt;paper-name&gt;</code></li>
+            </ol>
+            <p class="note-tail">全部通过后，提交并创建 Pull Request（借助 fork 在你的仓库中拉取 PaperSkill）。</p>
+          </div>
         </div>
       </section>
 

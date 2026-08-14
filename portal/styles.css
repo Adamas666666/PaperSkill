@@ -43,8 +43,16 @@ main { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 48px 0 80
 .starter-result h3 { margin: 0; font-size: 16px; }
 .starter-result pre { margin: 16px 0 0; padding: 14px; overflow-x: auto; background: #0f1a2b; color: #dce5ef; white-space: pre-wrap; word-break: break-word; line-height: 1.6; }
 .copy-btn { position: absolute; top: 16px; right: 16px; padding: 7px 11px; border: 1px solid #71819a; background: transparent; color: #fff; cursor: pointer; }
-.result-note { margin: 0; padding: 16px; background: #edf3e8; color: #47613c; line-height: 1.7; }
-.result-note code { font-weight: 700; }
+.paper-dir { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 16px 20px; background: #fff7e8; border: 1px solid #f0d9a8; color: #8a5a12; }
+.paper-dir span { font-weight: 700; }
+.paper-dir code { font: 700 15px/1.4 ui-monospace, monospace; color: #b4530a; word-break: break-all; }
+.result-note { margin: 0; padding: 20px 22px; background: #edf3e8; color: #47613c; border: 1px solid #d3e0c8; line-height: 1.7; }
+.result-note .note-lead { margin: 0 0 14px; font-weight: 700; color: #3c5630; }
+.result-note .note-tail { margin: 14px 0 0; color: #5a7349; }
+.result-commands { counter-reset: step; margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.result-commands li { display: flex; align-items: center; gap: 12px; }
+.result-commands li::before { counter-increment: step; content: counter(step); flex: 0 0 auto; width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; background: #47613c; color: #fff; font: 700 13px/1 ui-monospace, monospace; }
+.result-commands code { flex: 1 1 auto; padding: 10px 13px; background: #fbfcf9; border: 1px solid #d3e0c8; border-radius: 6px; font: 700 14px/1.4 ui-monospace, monospace; color: #2f4226; word-break: break-all; }
 .collection-heading { margin-bottom: 22px; }
 .toolbar { display: grid; grid-template-columns: minmax(0, 1fr) 240px; gap: 16px; padding: 18px; background: #fff; border: 1px solid #d8dfd1; box-shadow: 0 8px 28px rgba(28, 48, 43, .06); }
 .toolbar label { display: grid; gap: 8px; color: #68778f; font-size: 12px; font-weight: 700; letter-spacing: .08em; }

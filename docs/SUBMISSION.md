@@ -5,8 +5,10 @@
 GitHub 仓库接收可以运行和构建的完整 React + TypeScript 最终教程项目，统一提交到：
 
 ```text
-html_output/<paper-slug>_<source>/
+html_output/<paper-name>/
 ```
+
+`paperName` 为论文名称（论文全称小写加下划线，例如：attention_is_all_you_need）
 
 作品目录应包含 `package.json`、`src/`、`public/`、`paper.json` 等完整项目文件，不能只提交单独的 HTML 文件。项目不得放在仓库根目录、`docs/` 或其他位置。
 

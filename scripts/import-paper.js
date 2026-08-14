@@ -3,10 +3,10 @@
 
 const fs = require('fs');
 const path = require('path');
-const { ROOT, OUTPUT_ROOT, PAPER_SLUG_RE, SOURCE_RE } = require('./lib/repository');
+const { ROOT, OUTPUT_ROOT, PAPER_NAME_RE } = require('./lib/repository');
 
 function usage() {
-  console.error('用法: npm run import -- <生成目录> <paper-slug> --source <来源标识> --source-branch <来源分支> --title "..." --paper-url "https://..." --participant "..." [--github "..."] [--year 2024] [--venue "..."] [--topics "CV,CNN"]');
+  console.error('用法: npm run import -- <生成目录> <paper-name> --title "..." --paper-url "https://..." --participant "..." [--github "..."] [--year 2024] [--venue "..."] [--topics "CV,CNN"]');
   process.exit(2);
 }
 
@@ -30,14 +30,13 @@ function copyFiltered(source, target) {
   }
 }
 
-const [sourceArg, paperSlug, ...rest] = process.argv.slice(2);
-if (!sourceArg || !paperSlug) usage();
-if (!PAPER_SLUG_RE.test(paperSlug)) throw new Error('paper-slug 只能包含小写字母、数字和中间连字符');
+const [sourceArg, paperName, ...rest] = process.argv.slice(2);
+if (!sourceArg || !paperName) usage();
+if (!PAPER_NAME_RE.test(paperName)) throw new Error('paper-name 必须是论文全称：小写字母、数字，单词间用下划线连接');
 const opts = options(rest);
-for (const key of ['source', 'source-branch', 'title', 'paper-url', 'participant']) {
+for (const key of ['title', 'paper-url', 'participant']) {
   if (!opts[key]) throw new Error(`缺少 --${key}`);
 }
-if (!SOURCE_RE.test(opts.source)) throw new Error('--source 只能包含小写字母、数字和中间连字符');
 if (!/^https:\/\//.test(opts['paper-url'])) throw new Error('--paper-url 必须是 https:// 链接');
 
 const versionFile = path.join(ROOT, 'paper-skill', 'VERSION');
@@ -46,8 +45,7 @@ const skillVersion = fs.readFileSync(versionFile, 'utf8').trim();
 if (!/^\d+\.\d+\.\d+$/.test(skillVersion)) throw new Error('paper-skill/VERSION 必须是 x.y.z');
 
 const source = path.resolve(ROOT, sourceArg);
-const slug = `${paperSlug}_${opts.source}`;
-const target = path.join(OUTPUT_ROOT, slug);
+const target = path.join(OUTPUT_ROOT, paperName);
 if (!fs.existsSync(source) || !fs.statSync(source).isDirectory()) throw new Error(`找不到源目录：${source}`);
 if (!fs.existsSync(path.join(source, 'package.json'))) throw new Error('源目录不是 paper-skill 输出：缺少 package.json');
 if (fs.existsSync(target)) throw new Error(`目标已存在：${target}`);
@@ -58,10 +56,7 @@ const participant = { name: opts.participant };
 if (opts.github) participant.github = opts.github.replace(/^@/, '');
 const meta = {
   schemaVersion: 1,
-  slug,
-  paperSlug,
-  source: opts.source,
-  sourceBranch: opts['source-branch'],
+  paperName,
   title: opts.title,
   authors: [],
   year: opts.year ? Number(opts.year) : null,

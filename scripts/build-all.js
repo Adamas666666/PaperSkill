@@ -25,18 +25,18 @@ function run(args, cwd) {
 }
 
 const allSubmissions = listSubmissions();
-const submissionsBySlug = new Map(allSubmissions.map((submission) => [submission.slug, submission]));
+const submissionsByPaperName = new Map(allSubmissions.map((submission) => [submission.paperName, submission]));
 const submissions = requestedPapers.length
-  ? [...new Set(requestedPapers)].map((slug) => {
-      const submission = submissionsBySlug.get(slug);
-      if (!submission) throw new Error(`论文目录不存在：html_output/${slug}`);
+  ? [...new Set(requestedPapers)].map((paperName) => {
+      const submission = submissionsByPaperName.get(paperName);
+      if (!submission) throw new Error(`论文目录不存在：html_output/${paperName}`);
       return submission;
     })
   : allSubmissions;
 
 fs.mkdirSync(outputRoot, { recursive: true });
 for (const submission of submissions) {
-  console.log(`\n构建 ${submission.slug}...`);
+  console.log(`\n构建 ${submission.paperName}...`);
   run(['ci', '--no-audit', '--no-fund'], submission.dir);
   // paper-skill projects intentionally use noEmit; check application types without
   // TypeScript build-mode emit, then let Vite produce the deployment bundle.
@@ -54,7 +54,7 @@ for (const submission of submissions) {
   }
   run(['exec', '--', 'vite', 'build'], submission.dir);
   const dist = path.join(submission.dir, 'dist');
-  if (!fs.existsSync(path.join(dist, 'index.html'))) throw new Error(`${submission.slug} 未生成 dist/index.html`);
-  fs.cpSync(dist, path.join(outputRoot, submission.slug), { recursive: true, force: true });
+  if (!fs.existsSync(path.join(dist, 'index.html'))) throw new Error(`${submission.paperName} 未生成 dist/index.html`);
+  fs.cpSync(dist, path.join(outputRoot, submission.paperName), { recursive: true, force: true });
 }
 console.log(`\n${requestedPapers.length ? `${submissions.length} 篇指定教程` : '全部教程'}已构建到 ${path.relative(ROOT, outputRoot)}。`);

@@ -1,9 +1,6 @@
 [
   {
-    "slug": "elf_example",
-    "paperSlug": "elf",
-    "source": "example",
-    "sourceBranch": "paper/elf-happycodingday",
+    "paperName": "elf_embedded_language_flows",
     "title": "ELF: Embedded Language Flows",
     "authors": [],
     "year": null,
@@ -18,6 +15,6 @@
     "topics": [],
     "skillVersion": "1.0.0",
     "status": "published",
-    "tutorialUrl": "papers/elf_example/"
+    "tutorialUrl": "papers/elf_embedded_language_flows/"
   }
 ]

@@ -5,9 +5,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const OUTPUT_ROOT = path.join(ROOT, 'html_output');
-const PAPER_SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const SOURCE_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*_[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const PAPER_NAME_RE = /^[a-z0-9]+(?:_[a-z0-9]+)*$/;
 
 function readJson(file) {
   try {
@@ -21,23 +19,20 @@ function listSubmissions() {
   if (!fs.existsSync(OUTPUT_ROOT)) return [];
   return fs.readdirSync(OUTPUT_ROOT, { withFileTypes: true })
     .filter((entry) => entry.isDirectory() && !entry.name.startsWith('.'))
-    .map((entry) => ({ slug: entry.name, dir: path.join(OUTPUT_ROOT, entry.name) }))
-    .sort((a, b) => a.slug.localeCompare(b.slug));
+    .map((entry) => ({ paperName: entry.name, dir: path.join(OUTPUT_ROOT, entry.name) }))
+    .sort((a, b) => a.paperName.localeCompare(b.paperName));
 }
 
-function validateMetadata(meta, expectedSlug) {
+function validateMetadata(meta, expectedPaperName) {
   const errors = [];
-  const requiredStrings = ['slug', 'paperSlug', 'source', 'sourceBranch', 'title', 'paperUrl', 'skillVersion', 'status', 'entry'];
+  const requiredStrings = ['paperName', 'title', 'paperUrl', 'skillVersion', 'status', 'entry'];
   if (!meta || typeof meta !== 'object' || Array.isArray(meta)) return ['paper.json 必须是对象'];
   if (meta.schemaVersion !== 1) errors.push('schemaVersion 必须为 1');
   for (const key of requiredStrings) {
     if (typeof meta[key] !== 'string' || meta[key].trim() === '') errors.push(`${key} 必须是非空字符串`);
   }
-  if (!SLUG_RE.test(meta.slug || '')) errors.push('slug 必须使用 <paperSlug>_<source> 格式');
-  if (!PAPER_SLUG_RE.test(meta.paperSlug || '')) errors.push('paperSlug 只能包含小写字母、数字和中间连字符');
-  if (!SOURCE_RE.test(meta.source || '')) errors.push('source 只能包含小写字母、数字和中间连字符');
-  if (meta.slug !== `${meta.paperSlug}_${meta.source}`) errors.push('slug 必须等于 paperSlug + "_" + source');
-  if (meta.slug !== expectedSlug) errors.push(`slug 必须与目录名一致（期望 ${expectedSlug}）`);
+  if (!PAPER_NAME_RE.test(meta.paperName || '')) errors.push('paperName 必须为小写字母、数字和下划线，且以下划线连接单词（论文全称）');
+  if (meta.paperName !== expectedPaperName) errors.push(`paperName 必须与目录名一致（期望 ${expectedPaperName}）`);
   if (!/^https:\/\//.test(meta.paperUrl || '')) errors.push('paperUrl 必须是 https:// 链接');
   if (!/^\d+\.\d+\.\d+$/.test(meta.skillVersion || '')) errors.push('skillVersion 必须是 x.y.z');
   if (!['draft', 'review', 'published'].includes(meta.status)) errors.push('status 必须是 draft、review 或 published');
@@ -64,10 +59,7 @@ function metadataFor(submission) {
 
 function catalogRecord(meta) {
   return {
-    slug: meta.slug,
-    paperSlug: meta.paperSlug,
-    source: meta.source,
-    sourceBranch: meta.sourceBranch,
+    paperName: meta.paperName,
     title: meta.title,
     authors: meta.authors || [],
     year: meta.year ?? null,
@@ -77,8 +69,8 @@ function catalogRecord(meta) {
     topics: meta.topics,
     skillVersion: meta.skillVersion,
     status: meta.status,
-    tutorialUrl: `papers/${meta.slug}/`,
+    tutorialUrl: `papers/${meta.paperName}/`,
   };
 }
 
-module.exports = { ROOT, OUTPUT_ROOT, SLUG_RE, PAPER_SLUG_RE, SOURCE_RE, readJson, listSubmissions, validateMetadata, metadataFor, catalogRecord };
+module.exports = { ROOT, OUTPUT_ROOT, PAPER_NAME_RE, readJson, listSubmissions, validateMetadata, metadataFor, catalogRecord };
