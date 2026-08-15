@@ -57,6 +57,7 @@ main { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 48px 0 80
 .toolbar { display: grid; grid-template-columns: minmax(0, 1fr) 240px; gap: 16px; padding: 18px; background: #fff; border: 1px solid #d8dfd1; box-shadow: 0 8px 28px rgba(28, 48, 43, .06); }
 .toolbar label { display: grid; gap: 8px; color: #68778f; font-size: 12px; font-weight: 700; letter-spacing: .08em; }
 input, select { width: 100%; min-height: 46px; border: 1px solid #cbd4df; background: #fbfcf9; padding: 0 14px; color: #21324a; font: inherit; outline: none; }
+.starter-form input[readonly] { background: #eef1ec; color: #8a9486; border-style: dashed; cursor: not-allowed; }
 input:focus, select:focus { border-color: #27446e; box-shadow: 0 0 0 3px rgba(39, 68, 110, .12); }
 .result-summary { margin: 28px 0 16px; color: #68778f; }
 .paper-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }

@@ -16,10 +16,7 @@ function toPaperName(value) {
 
 const titleField = document.querySelector('#start-title');
 const paperNameField = document.querySelector('#start-paper-name');
-let paperNameEdited = false;
-paperNameField.addEventListener('input', () => { paperNameEdited = true; });
 function syncPaperName() {
-  if (paperNameEdited) return;
   const derived = toPaperName(titleField.value);
   if (derived) paperNameField.value = derived;
 }
