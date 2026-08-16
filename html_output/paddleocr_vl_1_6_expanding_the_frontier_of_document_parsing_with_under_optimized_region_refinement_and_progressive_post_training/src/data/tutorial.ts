@@ -46,7 +46,7 @@ export const tutorial: TutorialData = {
           id: "1.1",
           title: "论文原图：数据引擎总览",
           desc: "在进入细节之前先记住一点：1.6 与 1.5 用的是同一套架构，它所有的进步都来自数据与后训练——下面这张论文原图（图 3）画的正是这条路线：三类欠优化区域经诊断后，沿两条路由进入标注与训练。",
-          figure: "/images/fig-3-data-engine.png"
+          figure: "images/fig-3-data-engine.png"
         },
         {
           kind: "module",
@@ -390,7 +390,7 @@ export const tutorial: TutorialData = {
           title: "成绩单对比：四项指标真实数据",
           desc: "切换指标查看静态柱状图：1.6 在四项「越高越好」指标上全部领先——总分与 TEDS、Real5 赢面大，CDM 仅险胜——而论文自己写明的局限（RL 增益小、阅读顺序非最优、内部基准不可复现）也一并陈列。成绩单口径：OmniDocBench v1.6 相比 v1.5 新增了 MGAM（多粒度自适应匹配，消除分段粒度偏差）与 296 页困难子集，评分更严。下方论文原图（图 1）为 OmniDocBench v1.6 排行榜官方口径成绩。",
           componentId: "mod-ch7-1",
-          figure: "/images/fig-1-metric.png"
+          figure: "images/fig-1-metric.png"
         }
       ],
       takeaways: [
